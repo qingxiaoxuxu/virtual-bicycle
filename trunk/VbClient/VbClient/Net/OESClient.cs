@@ -236,7 +236,7 @@ namespace OES.Net
                     }
                     break;
             }
-        }
+        }  
         /// <summary>
         /// 当客户端需要上传文件时,发送文件大小信息
         /// </summary>
