@@ -15,5 +15,19 @@ namespace VbCsvHelper
         {
             InitializeComponent();
         }
+
+        private void buttonAdd_Click(object sender, EventArgs e)
+        {
+            foreach (Object tx in this.Controls)
+            {
+                if ((tx is TextBox) && ((TextBox)tx).Text == "" )
+                {
+                    MessageBox.Show("信息不完整！");
+                    return;
+                }
+            }
+                    
+        }
+
     }
 }
