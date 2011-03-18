@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using Code2015.EngineEx;
+using Game.Config;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -23,7 +26,12 @@ namespace Game
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            
+
+
+            graphics.PreferredBackBufferWidth = CommonSettings["Display"].GetInt("ScreenWidth");
+            graphics.PreferredBackBufferHeight = CommonSettings["Display"].GetInt("ScreenHeight");
+
+            graphics.ApplyChanges();
             Content.RootDirectory = "Content";
         }
 
