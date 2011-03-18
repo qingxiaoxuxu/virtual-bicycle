@@ -24,6 +24,8 @@ http://www.gnu.org/copyleft/gpl.txt.
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace Apoc3D.Config
 {
@@ -167,14 +169,11 @@ namespace Apoc3D.Config
         public abstract bool TryGetSubSection(string key, out ConfigurationSection sect);
 
 
-        public abstract bool TryGetPaths(string key, out string[] res);
-
-        public abstract string[] GetPaths(string key);
         public abstract void GetRectangle(string key, out Rectangle rect);
 
-        public abstract bool TryGetColorRGBA(string key, out ColorValue clr);
-        public abstract ColorValue GetColorRGBA(string key, ColorValue def);
-        public abstract ColorValue GetColorRGBA(string key);
+        public abstract bool TryGetColorRGBA(string key, out Color clr);
+        public abstract Color GetColorRGBA(string key, Color def);
+        public abstract Color GetColorRGBA(string key);
         public abstract int GetColorRGBInt(string key);
         public abstract int GetColorRGBInt(string key, int def);
 
@@ -204,8 +203,6 @@ namespace Apoc3D.Config
         public abstract int[] GetIntArray(string key);
         public abstract int[] GetIntArray(string key, int[] def);
 
-        public abstract Size GetSize(string key);
-        public abstract Size GetSize(string key, Size def);
 
         public abstract Point GetPoint(string key);
         public abstract Point GetPoint(string key, Point def);
@@ -216,9 +213,7 @@ namespace Apoc3D.Config
 
         public abstract float[] GetPercetageArray(string key);
 
-        public abstract string GetUIString(string key);
-        public abstract string GetUIString(string key, string def);
-        
+
         
         
     }
