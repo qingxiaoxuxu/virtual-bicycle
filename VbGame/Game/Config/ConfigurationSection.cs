@@ -148,16 +148,6 @@ namespace Apoc3D.Config
             get;
             set;
         }
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <remarks>SHP是唯一允许的Anim</remarks>
-        ///// <param name="rule"></param>
-        ///// <returns></returns>
-        //public abstract CameoInfo GetCameo(FileLocateRule rule);
-        //public abstract UIImageInformation GetImage(FileLocateRule rule);
-
-        //public abstract UIImageInformation GetImage(string key, FileLocateRule rule);
 
         /// <summary>
         ///  获取此Section的子Section
