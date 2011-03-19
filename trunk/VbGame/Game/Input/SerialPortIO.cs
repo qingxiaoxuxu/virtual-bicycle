@@ -5,6 +5,7 @@ using System.IO.Ports;
 using VirtualBicycle.Collections;
 using System.Threading;
 using VirtualBicycle.MathLib;
+using Microsoft.Xna.Framework;
 
 namespace VirtualBicycle.Input
 {
