@@ -78,6 +78,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Camera.cs" />
     <Compile Include="CaseInsensitiveStringComparer.cs" />
     <Compile Include="Collections\CollectionBase.cs" />
     <Compile Include="Collections\ExistTable.cs" />
@@ -94,14 +95,15 @@
     <Compile Include="Config\GameConfigurationSection.cs" />
     <Compile Include="Config\IConfigurable.cs" />
     <Compile Include="GameScene.cs" />
-    <Compile Include="GameState.cs" />
+    <Compile Include="GS\GameState.cs" />
+    <Compile Include="GS\RacingGameState.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\InputProcessor.cs" />
     <Compile Include="Input\KeyboardInputProcessor.cs" />
     <Compile Include="Input\SerialPortInputProcessor.cs" />
     <Compile Include="Input\SerialPortIO.cs" />
-    <Compile Include="Input\SerialPortOutputProcessor.cs" />
     <Compile Include="Input\WirelessInputProcessor.cs" />
+    <Compile Include="MathLib\Frustum.cs" />
     <Compile Include="MathLib\LineSegment.cs" />
     <Compile Include="MathLib\MathEx.cs" />
     <Compile Include="MathLib\Triangle.cs" />
