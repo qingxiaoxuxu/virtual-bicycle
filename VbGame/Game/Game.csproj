@@ -79,6 +79,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CaseInsensitiveStringComparer.cs" />
+    <Compile Include="Collections\CollectionBase.cs" />
+    <Compile Include="Collections\ExistTable.cs" />
+    <Compile Include="Collections\FastList.cs" />
+    <Compile Include="Collections\HashHelpers.cs" />
+    <Compile Include="CollisionModel\DirectDetectData.cs" />
+    <Compile Include="CollisionModel\MidPhrase\AABBTree.cs" />
+    <Compile Include="CollisionModel\MidPhrase\BaseTree.cs" />
+    <Compile Include="CollisionModel\MidPhrase\BBTree.cs" />
     <Compile Include="Config\CommonSettings.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Config\ConfigurationSection.cs" />
@@ -92,6 +100,9 @@
     <Compile Include="Input\SerialPortIO.cs" />
     <Compile Include="Input\SerialPortOutputProcessor.cs" />
     <Compile Include="Input\WirelessInputProcessor.cs" />
+    <Compile Include="MathLib\LineSegment.cs" />
+    <Compile Include="MathLib\MathEx.cs" />
+    <Compile Include="MathLib\Triangle.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
