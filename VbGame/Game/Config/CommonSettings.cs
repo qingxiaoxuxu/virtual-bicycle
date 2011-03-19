@@ -43,5 +43,10 @@ namespace Game.Config
         {
             get { return config[sectName]; }
         }
+
+        protected override void dispose()
+        {
+            
+        }
     }
 }
