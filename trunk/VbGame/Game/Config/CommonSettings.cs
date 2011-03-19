@@ -11,15 +11,35 @@ namespace Game.Config
 {
     class CommonSettings : Singleton
     {
-        static GameConfiguration config;
+        static volatile CommonSettings singleton;
+        static object syncHelper = new object();
+        public static CommonSettings Instance 
+        {
+            get 
+            {                
+                if (singleton == null)
+                {
+                    lock (syncHelper)
+                    {
+                        if (singleton == null)
+                        {
+                            singleton = new CommonSettings();
+                        }
+                    }
+                }
+                return singleton;
+            }
+        }
 
-        static CommonSettings()
+        GameConfiguration config;
+
+        private CommonSettings()
         {
             string filePath = Path.Combine(StorageContainer.TitleLocation, @"Config\common.xml");
             config = new GameConfiguration(filePath);
         }
 
-        public static ConfigurationSection this[string sectName] 
+        public ConfigurationSection this[string sectName] 
         {
             get { return config[sectName]; }
         }
