@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game", "Game\Game.csproj", "{4388E381-8715-4561-BC83-A2F212A2039E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RacingGame", "RacingGame\RacingGame.csproj", "{500DE416-27AA-43A7-A8A8-DCF70B88D2C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RacingGameContentProcessors", "RacingGameContentProcessors\RacingGameContentProcessors.csproj", "{4DBA3614-B319-4F2A-A0E3-6AE7BD1EEE73}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -13,8 +17,16 @@ Global
 		{4388E381-8715-4561-BC83-A2F212A2039E}.Debug|x86.Build.0 = Debug|x86
 		{4388E381-8715-4561-BC83-A2F212A2039E}.Release|x86.ActiveCfg = Release|x86
 		{4388E381-8715-4561-BC83-A2F212A2039E}.Release|x86.Build.0 = Release|x86
-		{C07AEF9B-C412-41FF-8378-FD2B61EAE063}.Debug|x86.ActiveCfg = Debug|x86
-		{C07AEF9B-C412-41FF-8378-FD2B61EAE063}.Release|x86.ActiveCfg = Release|x86
+		{500DE416-27AA-43A7-A8A8-DCF70B88D2C3}.Debug|x86.ActiveCfg = Debug|x86
+		{500DE416-27AA-43A7-A8A8-DCF70B88D2C3}.Debug|x86.Build.0 = Debug|x86
+		{500DE416-27AA-43A7-A8A8-DCF70B88D2C3}.Release|x86.ActiveCfg = Release|x86
+		{500DE416-27AA-43A7-A8A8-DCF70B88D2C3}.Release|x86.Build.0 = Release|x86
+		{96C2173D-4E0E-4A6A-A3A7-CFA5F80AB2AB}.Debug|x86.ActiveCfg = Debug|x86
+		{96C2173D-4E0E-4A6A-A3A7-CFA5F80AB2AB}.Release|x86.ActiveCfg = Release|x86
+		{4DBA3614-B319-4F2A-A0E3-6AE7BD1EEE73}.Debug|x86.ActiveCfg = Debug|x86
+		{4DBA3614-B319-4F2A-A0E3-6AE7BD1EEE73}.Debug|x86.Build.0 = Debug|x86
+		{4DBA3614-B319-4F2A-A0E3-6AE7BD1EEE73}.Release|x86.ActiveCfg = Release|x86
+		{4DBA3614-B319-4F2A-A0E3-6AE7BD1EEE73}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
