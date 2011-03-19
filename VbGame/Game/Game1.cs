@@ -28,8 +28,8 @@ namespace Game
             graphics = new GraphicsDeviceManager(this);
 
 
-            graphics.PreferredBackBufferWidth = CommonSettings["Display"].GetInt("ScreenWidth");
-            graphics.PreferredBackBufferHeight = CommonSettings["Display"].GetInt("ScreenHeight");
+            graphics.PreferredBackBufferWidth = CommonSettings.Instance["Display"].GetInt("ScreenWidth");
+            graphics.PreferredBackBufferHeight = CommonSettings.Instance["Display"].GetInt("ScreenHeight");
 
             graphics.ApplyChanges();
             Content.RootDirectory = "Content";
