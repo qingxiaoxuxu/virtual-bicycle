@@ -93,6 +93,8 @@
     <Compile Include="Config\GameConfiguration.cs" />
     <Compile Include="Config\GameConfigurationSection.cs" />
     <Compile Include="Config\IConfigurable.cs" />
+    <Compile Include="GameScene.cs" />
+    <Compile Include="GameState.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Input\InputProcessor.cs" />
     <Compile Include="Input\KeyboardInputProcessor.cs" />
