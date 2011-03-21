@@ -1,0 +1,34 @@
+﻿<Window x:Class="MyFirstWPF.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Window1" Height="860" Width="1360" WindowStyle="None" WindowState="Maximized" AllowsTransparency="True">
+    <Grid Name="testGd" Height="802" Width="1282">
+        <Grid.Background>
+            <ImageBrush Stretch="Fill" ImageSource="Contents\Images\mainMenu.png"></ImageBrush>
+        </Grid.Background>
+        
+        <Canvas Margin="500, 220, 502, 302" Name="flickerCanvas">
+            <Canvas.Background>
+                <ImageBrush Stretch="Fill" ImageSource="Contents\Images\Menu_Background.png"/>
+            </Canvas.Background>
+        </Canvas>
+        <Canvas Margin="512,240,514,306"  Name="singleCanvas">
+            <Canvas.Background>
+                <ImageBrush Stretch="Fill" ImageSource="Contents\Images\single.png"/>
+            </Canvas.Background>
+        </Canvas>
+        <Canvas Margin="768,240,258,306"  Name="createGameCanvas">
+            <Canvas.Background>
+                <ImageBrush Stretch="Fill" ImageSource="Contents\Images\createGame.png" />
+            </Canvas.Background>
+        </Canvas>
+        <Canvas Margin="1024,240,2,306" Name="joinGameCanvas" Opacity="0.0">
+            <Canvas.Background>
+                <ImageBrush Stretch="Fill" ImageSource="Contents\Images\joinGame.png"/>
+            </Canvas.Background>
+        </Canvas>
+        
+        <TextBlock  Height="50" Name="iconText" FontSize="32pt" Foreground="White" TextAlignment="Center"
+                    FontFamily="微软雅黑" Text="单人游戏" Margin="512, 0,514 ,224" VerticalAlignment="Bottom" />
+    </Grid>
+</Window>
