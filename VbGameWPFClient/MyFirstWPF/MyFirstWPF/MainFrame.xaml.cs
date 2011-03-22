@@ -18,7 +18,7 @@ namespace MyFirstWPF
     /// <summary>
     /// Window1.xaml 的交互逻辑
     /// </summary>
-    public partial class Window1 : Window
+    public partial class MainFrame : Window
     {
         int state;
         const int IconCount = 3;                        //按钮数量
@@ -32,7 +32,7 @@ namespace MyFirstWPF
         Canvas[] iconCanvas = new Canvas[IconCount];
         String[] showTexts = new String[IconCount];
 
-        public Window1()
+        public MainFrame()
         {
             InitializeComponent();
             state = 0;
