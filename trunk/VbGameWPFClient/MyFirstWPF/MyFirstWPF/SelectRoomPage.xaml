@@ -1,0 +1,10 @@
+﻿<UserControl x:Class="MyFirstWPF.SelectRoomPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="802" Width="1282" x:Name="SelectRoomPage">
+    <Grid Name="LayoutRoot">
+    	<Grid.Background>
+			<ImageBrush Stretch="Fill" ImageSource="Contents\Images\select.png"/>
+		</Grid.Background>
+    </Grid>
+</UserControl>
