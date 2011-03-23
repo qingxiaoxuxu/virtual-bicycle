@@ -1,0 +1,22 @@
+﻿<Window x:Class="VbGameEditor.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="VbGameEditor" Height="670" Width="630">
+    <StackPanel>
+        <ToolBar Name="MapToolBar" Height="30" Width="auto">
+            <RadioButton Name="rbtnRoad" GroupName="Category" IsChecked="True" >Road</RadioButton>
+            <RadioButton Name="rbtnTree" GroupName="Category" >Tree</RadioButton>
+            <RadioButton Name="rbtnHouse" GroupName="Category" >House</RadioButton>
+            <RadioButton Name="rbtnPeople" GroupName="Category" >People</RadioButton>
+            <RadioButton Name="rbtnCar" GroupName="Category" >Car</RadioButton>
+            <Button Name="btnSave">Save</Button>
+            <Button Name="btnLoad">Load</Button>
+        </ToolBar>
+        <Canvas Name="MapCanvas" Height="400" Width="600" Background="White" ClipToBounds="True">
+            
+        </Canvas>
+        <Canvas Name="HeightCanvas" Height="200" Width="600" Background="Wheat" ClipToBounds="True">
+            
+        </Canvas>
+    </StackPanel>
+</Window>
