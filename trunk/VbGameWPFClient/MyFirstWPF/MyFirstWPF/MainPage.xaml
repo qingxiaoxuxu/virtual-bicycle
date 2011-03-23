@@ -33,6 +33,6 @@
         </Canvas>
         
         <TextBlock  Height="50" Name="iconText" FontSize="32pt" Foreground="White" TextAlignment="Center"
-                    FontFamily="微软雅黑" Text="单人游戏" Margin="512, 0, 514, 224" VerticalAlignment="Bottom" />
+                    FontFamily="微软雅黑" Margin="512, 0, 514, 224" VerticalAlignment="Bottom" />
 	</Grid>
 </UserControl>

@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="MyFirstWPF.SelectMapPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="802" Width="1282">
+    <Grid x:Name="LayoutRoot">
+        <Grid.Background>
+            <ImageBrush Stretch="Fill" ImageSource="Contents\Images\select.png" />
+        </Grid.Background>
+        <Canvas Margin="512,240,514,306"  Name="singleCanvas">
+            <Canvas.Background>
+                <ImageBrush Stretch="Fill" ImageSource="Contents\Images\single.png"/>
+            </Canvas.Background>
+        </Canvas>
+        <Canvas Margin="768,240,258,306"  Name="createGameCanvas" Opacity="0.5">
+            <Canvas.Background>
+                <ImageBrush Stretch="Fill" ImageSource="Contents\Images\createGame.png" />
+            </Canvas.Background>
+        </Canvas>
+        <Canvas Margin="1024,240,2,306" Name="joinGameCanvas" Opacity="0.0">
+            <Canvas.Background>
+                <ImageBrush Stretch="Fill" ImageSource="Contents\Images\joinGame.png"/>
+            </Canvas.Background>
+        </Canvas>
+        <TextBlock x:Name="titleText" FontSize="32pt" Foreground="White" TextAlignment="Center"
+			FontFamily="微软雅黑" Text="选择地图" Margin="512,92.5,514,0" VerticalAlignment="Top" Height="50" />
+        <TextBlock  Height="50" Name="iconText" FontSize="32pt" Foreground="White" TextAlignment="Center" Width="512"
+                    FontFamily="微软雅黑" Margin="0, 0, 0, 224" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+    </Grid>
+</UserControl>

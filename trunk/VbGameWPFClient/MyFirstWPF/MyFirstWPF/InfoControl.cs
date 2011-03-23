@@ -22,6 +22,36 @@ namespace MyFirstWPF
             }
         }
 
+        private static SelectMapPage singleSelectMapPage = null;
+        public static SelectMapPage Single_Select_Map_Page
+        {
+            get
+            {
+                if (singleSelectMapPage == null)
+                    singleSelectMapPage = new SelectMapPage(0);
+                return InfoControl.singleSelectMapPage;
+            }
+            set
+            {
+                InfoControl.singleSelectMapPage = value;
+            }
+        }
+
+        private static SelectMapPage multiSelectMapPage = null;
+        public static SelectMapPage Multi_Select_Map_Page
+        {
+            get
+            {
+                if (multiSelectMapPage == null)
+                    multiSelectMapPage = new SelectMapPage(1);
+                return InfoControl.multiSelectMapPage;
+            }
+            set
+            {
+                InfoControl.multiSelectMapPage = value;
+            }
+        }
+
         private static SelectRoomPage selectRoomPage = null;
         public static SelectRoomPage Select_Room_Page
         {
