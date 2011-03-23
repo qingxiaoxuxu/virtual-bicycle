@@ -25,6 +25,7 @@ namespace VbGameEditor
             InitializeComponent();
             btnSave.Click += new RoutedEventHandler(btnSave_Click);
             btnLoad.Click += new RoutedEventHandler(btnLoad_Click);
+            btnHelp.Click += new RoutedEventHandler(btnHelp_Click);
             MapCanvas.MouseDown+=new MouseButtonEventHandler(MapCanvas_MouseDown);
             MapCanvas.MouseMove += new MouseEventHandler(MapCanvas_MouseMove);
             MapCanvas.MouseUp += new MouseButtonEventHandler(MapCanvas_MouseUp);
@@ -36,6 +37,24 @@ namespace VbGameEditor
             rbtnHouse.Click += new RoutedEventHandler(rbtnHouse_Click);
             rbtnCar.Click += new RoutedEventHandler(rbtnCar_Click);
             HeightCanvas.MouseMove += new MouseEventHandler(HeightCanvas_MouseMove);
+        }
+
+        void btnHelp_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(@"Mouse:
+LeftButtonClick: add a point
+LeftButtonDrag: move a point
+Shift+LeftButtonClick: delete a point
+RightButtonDrag: move the screen
+MiddleButton: zoom
+
+KeyBoard:
+Z: clear all
+
+XML Format:
+<ElementName>
+Point3D
+</ElementName>");
         }
 
         void btnLoad_Click(object sender, RoutedEventArgs e)
