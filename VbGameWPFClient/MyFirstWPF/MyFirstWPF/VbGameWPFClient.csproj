@@ -76,6 +76,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="SelectMap.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SelectRoomPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -110,6 +114,9 @@
     </Compile>
     <Compile Include="RoomInfoBlock.xaml.cs">
       <DependentUpon>RoomInfoBlock.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SelectMap.xaml.cs">
+      <DependentUpon>SelectMap.xaml</DependentUpon>
     </Compile>
     <Compile Include="SelectRoomPage.xaml.cs">
       <DependentUpon>SelectRoomPage.xaml</DependentUpon>

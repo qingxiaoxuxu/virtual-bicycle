@@ -20,7 +20,7 @@ namespace MyFirstWPF
     /// </summary>
     public partial class MainFrame : Window
     {
-		const int PageCount = 2;			//界面数量
+		const int PageCount = 4;			//界面数量
         UserControl[] pages = new UserControl[PageCount];
 
         public MainFrame()
@@ -28,7 +28,9 @@ namespace MyFirstWPF
             InitializeComponent();
             #region 界面初始化
             pages[0] = InfoControl.Main_Page;
-            pages[1] = InfoControl.Select_Room_Page;
+            pages[1] = InfoControl.Single_Select_Map_Page;
+            pages[2] = InfoControl.Multi_Select_Map_Page;
+            pages[3] = InfoControl.Select_Room_Page;
             this.Content = pages[0];
             #endregion
             this.KeyDown +=new KeyEventHandler(MainFrame_KeyDown);
