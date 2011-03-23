@@ -11,6 +11,7 @@
             <RadioButton Name="rbtnCar" GroupName="Category" >Car</RadioButton>
             <Button Name="btnSave">Save</Button>
             <Button Name="btnLoad">Load</Button>
+            <Button Name="btnHelp">Help</Button>
         </ToolBar>
         <Canvas Name="MapCanvas" Height="400" Width="600" Background="White" ClipToBounds="True">
             
