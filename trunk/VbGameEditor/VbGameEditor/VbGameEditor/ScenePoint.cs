@@ -167,7 +167,7 @@ namespace VbGameEditor
             {
                 if (Keyboard.IsKeyDown(Key.LeftShift))
                 {
-                    foreach (ScenePoint sp in roadPoint)
+                    foreach (ScenePoint sp in listPoint)
                     {
                         if (sp.ellipseh == sender as Ellipse)
                         {
@@ -233,7 +233,7 @@ namespace VbGameEditor
             {
                 if (Keyboard.IsKeyDown(Key.LeftShift))
                 {
-                    foreach (ScenePoint sp in roadPoint)
+                    foreach (ScenePoint sp in listPoint)
                     {
                         if (sp.ellipse == sender as Ellipse)
                         {
