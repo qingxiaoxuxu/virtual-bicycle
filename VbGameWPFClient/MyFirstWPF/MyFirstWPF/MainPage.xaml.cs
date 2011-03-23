@@ -22,10 +22,10 @@ namespace MyFirstWPF
 	{
 		int state;										//哪个按钮被选中
         const int IconCount = 3;                        //按钮数量
-        const double left = 512;                        //初始Margin.Left
-        const double top = 240;                         //初始Margin.Top
-        const double right = 514;                       //初始Margin.Right
-        const double bottom = 306;                      //初始Margin.Bottom   (这些是正中间图标的坐标)
+        const double Left = 512;                        //初始Margin.Left
+        const double Top = 240;                         //初始Margin.Top
+        const double Right = 514;                       //初始Margin.Right
+        const double Bottom = 306;                      //初始Margin.Bottom   (这些是正中间图标的坐标)
         const int MoveUnit = 256;                       //图标移动尺寸
         const int ShrinkUnit = 80;                      //图标缩小尺寸
         Storyboard moveStory;
@@ -47,9 +47,7 @@ namespace MyFirstWPF
             //this.KeyDown += new KeyEventHandler(KeyD
             this.KeyDown += new KeyEventHandler(KeyboardDown);
             this.Loaded += new RoutedEventHandler(MainPage_Loaded);
-		}
-
-
+        }
 
         #region IKeyDown 成员
 
@@ -59,8 +57,18 @@ namespace MyFirstWPF
                 moveLeft();
             else if (e.Key == Key.Right)
                 moveRight();
-            else if (e.Key == Key.Enter)
-                choose();
+        }
+
+        public int Choose()
+        {
+            if (state == 2)
+                return 1;
+            return -1;
+        }
+
+        public int MoveBack()
+        {
+            return -1;
         }
 
         #endregion
@@ -69,13 +77,6 @@ namespace MyFirstWPF
         {
             Storyboard flickerStory = generateFlickerStoryboard();
             flickerStory.Begin(this);
-        }
-       
-        private void choose()
-        {
-            if (state == 0) { }
-            else if (state == 1) { }
-            else { }
         }
 
         //向左移动
@@ -111,8 +112,8 @@ namespace MyFirstWPF
                 offset = i - state;                                             //第i个按钮的偏移量（带符号）
                 off_abs = Math.Abs(offset);                                     //第i个按钮的偏移量（绝对值）
                 iconCanvas[i].Margin = 
-                    new Thickness(left + MoveUnit * offset + (ShrinkUnit / 2) * off_abs, top + (ShrinkUnit / 2) * off_abs,
-                        right - MoveUnit * offset + (ShrinkUnit / 2) * off_abs, bottom + (ShrinkUnit / 2) * off_abs);
+                    new Thickness(Left + MoveUnit * offset + (ShrinkUnit / 2) * off_abs, Top + (ShrinkUnit / 2) * off_abs,
+                        Right - MoveUnit * offset + (ShrinkUnit / 2) * off_abs, Bottom + (ShrinkUnit / 2) * off_abs);
                 iconCanvas[i].Opacity = 1.0 - 0.5 * off_abs;
             }
         }
@@ -137,9 +138,6 @@ namespace MyFirstWPF
         private Storyboard generateMoveStoryboard()
         {
             int i;
-            #region 初始坐标
-            
-            #endregion
             Storyboard moveStory = new Storyboard();
             ThicknessAnimation[] posAnimation = new ThicknessAnimation[IconCount];
             DoubleAnimation[] opacAnimation = new DoubleAnimation[IconCount];
@@ -149,8 +147,8 @@ namespace MyFirstWPF
                 int off_abs = Math.Abs(offset);                                     //第i个按钮的偏移量（绝对值）
                 posAnimation[i] = new ThicknessAnimation();                         //控制图标位置
                 posAnimation[i].To =
-                    new Thickness(left + MoveUnit * offset + (ShrinkUnit / 2) * off_abs, top + (ShrinkUnit / 2) * off_abs,
-                        right - MoveUnit * offset + (ShrinkUnit / 2) * off_abs, bottom + (ShrinkUnit / 2) * off_abs);
+                    new Thickness(Left + MoveUnit * offset + (ShrinkUnit / 2) * off_abs, Top + (ShrinkUnit / 2) * off_abs,
+                        Right - MoveUnit * offset + (ShrinkUnit / 2) * off_abs, Bottom + (ShrinkUnit / 2) * off_abs);
                 posAnimation[i].Duration = new Duration(TimeSpan.FromSeconds(0.3));
                 Storyboard.SetTargetName(posAnimation[i], iconCanvas[i].Name);
                 Storyboard.SetTargetProperty(posAnimation[i], new PropertyPath(Canvas.MarginProperty));
@@ -165,8 +163,6 @@ namespace MyFirstWPF
             }
             return moveStory;
         }
-
-
 
     }
 }

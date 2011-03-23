@@ -72,6 +72,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="RoomInfoBlock.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SelectRoomPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -87,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IKeyDown.cs" />
+    <Compile Include="InfoControl.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -102,6 +107,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="RoomInfoBlock.xaml.cs">
+      <DependentUpon>RoomInfoBlock.xaml</DependentUpon>
     </Compile>
     <Compile Include="SelectRoomPage.xaml.cs">
       <DependentUpon>SelectRoomPage.xaml</DependentUpon>
@@ -130,10 +138,14 @@
     <Resource Include="Contents\Images\single.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Contents\Images\bgButton.png" />
     <Resource Include="Contents\Images\Menu_Background.png" />
     <Resource Include="Contents\Images\select.png" />
     <Resource Include="Contents\Images\select_origin.png" />
     <Resource Include="Contents\Images\startScreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Contents\Images\Menu_Background_Rect.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

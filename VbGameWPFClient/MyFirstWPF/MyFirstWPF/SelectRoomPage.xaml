@@ -1,10 +1,21 @@
-﻿<UserControl x:Class="MyFirstWPF.SelectRoomPage"
+﻿<UserControl
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Height="802" Width="1282" x:Name="SelectRoomPage">
-    <Grid Name="LayoutRoot">
-    	<Grid.Background>
+    xmlns:local="clr-namespace:MyFirstWPF" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Class="MyFirstWPF.SelectRoomPage"
+    Height="802" Width="1282" x:Name="selectRoomPage" mc:Ignorable="d">
+	<Grid x:Name="LayoutRoot" >
+		<Grid.Background>
 			<ImageBrush Stretch="Fill" ImageSource="Contents\Images\select.png"/>
 		</Grid.Background>
-    </Grid>
+        <Canvas Margin="90, 170, 672, 492" Name="flickerCanvas">
+            <Canvas.Background>
+                <ImageBrush Stretch="Fill" ImageSource="Contents\Images\Menu_Background_Rect.png" />
+            </Canvas.Background>
+        </Canvas>
+		<TextBlock x:Name="iconText" FontSize="32pt" Foreground="White" TextAlignment="Center"
+			FontFamily="微软雅黑" Text="选择房间" Margin="512,36,514,0" VerticalAlignment="Top" Height="50" />
+		<local:RoomInfoBlock Margin="100,180,682,502" Opacity="0.0"/>
+        <local:RoomInfoBlock Margin="680,600,102,82" Opacity="0.0" />
+	</Grid>
 </UserControl>

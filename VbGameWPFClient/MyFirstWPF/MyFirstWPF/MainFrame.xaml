@@ -4,6 +4,4 @@
     xmlns:local="clr-namespace:MyFirstWPF" x:Class="MyFirstWPF.MainFrame"
     Title="MainFrame" Height="860" Width="1360" WindowStyle="None" WindowState="Maximized" AllowsTransparency="True">
     
-	<local:MainPage x:Name="mainPage"/>
-    
 </Window>
