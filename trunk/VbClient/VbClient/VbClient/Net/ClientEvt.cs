@@ -3,7 +3,7 @@ using System.Collections.Generic;
  
 using System.Text;
 
-namespace OES.Net
+namespace VbClient.Net
 {
     public class ClientEvt
     {
@@ -32,7 +32,7 @@ namespace OES.Net
 
         public ClientEvt(string serverIp)
         {
-            Client.server = serverIp;
+            //Client.server = serverIp;
             Client.ReceivedTxt+=new EventHandler(Client_ReceivedTxt);
             Client.InitializeClient();
         }
