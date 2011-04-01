@@ -58,6 +58,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Net\ClientConfig.cs" />
     <Compile Include="Net\ClientEvt.cs" />
     <Compile Include="Net\DataPort.cs" />
     <Compile Include="Net\OESClient.cs" />

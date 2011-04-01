@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using OES.Net;
+using VbClient.Net;
 
 namespace VbClient
 {
@@ -48,8 +48,8 @@ namespace VbClient
 
         void client_GotTeamMapList(object sender, List<string> team, List<string> map)
         {
-            foreach(string s in team)
-                listBox1.Items.Add("---"+s);
+            foreach (string s in team)
+                listBox1.Items.Add("---" + s);
             foreach (string s in map)
                 listBox1.Items.Add("---" + s);
         }
