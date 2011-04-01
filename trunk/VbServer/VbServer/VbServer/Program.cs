@@ -15,7 +15,7 @@ namespace VbServer
         static void Main()
         {
             ServerEvt server = new ServerEvt();
-            server.Server.ip=System.Net.IPAddress.Parse("222.20.59.63");
+            //server.Server.ip=System.Net.IPAddress.Parse("222.20.59.63");
             server.Server.StartServer();
             server.Server.ReceivedMsg += new ClientEventHandel(Server_ReceivedMsg);
             while (Console.ReadLine() != "exit")
