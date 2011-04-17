@@ -31,7 +31,29 @@ namespace VbServer.Net
         private object syncLock = new object();
         //数据端口预定个数
         private int portsRequest = ServerConfig.DataPortNum;      
+        //数据端口准备就绪
+        private bool isPortAvailable = false;
 
+        public bool IsPortAvailable
+        {
+            get { return isPortAvailable; }
+            set
+            {
+                isPortAvailable = value;
+                if (isPortAvailable)
+                {
+                    ProvideClientService();
+                }
+            }
+        }
+        //当前数据端口数量
+        public int PortCurNum
+        {
+            get
+            {
+                return PortQueue.Count;
+            }
+        }
 
         #region 运行事件定义
         /// <summary>
@@ -154,7 +176,7 @@ namespace VbServer.Net
         /// </summary>
         private void InitializeDataPorts()
         {
-            SearchSparePort();
+            isPortAvailable= SearchSparePort();
             for (int i = availablePorts.Count - 1; i >= 0; i--)
             {
                 DataPort dport = new DataPort(ip, availablePorts.Dequeue());
@@ -178,7 +200,7 @@ namespace VbServer.Net
         /// <summary>
         /// 搜索当前空闲端口号
         /// </summary>
-        private void SearchSparePort()
+        private bool SearchSparePort()
         {
             int start_port = 10005;
             IPGlobalProperties ipgloabalprops = IPGlobalProperties.GetIPGlobalProperties();
@@ -213,7 +235,7 @@ namespace VbServer.Net
                     availablePorts.Enqueue(port);
                     port++;
                     if (--portsRequest == 0)
-                        return;
+                        return true ;
                 }
             }
             if (portsRequest != 0)
@@ -221,6 +243,7 @@ namespace VbServer.Net
                 if(OnDataPortError!=null)
                     OnDataPortError("可用端口数量不足！");
             }
+            return false;
         }
 
         /// <summary>
@@ -229,24 +252,32 @@ namespace VbServer.Net
         /// <param name="port"></param>
         private void PortRecycler(DataPort port)
         {
-            PortQueue.Enqueue(port);
+            if(!PortQueue.Contains(port))
+                PortQueue.Enqueue(port);
+            ProvideClientService();
+        }
+
+        /// <summary>
+        /// 分配端口
+        /// </summary>
+        private void ProvideClientService()
+        {
             Client tclient;
             while ((RequestingQueue.Count != 0) && (PortQueue.Count != 0))
             {
                 tclient = RequestingQueue.Dequeue();
                 tclient.Port = PortQueue.Dequeue();
-                tclient.Port.IsSend = true;
-                tclient.sendData();
+                tclient.Port.IsSend = false;
+                tclient.fetchData();
             }
             while ((SubmitingQueue.Count != 0) && (PortQueue.Count != 0))
             {
                 tclient = SubmitingQueue.Dequeue();
                 tclient.Port = PortQueue.Dequeue();
-                tclient.Port.IsSend = false;
-                tclient.fetchData();
+                tclient.Port.IsSend = true;
+                tclient.sendData();
             }
         }
-
         /// <summary>
         /// Accept回调函数
         /// </summary>
@@ -298,7 +329,7 @@ namespace VbServer.Net
                     
                     case 0:
                     #region 搜索空闲数据端口，准备传送数据
-                        if (PortQueue.Count != 0)
+                        if (PortQueue.Count != 0 && isPortAvailable)
                         {
                             client.Port = PortQueue.Dequeue();
                             client.Port.IsSend = false;
@@ -313,7 +344,7 @@ namespace VbServer.Net
 
                     case 1:
                     #region 搜索空闲数据端口，准备接受数据
-                        if (PortQueue.Count != 0)
+                        if (PortQueue.Count != 0 && isPortAvailable)
                         {
                             client.Port = PortQueue.Dequeue();
                             client.Port.IsSend = true;
