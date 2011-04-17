@@ -1,0 +1,15 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	x:Class="MyFirstWPF.UserInfoBlock"
+	x:Name="UserControl"
+	Width="800" Height="80">
+	<Grid x:Name="LayoutRoot">
+		<TextBlock Name="PlayerText" Margin="20,10,200,10"
+			Text="YCX" FontSize="32pt" FontFamily="微软雅黑"/>
+		<Canvas Name="ReadyCanvas" HorizontalAlignment="Right" Margin="0,10,10,10" Width="180"/>
+	</Grid>
+</UserControl>

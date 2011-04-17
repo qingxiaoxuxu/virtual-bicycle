@@ -4,6 +4,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
+	xmlns:local="clr-namespace:MyFirstWPF"
 	x:Class="MyFirstWPF.WaitingRoomPage"
 	x:Name="waitingRoomPage"
 	Height="802" Width="1282">
@@ -13,28 +14,40 @@
 			<ImageBrush Stretch="Fill" ImageSource="Contents\Images\WaitingRoom.jpg"/>
 		</Grid.Background>
 		<TextBlock x:Name="titleText" FontSize="32pt" Foreground="White" TextAlignment="Center"
-			FontFamily="微软雅黑" Text="准备游戏" Margin="512,70,514,0" VerticalAlignment="Top" Height="50" />
-		<Canvas Name="MapCanvas" HorizontalAlignment="Left" Margin="50,150,0,0" 
+			FontFamily="微软雅黑" Text="准备游戏" Margin="512,70,514,0" VerticalAlignment="Top" Height="50" d:IsHidden="True" />
+		<Canvas x:Name="MapCanvas" HorizontalAlignment="Left" Margin="50,150,0,0" 
 			Width="360" VerticalAlignment="Top" Height="260" Background="BurlyWood" d:IsHidden="True"/>
-		<Canvas Name="BicycleCanvas" HorizontalAlignment="Left" Margin="50,420,0,0"
-			 Width="360" VerticalAlignment="Top" Height="260" Background="Cyan" d:IsHidden="True"/>
-		<Canvas Name="PlayerCanvas1" Margin="0,150,50,0" VerticalAlignment="Top" 
-			Height="80" HorizontalAlignment="Right" Width="800" Background="Red">
-			<TextBlock Text="Hello!" Height="60" VerticalAlignment="Center" Canvas.Top="10" HorizontalAlignment="Center" Width="600" Canvas.Left="10"/>
+		<Canvas x:Name="BicycleCanvas" HorizontalAlignment="Left" Margin="50,420,0,0"
+			Width="360" VerticalAlignment="Top" Height="260" Background="Cyan" d:IsHidden="True"/>
+        
+		<Canvas x:Name="PlayerCanvas1" Margin="0,150,50,0" VerticalAlignment="Top" 
+			Height="80" HorizontalAlignment="Right" Width="800" Background="Red" d:IsHidden="True">
+			<local:UserInfoBlock d:LayoutOverrides="Width, Height" d:IsHidden="True"/>
 		</Canvas>
-		<Canvas Name="PlayerCanvas2" Margin="0,240,50,0" VerticalAlignment="Top" 
-			Height="80" HorizontalAlignment="Right" Width="800" Background="Blue" d:IsHidden="True"/>
-		<Canvas Name="PlayerCanvas3" Margin="0,330,50,0" VerticalAlignment="Top" 
-			Height="80" HorizontalAlignment="Right" Width="800" Background="Yellow" d:IsHidden="True"/>
-		<Canvas Name="PlayerCanvas4" Margin="0,420,50,0" VerticalAlignment="Top" 
-			Height="80" HorizontalAlignment="Right" Width="800" Background="AntiqueWhite" d:IsHidden="True"/>
-		<Canvas Name="PlayerCanvas5" Margin="0,510,50,0" VerticalAlignment="Top" 
-			Height="80" HorizontalAlignment="Right" Width="800" Background="AliceBlue" d:IsHidden="True"/>
-		<Canvas Name="PlayerCanvas6" Margin="0,600,50,0" VerticalAlignment="Top" 
-			Height="80" HorizontalAlignment="Right" Width="800" Background="Aqua" d:IsHidden="True"/>
-		<Canvas HorizontalAlignment="Left" Margin="50,0,0,20" Name="ReturnCanvas"
+        <Canvas x:Name="PlayerCanvas2" Margin="0,240,50,0" VerticalAlignment="Top" 
+			Height="80" HorizontalAlignment="Right" Width="800" Background="Blue" d:IsHidden="True">
+            <local:UserInfoBlock d:LayoutOverrides="Width, Height" d:IsHidden="True"/>
+        </Canvas>
+        <Canvas x:Name="PlayerCanvas3" Margin="0,330,50,0" VerticalAlignment="Top" 
+			Height="80" HorizontalAlignment="Right" Width="800" Background="Yellow" d:IsHidden="True">
+            <local:UserInfoBlock d:LayoutOverrides="Width, Height" d:IsHidden="True"/>
+        </Canvas>
+        <Canvas x:Name="PlayerCanvas4" Margin="0,420,50,0" VerticalAlignment="Top" 
+			Height="80" HorizontalAlignment="Right" Width="800" Background="AntiqueWhite" d:IsHidden="True">
+            <local:UserInfoBlock d:LayoutOverrides="Width, Height" d:IsHidden="True"/>
+        </Canvas>
+        <Canvas x:Name="PlayerCanvas5" Margin="0,510,50,0" VerticalAlignment="Top" 
+			Height="80" HorizontalAlignment="Right" Width="800" Background="AliceBlue" d:IsHidden="True">
+            <local:UserInfoBlock d:LayoutOverrides="Width, Height" d:IsHidden="True"/>
+        </Canvas>
+        <Canvas x:Name="PlayerCanvas6" Margin="0,600,50,0" VerticalAlignment="Top" 
+			Height="80" HorizontalAlignment="Right" Width="800" Background="Aqua" d:IsHidden="True">
+            <local:UserInfoBlock d:LayoutOverrides="Width, Height" d:IsHidden="True"/>
+        </Canvas>
+
+        <Canvas HorizontalAlignment="Left" Margin="50,0,0,20" x:Name="ReturnCanvas"
 			VerticalAlignment="Bottom" Width="150" Height="50" Background="AliceBlue"/>
-		<Canvas HorizontalAlignment="Right" Margin="0,0,50,20" Name="StartCanvas"
+		<Canvas HorizontalAlignment="Right" Margin="0,0,50,20" x:Name="StartCanvas"
 			VerticalAlignment="Bottom" Width="150" Height="50" Background="AliceBlue"/>
 	</Grid>
 </UserControl>
