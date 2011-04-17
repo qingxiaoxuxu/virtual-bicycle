@@ -89,8 +89,7 @@ namespace VbClient.Net
         /// </summary>
         public OESClient()
         {
-            client = new TcpClient();
-            port = new DataPort();
+            
         }
         /// <summary>
         /// 开始连接服务端
@@ -100,6 +99,8 @@ namespace VbClient.Net
         {
             try
             {
+                client = new TcpClient();
+                port = new DataPort();
                 client.BeginConnect(IPAddress.Parse(server), portNum, new AsyncCallback(connect_callBack), client);
             }
             catch (Exception e)
@@ -164,6 +165,7 @@ namespace VbClient.Net
             }
             catch
             {
+                client = new TcpClient();
                 if (DisConnectError != null)
                 {
                     DisConnectError(this, null);
