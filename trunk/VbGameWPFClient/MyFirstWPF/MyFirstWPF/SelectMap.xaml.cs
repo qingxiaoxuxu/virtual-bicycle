@@ -69,13 +69,13 @@ namespace MyFirstWPF
             else                                //联网游戏
             {
                 MessageBox.Show("Waiting!");
-                return -1;  //return 3;
+                return MainFrame.INDEX_WAITING_ROOM_PAGE;
             }
         }
 
         public int MoveBack()
         {
-            return 0;
+            return MainFrame.INDEX_MAIN_PAGE;
         }
 
         #endregion

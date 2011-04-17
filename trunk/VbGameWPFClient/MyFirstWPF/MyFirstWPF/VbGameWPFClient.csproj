@@ -84,6 +84,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="WaitingRoomPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -121,6 +125,10 @@
     <Compile Include="SelectRoomPage.xaml.cs">
       <DependentUpon>SelectRoomPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserPage.cs" />
+    <Compile Include="WaitingRoomPage.xaml.cs">
+      <DependentUpon>WaitingRoomPage.xaml</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -153,6 +161,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Contents\Images\Menu_Background_Rect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Contents\Images\WaitingRoom.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

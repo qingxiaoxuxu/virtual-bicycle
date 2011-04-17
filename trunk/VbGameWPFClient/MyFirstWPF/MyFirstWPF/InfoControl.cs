@@ -67,5 +67,19 @@ namespace MyFirstWPF
             }
         }
 
+        private static WaitingRoomPage waitingRoomPage = null;
+
+        public static WaitingRoomPage Waiting_Room_Page
+        {
+            get 
+            {
+                if (waitingRoomPage == null)
+                    waitingRoomPage = new WaitingRoomPage();
+                return InfoControl.waitingRoomPage; 
+            }
+            set { InfoControl.waitingRoomPage = value; }
+        }
+        
+
     }
 }

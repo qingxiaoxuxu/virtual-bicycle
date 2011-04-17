@@ -18,7 +18,7 @@ namespace MyFirstWPF
 	/// <summary>
 	/// mainPage.xaml 的交互逻辑
 	/// </summary>
-	public partial class MainPage : UserControl, IKeyDown
+	public partial class MainPage :UserControl, IKeyDown
 	{
 		int state;										//哪个按钮被选中
         const int IconCount = 3;                        //按钮数量
