@@ -25,6 +25,11 @@ namespace MyFirstWPF
 
         #region IKeyDown 成员
 
+        public void setUserInfo()
+        {
+            PlayerCanvas1
+        }
+
         public void KeyboardDown(object sender, KeyEventArgs e)
         {
             
