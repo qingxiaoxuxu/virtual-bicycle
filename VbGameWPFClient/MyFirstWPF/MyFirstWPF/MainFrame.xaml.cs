@@ -20,8 +20,14 @@ namespace MyFirstWPF
     /// </summary>
     public partial class MainFrame : Window
     {
-		const int PageCount = 4;			//界面数量
+		const int PageCount = 5;			//界面数量
         UserControl[] pages = new UserControl[PageCount];
+
+        public const int INDEX_MAIN_PAGE = 0;
+        public const int INDEX_SINGLE_SELECT_MAP_PAGE = 1;
+        public const int INDEX_MULTI_SELECT_MAP_PAGE = 2;
+        public const int INDEX_SELECT_ROOM_PAGE = 3;
+        public const int INDEX_WAITING_ROOM_PAGE = 4;
 
         public MainFrame()
         {
@@ -31,6 +37,7 @@ namespace MyFirstWPF
             pages[1] = InfoControl.Single_Select_Map_Page;
             pages[2] = InfoControl.Multi_Select_Map_Page;
             pages[3] = InfoControl.Select_Room_Page;
+            pages[4] = InfoControl.Waiting_Room_Page;
             this.Content = pages[0];
             #endregion
             this.KeyDown +=new KeyEventHandler(MainFrame_KeyDown);

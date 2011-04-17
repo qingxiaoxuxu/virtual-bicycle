@@ -4,11 +4,15 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
-	x:Class="MyFirstWPF.RoomInfoBlock"
-	x:Name="UserControl">
+	x:Class="MyFirstWPF.WaitingRoomPage"
+	x:Name="waitingRoomPage"
+	Height="802" Width="1282">
+
 	<Grid x:Name="LayoutRoot">
 		<Grid.Background>
-			<ImageBrush Stretch="Fill" ImageSource="Contents\Images\bgButton.png"/>
+			<ImageBrush Stretch="Fill" ImageSource="Contents\Images\WaitingRoom.jpg"/>
 		</Grid.Background>
+		<TextBlock x:Name="titleText" FontSize="32pt" Foreground="White" TextAlignment="Center"
+			FontFamily="微软雅黑" Text="准备游戏" Margin="512,80,514,0" VerticalAlignment="Top" Height="50" />
 	</Grid>
 </UserControl>

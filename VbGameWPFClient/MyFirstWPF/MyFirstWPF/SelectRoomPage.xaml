@@ -4,7 +4,7 @@
     xmlns:local="clr-namespace:MyFirstWPF" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Class="MyFirstWPF.SelectRoomPage"
     Height="802" Width="1282" x:Name="selectRoomPage" mc:Ignorable="d">
-	<Grid x:Name="LayoutRoot" >
+	<Grid x:Name="LayoutRoot">
 		<Grid.Background>
 			<ImageBrush Stretch="Fill" ImageSource="Contents\Images\select.png"/>
 		</Grid.Background>
@@ -15,5 +15,5 @@
         </Canvas>
 		<TextBlock x:Name="iconText" FontSize="32pt" Foreground="White" TextAlignment="Center"
 			FontFamily="微软雅黑" Text="选择房间" Margin="512,36,514,0" VerticalAlignment="Top" Height="50" />
-	</Grid>
+    </Grid>
 </UserControl>

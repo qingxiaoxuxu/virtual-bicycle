@@ -27,7 +27,7 @@ namespace MyFirstWPF
         const int Left = 100;
         const int Top = 180;
         const int Right = 682;
-        const int Bottom = 502;
+        const int Bottom = 502;			//左上角RoomBlock的四个margin值
         const int HorMoveUnit = 580;
         const int VerMoveUnit = 140;
         RoomInfoBlock[] rooms = null;   //房间信息
@@ -41,6 +41,7 @@ namespace MyFirstWPF
             flickerState = 0;
             roomCount = getRoomInfo();
             initPosition();
+
             this.KeyDown +=new KeyEventHandler(KeyboardDown);
         }
 
@@ -66,7 +67,6 @@ namespace MyFirstWPF
             {
                 row_offset = i / 2 - blockState / 2;
                 col_offset = i % 2 - blockState % 2;
-
                 LayoutRoot.Children.Add(rooms[i]);
                 Thickness pos = new Thickness(
                     Left + HorMoveUnit * col_offset,
@@ -81,7 +81,7 @@ namespace MyFirstWPF
         #region IKeyDown 成员
 
         public void KeyboardDown(object sender, KeyEventArgs e)         //重写键盘按下事件响应函数
-        {       
+        {   
             if (e.Key == Key.Up)
                 moveUp();
             else if (e.Key == Key.Down)
@@ -94,12 +94,14 @@ namespace MyFirstWPF
 
         public int Choose()
         {
+            if (flickerState != -1)
+                return MainFrame.INDEX_WAITING_ROOM_PAGE;
             return -1;
         }
 
         public int MoveBack()
         {
-            return 0;
+            return MainFrame.INDEX_MAIN_PAGE;
         }
 
         #endregion
@@ -187,7 +189,7 @@ namespace MyFirstWPF
             
         }
 
-        //生成选择Canvas闪烁摇摆的故事版
+        //生成选择Flicker移动的故事版
         private Storyboard generateFlickerMoveStoryboard()
         {
             Storyboard flickerStory = new Storyboard();
@@ -226,7 +228,7 @@ namespace MyFirstWPF
                     Bottom - VerMoveUnit * row_offset);
                 posAnimation[i] = new ThicknessAnimation();
                 posAnimation[i].To = pos;
-                posAnimation[i].Duration = new Duration(TimeSpan.FromSeconds(0.1));
+                posAnimation[i].Duration = new Duration(TimeSpan.FromSeconds(0.2));
                 Storyboard.SetTargetName(posAnimation[i], rooms[i].Name);
                 Storyboard.SetTargetProperty(posAnimation[i], new PropertyPath(RoomInfoBlock.MarginProperty));
                 moveStory.Children.Add(posAnimation[i]);
@@ -238,9 +240,6 @@ namespace MyFirstWPF
                 Storyboard.SetTargetProperty(opacAnimation[i], new PropertyPath(RoomInfoBlock.OpacityProperty));
                 moveStory.Children.Add(opacAnimation[i]);
             }
-
-
-
             return moveStory;
         }
     }
