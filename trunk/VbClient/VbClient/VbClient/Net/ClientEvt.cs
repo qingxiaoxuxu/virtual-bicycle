@@ -18,7 +18,7 @@ namespace VbClient.Net
         public delegate void UpdateMapHandler(object sender,string map);
         public event UpdateMapHandler SettingMap;
         
-        public delegate void TeamMapList(object sender, List<string> team, List<string> map);
+        public delegate void TeamMapList(object sender, List<string> team, List<string> map,List<int> counts);
         public event TeamMapList GotTeamMapList;
 
         public event UpdateMapHandler AddSuccess;
@@ -126,13 +126,15 @@ namespace VbClient.Net
                     {
                         List<string> team=new List<string>();
                         List<string> map=new List<string>();
+                        List<int> counts = new List<int>();
                         for(int i=1;i<msgs.Length;)
                         {
                             team.Add(msgs[i++]);
                             map.Add(msgs[i++]);
+                            counts.Add(Int32.Parse(msgs[i++]));
                         }
                         if(GotTeamMapList!=null)
-                            GotTeamMapList(this,team,map);
+                            GotTeamMapList(this,team,map,counts);
                         break;
                     }
                 case "add":
