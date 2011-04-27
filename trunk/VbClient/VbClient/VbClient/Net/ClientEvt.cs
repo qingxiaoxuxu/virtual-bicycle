@@ -30,6 +30,7 @@ namespace VbClient.Net
         public event UpdateMapHandler GetOtherBike;
         public event UpdateMapHandler GetObject;
 
+        public event Action BecomeHost;
         public ClientEvt(string serverIp)
         {
             //Client.server = serverIp;
@@ -164,6 +165,14 @@ namespace VbClient.Net
                                 if (BeginGame != null)
                                     BeginGame(this, null);
                                 break;
+                        }
+                        break;
+                    }
+                case "host":
+                    {
+                        if (BecomeHost != null)
+                        {
+                            BecomeHost();
                         }
                         break;
                     }
