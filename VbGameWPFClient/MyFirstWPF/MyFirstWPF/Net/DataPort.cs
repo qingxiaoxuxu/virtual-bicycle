@@ -114,7 +114,7 @@ namespace VbClient.Net
                 client.BeginConnect(remoteIp, remotePort, new AsyncCallback(connect_callBack), client);
                 return true;
             }
-            catch (Exception e)
+            catch
             {
                 if (ConnectError != null)
                 {

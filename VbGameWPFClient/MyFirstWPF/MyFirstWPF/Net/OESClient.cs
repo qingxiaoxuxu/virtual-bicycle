@@ -5,7 +5,6 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Net.NetworkInformation;
-using System.Windows.Forms;
 using System.Threading;
 using System.IO;
 
@@ -294,7 +293,7 @@ namespace VbClient.Net
             {
                 ns.BeginWrite(tBuffer, 0, tBuffer.Length, new AsyncCallback(write_callBack), client);
             }
-            catch (Exception e)
+            catch
             {
                 //网络出错处理程序
             }
@@ -309,7 +308,7 @@ namespace VbClient.Net
             {
                 ns.EndWrite(asy);
             }
-            catch (Exception e)
+            catch
             {
             }
         }

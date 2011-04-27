@@ -21,7 +21,7 @@ namespace MyFirstWPF
 	public partial class MainPage :UserControl, IKeyDown
 	{
 		int state;										//哪个按钮被选中
-        const int IconCount = 3;                        //按钮数量
+        const int IconCount = 2;                        //按钮数量
         const double Left = 512;                        //初始Margin.Left
         const double Top = 240;                         //初始Margin.Top
         const double Right = 514;                       //初始Margin.Right
@@ -37,11 +37,9 @@ namespace MyFirstWPF
 			this.InitializeComponent();
             state = 0;									//初始状态为0
             iconCanvas[0] = singleCanvas;
-            iconCanvas[1] = createGameCanvas;
-            iconCanvas[2] = joinGameCanvas;
+            iconCanvas[1] = networkCanvas;
             showTexts[0] = "单人游戏";
-            showTexts[1] = "建立网络对战";
-            showTexts[2] = "加入网络对战";
+            showTexts[1] = "网络对战";
             initPosition();             				//按钮位置初始化
             iconText.Text = showTexts[0];
             this.KeyDown += new KeyEventHandler(KeyboardDown);
@@ -64,6 +62,11 @@ namespace MyFirstWPF
         }
 
         public int MoveBack()
+        {
+            return -1;
+        }
+
+        public int BtnFunction1()
         {
             return -1;
         }

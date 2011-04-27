@@ -20,6 +20,9 @@ namespace MyFirstWPF
     /// </summary>
     public partial class SelectMapPage : UserControl, IKeyDown
     {
+        public const int MODE_SINGLE = 0;
+        public const int MODE_MULTI = 1;
+
         int mode;                                       //单人模式（0） 或  联网模式（1）
         int state;										//哪个按钮被选中
         const int IconCount = 3;                        //按钮数量
@@ -75,7 +78,15 @@ namespace MyFirstWPF
 
         public int MoveBack()
         {
-            return MainFrame.INDEX_MAIN_PAGE;
+            if (mode == 0)
+                return MainFrame.INDEX_MAIN_PAGE;
+            else
+                return MainFrame.INDEX_MULTI_SELECT_ROOM_PAGE;
+        }
+
+        public int BtnFunction1()
+        {
+            return -1;
         }
 
         #endregion

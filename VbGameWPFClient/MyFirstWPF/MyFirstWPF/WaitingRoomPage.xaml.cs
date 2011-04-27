@@ -18,17 +18,21 @@ namespace MyFirstWPF
 	/// </summary>
 	public partial class WaitingRoomPage : UserControl, IKeyDown
 	{
+        public const int MODE_FROM_CREATE = 0;
+        public const int MODE_FROM_JOIN = 1;
+
 		public WaitingRoomPage()
 		{
 			this.InitializeComponent();
 		}
 
-        #region IKeyDown 成员
-
         public void setUserInfo()
         {
-            
+
+        
         }
+
+        #region IKeyDown 成员
 
         public void KeyboardDown(object sender, KeyEventArgs e)
         {
@@ -42,7 +46,12 @@ namespace MyFirstWPF
 
         public int MoveBack()
         {
-            return MainFrame.INDEX_SELECT_ROOM_PAGE;
+            return MainFrame.INDEX_MULTI_SELECT_ROOM_PAGE;
+        }
+
+        public int BtnFunction1()
+        {
+            return -1;
         }
 
         #endregion
