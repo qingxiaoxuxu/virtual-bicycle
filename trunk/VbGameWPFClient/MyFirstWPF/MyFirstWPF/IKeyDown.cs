@@ -15,5 +15,7 @@ namespace MyFirstWPF
         int Choose();                                           //切换到哪个窗体
 
         int MoveBack();                                         //返回到哪个窗体
+
+        int BtnFunction1();                                     //按下第一个功能键
     }
 }

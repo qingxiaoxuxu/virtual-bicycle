@@ -21,17 +21,11 @@
                 <ImageBrush Stretch="Fill" ImageSource="Contents\Images\single.png"/>
             </Canvas.Background>
         </Canvas>
-        <Canvas Margin="768,240,258,306"  Name="createGameCanvas" Opacity="0.5">
+        <Canvas Margin="768,240,258,306"  Name="networkCanvas" Opacity="0.5">
             <Canvas.Background>
                 <ImageBrush Stretch="Fill" ImageSource="Contents\Images\createGame.png" />
             </Canvas.Background>
         </Canvas>
-        <Canvas Margin="1024,240,2,306" Name="joinGameCanvas" Opacity="0.0">
-            <Canvas.Background>
-                <ImageBrush Stretch="Fill" ImageSource="Contents\Images\joinGame.png"/>
-            </Canvas.Background>
-        </Canvas>
-        
         <TextBlock  Height="50" Name="iconText" FontSize="32pt" Foreground="White" TextAlignment="Center"
                     FontFamily="微软雅黑" Margin="512, 0, 514, 224" VerticalAlignment="Bottom" />
 	</Grid>

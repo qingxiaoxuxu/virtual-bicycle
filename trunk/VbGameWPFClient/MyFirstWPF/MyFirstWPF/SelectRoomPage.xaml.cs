@@ -81,7 +81,7 @@ namespace MyFirstWPF
         #region IKeyDown 成员
 
         public void KeyboardDown(object sender, KeyEventArgs e)         //重写键盘按下事件响应函数
-        {   
+        {
             if (e.Key == Key.Up)
                 moveUp();
             else if (e.Key == Key.Down)
@@ -102,6 +102,11 @@ namespace MyFirstWPF
         public int MoveBack()
         {
             return MainFrame.INDEX_MAIN_PAGE;
+        }
+
+        public int BtnFunction1()               //按下第一个功能键，跳转到联网地图选择
+        {
+            return MainFrame.INDEX_MULTI_SELECT_MAP_PAGE;
         }
 
         #endregion

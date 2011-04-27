@@ -7,6 +7,13 @@ namespace MyFirstWPF
 {
     public class InfoControl
     {
+        private static string userName = null;
+        public static string UserName
+        {
+            get { return InfoControl.userName; }
+            set { InfoControl.userName = value; }
+        }
+
         private static MainPage mainPage = null;
         public static MainPage Main_Page
         {
