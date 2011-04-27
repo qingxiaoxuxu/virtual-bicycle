@@ -84,7 +84,7 @@ namespace VbServer.Net
                         string genmsg = "list";
                         foreach (Team t in teamList)
                         {
-                            genmsg += "$" + t.teamName + "$" + t.mapName;
+                            genmsg += "$" + t.teamName + "$" + t.mapName+"$"+t.userList.Count.ToString();
                         }
                         client.SendTxt(genmsg);
                         break;
