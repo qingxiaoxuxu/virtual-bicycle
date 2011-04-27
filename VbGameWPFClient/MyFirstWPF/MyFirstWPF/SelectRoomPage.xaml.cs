@@ -115,8 +115,6 @@ namespace MyFirstWPF
         public void Reload()
         {
             client.GetTeamList();
-            //System.Threading.Thread.Sleep(2000);
-            //initPosition();
         }
 
         #endregion
