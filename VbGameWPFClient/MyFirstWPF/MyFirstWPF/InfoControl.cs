@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using VbClient.Net;
 
 namespace MyFirstWPF
 {
@@ -75,7 +76,6 @@ namespace MyFirstWPF
         }
 
         private static WaitingRoomPage waitingRoomPage = null;
-
         public static WaitingRoomPage Waiting_Room_Page
         {
             get 
@@ -86,7 +86,18 @@ namespace MyFirstWPF
             }
             set { InfoControl.waitingRoomPage = value; }
         }
-        
+
+        private static ClientEvt client = null;
+        public static ClientEvt Client
+        {
+            get 
+            {
+                if (client == null)
+                    client = new ClientEvt("");
+                return InfoControl.client; 
+            }
+            set { InfoControl.client = value; }
+        }
 
     }
 }
