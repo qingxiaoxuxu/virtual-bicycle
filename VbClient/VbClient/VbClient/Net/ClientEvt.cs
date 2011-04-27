@@ -82,6 +82,11 @@ namespace VbClient.Net
         {
             Client.SendTxt("obj" + msg);
         }
+
+        public void Logout()
+        {
+            Client.SendTxt("logout");
+        }
         void Client_ReceivedTxt(object sender, EventArgs e)
         {
             string[] msgs=sender.ToString().Split('$');
