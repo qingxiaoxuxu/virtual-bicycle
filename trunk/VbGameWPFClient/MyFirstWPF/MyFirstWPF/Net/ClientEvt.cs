@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
- 
+
 using System.Text;
 
 namespace VbClient.Net
@@ -11,14 +11,14 @@ namespace VbClient.Net
 
         public event EventHandler LoginSuccess;
         public event EventHandler LoginFailure;
-        
+
         public event EventHandler CreateSuccess;
         public event EventHandler CreateFailure;
-        
-        public delegate void UpdateMapHandler(object sender,string map);
+
+        public delegate void UpdateMapHandler(object sender, string map);
         public event UpdateMapHandler SettingMap;
-        
-        public delegate void TeamMapList(object sender, List<string> team, List<string> map);
+
+        public delegate void TeamMapList(object sender, List<string> team, List<string> map, List<int> counts);
         public event TeamMapList GotTeamMapList;
 
         public event UpdateMapHandler AddSuccess;
@@ -30,10 +30,11 @@ namespace VbClient.Net
         public event UpdateMapHandler GetOtherBike;
         public event UpdateMapHandler GetObject;
 
+        public event Action BecomeHost;
         public ClientEvt(string serverIp)
         {
             //Client.server = serverIp;
-            Client.ReceivedTxt+=new EventHandler(Client_ReceivedTxt);
+            Client.ReceivedTxt += new EventHandler(Client_ReceivedTxt);
             Client.InitializeClient();
         }
 
@@ -81,9 +82,14 @@ namespace VbClient.Net
         {
             Client.SendTxt("obj" + msg);
         }
+
+        public void Logout()
+        {
+            Client.SendTxt("logout");
+        }
         void Client_ReceivedTxt(object sender, EventArgs e)
         {
-            string[] msgs=sender.ToString().Split('$');
+            string[] msgs = sender.ToString().Split('$');
             switch (msgs[0])
             {
                 case "login":
@@ -94,7 +100,7 @@ namespace VbClient.Net
                                 if (LoginSuccess != null)
                                     LoginSuccess(this, null);
                                 break;
-                            case"error":
+                            case "error":
                                 if (LoginFailure != null)
                                     LoginFailure(this, null);
                                 break;
@@ -118,21 +124,23 @@ namespace VbClient.Net
                     }
                 case "setmap":
                     {
-                        if(SettingMap!=null)
+                        if (SettingMap != null)
                             SettingMap(this, msgs[1]);
                         break;
                     }
                 case "list":
                     {
-                        List<string> team=new List<string>();
-                        List<string> map=new List<string>();
-                        for(int i=1;i<msgs.Length;)
+                        List<string> team = new List<string>();
+                        List<string> map = new List<string>();
+                        List<int> counts = new List<int>();
+                        for (int i = 1; i < msgs.Length; )
                         {
                             team.Add(msgs[i++]);
                             map.Add(msgs[i++]);
+                            counts.Add(Int32.Parse(msgs[i++]));
                         }
-                        if(GotTeamMapList!=null)
-                            GotTeamMapList(this,team,map);
+                        if (GotTeamMapList != null)
+                            GotTeamMapList(this, team, map, counts);
                         break;
                     }
                 case "add":
@@ -143,7 +151,7 @@ namespace VbClient.Net
                                 if (AddSuccess != null)
                                     AddSuccess(this, msgs[2]);
                                 break;
-                            case"error":
+                            case "error":
                                 if (AddFailure != null)
                                     AddFailure(this, null);
                                 break;
@@ -162,6 +170,14 @@ namespace VbClient.Net
                                 if (BeginGame != null)
                                     BeginGame(this, null);
                                 break;
+                        }
+                        break;
+                    }
+                case "host":
+                    {
+                        if (BecomeHost != null)
+                        {
+                            BecomeHost();
                         }
                         break;
                     }

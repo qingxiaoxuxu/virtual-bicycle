@@ -12,18 +12,19 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VbClient.Net;
 
 namespace MyFirstWPF
 {
     /// <summary>
     /// SelectRoomPage.xaml 的交互逻辑
     /// </summary>
-    public partial class SelectRoomPage : UserControl, IKeyDown
+    public partial class SelectRoomPage : UserControl, IKeyDown, IReload
     {
-		
 		int blockState;					//屏幕上第一个roomBlock在全部roomBlock中的顺序
 		int flickerState;				//橙色闪烁标记所处的位置
         int roomCount;                  //总房间数
+        public const int MaxPeople = 4;       //每个房间的最大人数
         const int Left = 100;
         const int Top = 180;
         const int Right = 682;
@@ -34,35 +35,64 @@ namespace MyFirstWPF
         Storyboard blockMoveStory;
         Storyboard flickerMoveStory;
 
+        private ClientEvt client;
+
+        delegate void Fun(List<string> team, List<string> map, List<int> counts);
+        Fun showRoom;
+
         public SelectRoomPage()
         {
             InitializeComponent();
-			blockState = 0;
-            flickerState = 0;
-            roomCount = getRoomInfo();
-            initPosition();
-
-            this.KeyDown +=new KeyEventHandler(KeyboardDown);
+            this.KeyDown += new KeyEventHandler(KeyboardDown);
+            client = InfoControl.Client;
+            client.GotTeamMapList += new ClientEvt.TeamMapList(client_GotTeamMapList);
+            roomCount = 0;
+            showRoom = new Fun(this.getRoomInfo);
+            //blockState = 0;
+            //flickerState = 0;                           //初始定位
+            //roomCount = getRoomInfo();
+            //initPosition();
+            //List<String> team = new List<string>();
+            //team.Add("a");
+            //team.Add("b");
+            //List<String> map = new List<string>();
+            //map.Add("a");
+            //map.Add("b");
+            //List<int> cnt = new List<int>();
+            //cnt.Add(1);
+            //cnt.Add(2);
+            //getRoomInfo(team, map, cnt);
         }
 
-        public int getRoomInfo()        //获取房间信息
+        void client_GotTeamMapList(object sender, List<string> team, List<string> map, List<int> counts)
         {
-            int roomCount = 13;
+            object[] para = new object[3];
+            para[0] = team;
+            para[1] = map;
+            para[2] = counts;
+            this.Dispatcher.Invoke(showRoom, para);
+        }
+
+        //获取房间信息
+        public void getRoomInfo(List<string> team, List<string> map, List<int> counts)   
+        {
+            roomCount = team.Count;
             rooms = new RoomInfoBlock[roomCount];
             for (int i = 0; i < roomCount; i++)
             {
-                rooms[i] = new RoomInfoBlock();
+                rooms[i] = new RoomInfoBlock(team[i], map[i], counts[i]);
                 rooms[i].Name = "room" + i.ToString();
                 RegisterName(rooms[i].Name, rooms[i]);
-                //TODO
             }
-            return roomCount;
+            if (roomCount != 0)
+                initPosition();
         }
 
         //房间位置初始化
         private void initPosition()
         {
             int i, row_offset, col_offset;
+            flickerState = blockState = 0;      //初始定位
             for (i = 0; i < roomCount; i++)
             {
                 row_offset = i / 2 - blockState / 2;
@@ -74,9 +104,22 @@ namespace MyFirstWPF
                     Right - HorMoveUnit * col_offset,
                     Bottom - VerMoveUnit * row_offset);
                 rooms[i].Margin = pos;
+                rooms[i].Height = 120;
+                rooms[i].Width = 500;
                 rooms[i].Opacity = ((row_offset >= 0 && row_offset <= 3) ? 1.0 : 0.0);
             }
         }
+
+        #region IReload 成员
+
+        public void Reload()
+        {
+            client.GetTeamList();
+            //System.Threading.Thread.Sleep(2000);
+            //initPosition();
+        }
+
+        #endregion
 
         #region IKeyDown 成员
 
@@ -168,7 +211,7 @@ namespace MyFirstWPF
                     flickerMoveStory = generateFlickerMoveStoryboard();
                     flickerMoveStory.Begin(this);
                 }
-                else                                                     //flicker必须左移
+                else if (blockState + flickerState + 1 < roomCount)      //flicker必须左移
                 {
                     flickerState++;
                     flickerMoveStory = generateFlickerMoveStoryboard();
@@ -180,7 +223,7 @@ namespace MyFirstWPF
                 blockState += 2;
                 blockMoveStory = generateBlockMoveStoryboard();
                 blockMoveStory.Begin(this);
-                if (blockState + flickerState >= roomCount)           //flicker必须左移
+                if (blockState + flickerState >= roomCount)                 //flicker必须左移
                 {
                     flickerState--;
                     flickerMoveStory = generateFlickerMoveStoryboard();
@@ -247,5 +290,7 @@ namespace MyFirstWPF
             }
             return moveStory;
         }
+
+        
     }
 }

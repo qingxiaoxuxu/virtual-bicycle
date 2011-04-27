@@ -37,17 +37,15 @@ namespace MyFirstWPF
         {
             InitializeComponent();
             this.KeyDown +=new KeyEventHandler(MainFrame_KeyDown);
-            
-            client = new ClientEvt("192.168.137.144");
-            client.Client.ConnectError += new System.IO.ErrorEventHandler(Client_ConnectError);
+            client = InfoControl.Client;                        //获取客户端
+            client.Client.ConnectError+=new System.IO.ErrorEventHandler(Client_ConnectError);
             client.LoginSuccess += new EventHandler(client_LoginSuccess);
             client.LoginFailure += new EventHandler(client_LoginFailure);
-
         }
 
         void Client_ConnectError(object sender, System.IO.ErrorEventArgs e)
         {
-            MessageBox.Show("Err.");
+            MessageBox.Show("Connect Err.");
             this.Dispatcher.Invoke(new Action(() =>
             {
                 this.Close();                                               //匿名委托，支线程调用主线程函数
@@ -86,7 +84,11 @@ namespace MyFirstWPF
             else if (e.Key == Key.Space)
                 index = ((IKeyDown)this.Content).BtnFunction1();            //获得第一个功能键的界面索引
             if (index >= 0)                                                 //索引合法
+            {
                 this.Content = pages[index];                                //显示新界面
+                if (index == INDEX_MULTI_SELECT_ROOM_PAGE)
+                    ((IReload)this.Content).Reload();
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
