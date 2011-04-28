@@ -63,7 +63,7 @@ namespace MyFirstWPF
 
         public int MoveBack()
         {
-            return -1;
+            return -2;          //退出程序
         }
 
         public int BtnFunction1()
