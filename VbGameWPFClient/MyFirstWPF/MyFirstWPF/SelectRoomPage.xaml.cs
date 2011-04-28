@@ -48,32 +48,19 @@ namespace MyFirstWPF
             client.GotTeamMapList += new ClientEvt.TeamMapList(client_GotTeamMapList);
             roomCount = 0;
             showRoom = new Fun(this.getRoomInfo);
-            //blockState = 0;
-            //flickerState = 0;                           //初始定位
-            //roomCount = getRoomInfo();
-            //initPosition();
-            //List<String> team = new List<string>();
-            //team.Add("a");
-            //team.Add("b");
-            //List<String> map = new List<string>();
-            //map.Add("a");
-            //map.Add("b");
-            //List<int> cnt = new List<int>();
-            //cnt.Add(1);
-            //cnt.Add(2);
-            //getRoomInfo(team, map, cnt);
         }
 
+        //生成房间信息
         void client_GotTeamMapList(object sender, List<string> team, List<string> map, List<int> counts)
         {
             object[] para = new object[3];
             para[0] = team;
             para[1] = map;
             para[2] = counts;
-            this.Dispatcher.Invoke(showRoom, para);
+            this.Dispatcher.Invoke(showRoom, para);         //调用getRoomInfo方法
         }
 
-        //获取房间信息
+        //从Server获取房间信息
         public void getRoomInfo(List<string> team, List<string> map, List<int> counts)   
         {
             roomCount = team.Count;
@@ -92,6 +79,12 @@ namespace MyFirstWPF
         private void initPosition()
         {
             int i, row_offset, col_offset;
+
+            if (flickerMoveStory != null)
+                flickerMoveStory.Remove(this);
+            if (blockMoveStory != null)
+                blockMoveStory.Remove(this);    //释放被动画占用的依赖属性
+
             flickerState = blockState = 0;      //初始定位
             for (i = 0; i < roomCount; i++)
             {
@@ -108,6 +101,7 @@ namespace MyFirstWPF
                 rooms[i].Width = 500;
                 rooms[i].Opacity = ((row_offset >= 0 && row_offset <= 3) ? 1.0 : 0.0);
             }
+            flickerCanvas.Margin = new Thickness(Left - 10, Top - 12, Right - 10, Bottom - 12);
         }
 
         #region IReload 成员
@@ -134,7 +128,7 @@ namespace MyFirstWPF
         }
 
         public int Choose()
-        {
+        {   
             if (flickerState != -1)
                 return MainFrame.INDEX_WAITING_ROOM_PAGE;
             return -1;
@@ -152,14 +146,14 @@ namespace MyFirstWPF
 
         #endregion
 
+        #region 移动操作
         //向左移动
         private void moveLeft()
         {
             if (flickerState % 2 == 1)      //奇数，在右边
             {
                 flickerState--;
-                flickerMoveStory = generateFlickerMoveStoryboard();
-                flickerMoveStory.Begin(this);
+                moveFlicker();
             }
         }
 
@@ -171,8 +165,7 @@ namespace MyFirstWPF
                 if (blockState + flickerState + 1 < roomCount)      //有房间
                 {
                     flickerState++;
-                    flickerMoveStory = generateFlickerMoveStoryboard();
-                    flickerMoveStory.Begin(this);
+                    moveFlicker();
                 }
             }
         }
@@ -183,14 +176,12 @@ namespace MyFirstWPF
             if (flickerState / 2 > 0)              //上面有空间，只需要移动flicker
             {
                 flickerState -= 2;
-                flickerMoveStory = generateFlickerMoveStoryboard();
-                flickerMoveStory.Begin(this);
+                moveFlicker();
             }
             else if (blockState / 2 > 0)           //屏幕上方还有房间，block可以向下移动
             {
                 blockState -= 2;
-                blockMoveStory = generateBlockMoveStoryboard();
-                blockMoveStory.Begin(this);
+                moveBlock();
             }
             else                                    //动不了了
             {
@@ -206,35 +197,33 @@ namespace MyFirstWPF
                 if (blockState + flickerState + 2 < roomCount)           //flicker下面有房间，只需要移动flicker
                 { 
                     flickerState += 2;
-                    flickerMoveStory = generateFlickerMoveStoryboard();
-                    flickerMoveStory.Begin(this);
+                    moveFlicker();
                 }
                 else if (blockState + flickerState + 1 < roomCount)      //flicker必须左移
                 {
                     flickerState++;
-                    flickerMoveStory = generateFlickerMoveStoryboard();
-                    flickerMoveStory.Begin(this);
+                    moveFlicker();
                 }
             }
             else if (blockState + 8 < roomCount)                         //屏幕下方还有房间，block可以向上移动
             {
                 blockState += 2;
-                blockMoveStory = generateBlockMoveStoryboard();
-                blockMoveStory.Begin(this);
+                moveBlock();
                 if (blockState + flickerState >= roomCount)                 //flicker必须左移
                 {
                     flickerState--;
-                    flickerMoveStory = generateFlickerMoveStoryboard();
-                    flickerMoveStory.Begin(this);
+                    moveFlicker();
                 }
             }
             else                                                          //动不了了
             {
 
             }
-            
-        }
 
+        }
+        #endregion
+
+        #region 故事版
         //生成选择Flicker移动的故事版
         private Storyboard generateFlickerMoveStoryboard()
         {
@@ -255,7 +244,7 @@ namespace MyFirstWPF
         }
 
         //生成block移动的故事板
-        private Storyboard generateBlockMoveStoryboard()     
+        private Storyboard generateBlockMoveStoryboard()  
         {
             int i, row_offset, col_offset;
             Storyboard moveStory = new Storyboard();
@@ -289,6 +278,19 @@ namespace MyFirstWPF
             return moveStory;
         }
 
-        
+        //移动flickerCanvas
+        private void moveFlicker()
+        {
+            flickerMoveStory = generateFlickerMoveStoryboard();
+            flickerMoveStory.Begin(this, HandoffBehavior.SnapshotAndReplace, true);
+        }
+
+        //移动roomBlock
+        private void moveBlock()
+        {
+            blockMoveStory = generateBlockMoveStoryboard();
+            blockMoveStory.Begin(this, HandoffBehavior.SnapshotAndReplace, true);
+        }
+        #endregion
     }
 }

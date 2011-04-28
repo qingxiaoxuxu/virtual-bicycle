@@ -85,10 +85,12 @@ namespace MyFirstWPF
                 index = ((IKeyDown)this.Content).BtnFunction1();            //获得第一个功能键的界面索引
             if (index >= 0)                                                 //索引合法
             {
-                this.Content = pages[index];                                //显示新界面
                 if (index == INDEX_MULTI_SELECT_ROOM_PAGE)
-                    ((IReload)this.Content).Reload();
+                    ((IReload)pages[index]).Reload();
+                this.Content = pages[index];                                //显示新界面
             }
+            else if (index == -2)                                           //退出程序
+                this.Close();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
