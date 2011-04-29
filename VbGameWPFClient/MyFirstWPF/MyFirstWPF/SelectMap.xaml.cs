@@ -44,9 +44,9 @@ namespace MyFirstWPF
             iconCanvas[0] = singleCanvas;
             iconCanvas[1] = createGameCanvas;
             iconCanvas[2] = joinGameCanvas;
-            showTexts[0] = "Scene1";
-            showTexts[1] = "Scene2";
-            showTexts[2] = "Scene3";
+            showTexts[0] = "丛林小径";
+            showTexts[1] = "城镇街区";
+            showTexts[2] = "盘山公路";
             initPosition();             				//按钮位置初始化
             iconText.Text = showTexts[0];
         }
