@@ -17,25 +17,25 @@
 		</Grid.Background>
 		<Canvas Margin="512,260,514,286"  x:Name="singleCanvas">
 			<Canvas.Background>
-				<ImageBrush Stretch="Fill" ImageSource="Contents\Images\single.png"/>
+				<ImageBrush Stretch="Fill" ImageSource="Contents\Images\scene1.png"/>
 			</Canvas.Background>
 		</Canvas>
 		<Canvas Margin="768,260,258,286"  x:Name="createGameCanvas" Opacity="0.5">
 			<Canvas.Background>
-				<ImageBrush Stretch="Fill" ImageSource="Contents\Images\createGame.png" />
+				<ImageBrush Stretch="Fill" ImageSource="Contents\Images\scene2.png" />
 			</Canvas.Background>
 		</Canvas>
 		<Canvas Margin="1024,260,2,286" x:Name="joinGameCanvas" Opacity="0.0">
 			<Canvas.Background>
-				<ImageBrush Stretch="Fill" ImageSource="Contents\Images\joinGame.png"/>
+				<ImageBrush Stretch="Fill" ImageSource="Contents\Images\scene3.png"/>
 			</Canvas.Background>
 		</Canvas>
 		<TextBlock x:Name="titleText" FontSize="32pt" Foreground="White" TextAlignment="Center"
 			FontFamily="微软雅黑" Text="选择地图" Margin="512,90,514,0" VerticalAlignment="Top" Height="50" />
 		<TextBlock x:Name="iconText" FontSize="24pt" Foreground="White" TextAlignment="Center" Width="512"
 			FontFamily="微软雅黑" Margin="0,192,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="50"/>
-		<TextBlock x:Name="iconText2" FontSize="24pt" Foreground="White" TextAlignment="Center" Width="512"
-			FontFamily="微软雅黑" Text="玩家上限" Margin="0,0,0,230" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="50"/>
+		<TextBlock x:Name="iconText2" FontSize="24pt" Foreground="White" TextAlignment="Center" 
+                   FontFamily="微软雅黑" Text="玩家上限: 4人" Margin="385,0,385,180" VerticalAlignment="Bottom" Height="50"/>
 		<Canvas x:Name="RightArrow" HorizontalAlignment="Right" Margin="0,330,128,380" Width="96">
 			<Canvas.Background>
 				<ImageBrush Stretch="Fill" ImageSource="Contents\Images\little_arrow.png"/>
