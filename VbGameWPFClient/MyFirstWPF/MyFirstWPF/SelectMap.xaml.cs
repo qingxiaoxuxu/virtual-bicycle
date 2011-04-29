@@ -25,6 +25,8 @@ namespace MyFirstWPF
 
         int mode;                                       //单人模式（0） 或  联网模式（1）
         int state;										//哪个按钮被选中
+        int peopleState;                                //选择人数的状态
+        int flickerState;                               //箭头的位置
         const int IconCount = 3;                        //按钮数量
         const double Left = 512;                        //初始Margin.Left
         const double Top = 260;                         //初始Margin.Top
@@ -32,15 +34,20 @@ namespace MyFirstWPF
         const double Bottom = 286;                      //初始Margin.Bottom   (这些是正中间图标的坐标)
         const int MoveUnit = 256;                       //图标移动尺寸
         const int ShrinkUnit = 80;                      //图标缩小尺寸
+        const int FlickerTop = 330;                     //箭头初始Margin.Top
+        const int FlickerMoveUnit = 240;                //箭头上下移动尺寸
         Storyboard moveStory;
         Canvas[] iconCanvas = new Canvas[IconCount];
-        String[] showTexts = new String[IconCount];
+        String[] showTexts = new String[IconCount]; 
+        string[] msk = new string[] { "Two", "Three", "Four" }; //Storyboard对应名称
 
         public SelectMapPage(int md)
         {
             InitializeComponent();
             mode = md;
-            state = 0;									//初始状态为0
+            state = 0;									//初始地图是第一幅
+            flickerState = 0;                           //flicker初始状态为修改地图
+            peopleState = 2;                            //设定人数状态为2（四人）
             iconCanvas[0] = singleCanvas;
             iconCanvas[1] = createGameCanvas;
             iconCanvas[2] = joinGameCanvas;
@@ -48,7 +55,21 @@ namespace MyFirstWPF
             showTexts[1] = "城镇街区";
             showTexts[2] = "盘山公路";
             initPosition();             				//按钮位置初始化
-            iconText.Text = showTexts[0];
+            mapText.Text = showTexts[0];
+            if (md == MODE_MULTI)
+            {
+                string str = "Large" + msk[peopleState] + "Story";
+                (this.Resources[str] as Storyboard).Begin(this);
+            }
+            else
+            {
+                LeftArrow.Visibility = Visibility.Hidden;
+                RightArrow.Visibility = Visibility.Hidden;
+                iconText2.Visibility = Visibility.Hidden;
+                peopleTwo.Visibility = Visibility.Hidden;
+                peopleThree.Visibility = Visibility.Hidden;
+                peopleFour.Visibility = Visibility.Hidden;
+            }
         }
 
         #region IKeyDown 成员
@@ -59,6 +80,10 @@ namespace MyFirstWPF
                 moveLeft();
             else if (e.Key == Key.Right)
                 moveRight();
+            else if (e.Key == Key.Up)
+                moveUp();
+            else if (e.Key == Key.Down)
+                moveDown();
         }
 
         public int Choose()
@@ -91,28 +116,80 @@ namespace MyFirstWPF
 
         #endregion
 
+        //向上移动(仅多人游戏模式有效)
+        private void moveUp()
+        {
+            if (flickerState == 1 && mode == MODE_MULTI)
+            {
+                flickerState--;
+                LeftArrow.Margin = new Thickness(
+                    LeftArrow.Margin.Left,
+                    FlickerTop,
+                    0, 0);
+                RightArrow.Margin = new Thickness(
+                    0, FlickerTop,
+                    RightArrow.Margin.Right, 0);
+            }
+        }
+
+        //向下移动(仅多人模式有效)
+        private void moveDown()
+        {
+            if (flickerState == 0 && mode == MODE_MULTI)
+            {
+                flickerState++;
+                LeftArrow.Margin = new Thickness(
+                    LeftArrow.Margin.Left, 
+                    FlickerTop + FlickerMoveUnit, 
+                    0, 0);
+                RightArrow.Margin = new Thickness(
+                    0, FlickerTop + FlickerMoveUnit,
+                    RightArrow.Margin.Right, 0);
+            }
+        }
+
         //向左移动
         private void moveLeft()
         {
-            if (state > 0)
+            if (flickerState == 0 && state > 0)
             {
                 state--;
-                iconText.Text = showTexts[state];
+                mapText.Text = showTexts[state];
                 moveStory = generateMoveStoryboard();
                 moveStory.Begin(this);
+            }
+            else if (flickerState == 1 && peopleState > 0)
+            {
+                peopleState--;
+                MovePeople(peopleState, peopleState + 1);
             }
         }
 
         //向右移动
         private void moveRight()
         {
-            if (state < IconCount - 1)
+            if (flickerState == 0 && state < IconCount - 1)
             {
                 state++;
-                iconText.Text = showTexts[state];
+                mapText.Text = showTexts[state];
                 moveStory = generateMoveStoryboard();
                 moveStory.Begin(this);
             }
+            else if (flickerState == 1 && peopleState < 2)
+            {
+                peopleState++;
+                MovePeople(peopleState, peopleState - 1);
+            }
+        }
+
+        //下方显示人数的TextBlock的移动
+        private void MovePeople(int state, int lastState)
+        {
+            string large, small;
+            large = "Large" + msk[state] + "Story";
+            small = "Small" + msk[lastState] + "Story";
+            (this.Resources[large] as Storyboard).Begin(this);
+            (this.Resources[small] as Storyboard).Begin(this);
         }
 
         //图标位置初始化

@@ -4,11 +4,82 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Class="MyFirstWPF.SelectMapPage"
     Height="802" Width="1282" mc:Ignorable="d">
 	<UserControl.Resources>
-		<Storyboard x:Key="ArrowMoveStory"/>
-	</UserControl.Resources>
+		<Storyboard x:Key="onLoaded" RepeatBehavior="Forever">
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="LeftArrow" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="0.5"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.8000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="RightArrow" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="0.5"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.8000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+		<Storyboard x:Key="LargeTwoStory">
+			<DoubleAnimation Storyboard.TargetName="peopleTwo" Storyboard.TargetProperty="(TextElement.FontSize)"
+                             Duration="00:00:00.3000000" To="40" From="32"/>
+			<DoubleAnimation Storyboard.TargetName="peopleTwo" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)"
+                             Duration="00:00:00.3000000" To="-4" From="0"/>
+            <DoubleAnimation Storyboard.TargetName="peopleTwo" Storyboard.TargetProperty="(UIElement.Opacity)"
+                             Duration="00:00:00.3000000" To="1" From="0.35"/>
+            <ColorAnimation  Storyboard.TargetName="peopleTwo" Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+                             Duration="00:00:00.3000000" To="#FFDACB21" From="#FFFFFFFF"/>
+		</Storyboard>
+        <Storyboard x:Key="LargeThreeStory">
+            <DoubleAnimation Storyboard.TargetName="peopleThree" Storyboard.TargetProperty="(TextElement.FontSize)"
+                             Duration="00:00:00.3000000" To="40" From="32"/>
+            <DoubleAnimation Storyboard.TargetName="peopleThree" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)"
+                             Duration="00:00:00.3000000" To="-4" From="0"/>
+            <DoubleAnimation Storyboard.TargetName="peopleThree" Storyboard.TargetProperty="(UIElement.Opacity)"
+                             Duration="00:00:00.3000000" To="1" From="0.35"/>
+            <ColorAnimation  Storyboard.TargetName="peopleThree" Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+                             Duration="00:00:00.3000000" To="#FFDACB21" From="#FFFFFFFF"/>
+        </Storyboard>
+        <Storyboard x:Key="LargeFourStory">
+            <DoubleAnimation Storyboard.TargetName="peopleFour" Storyboard.TargetProperty="(TextElement.FontSize)"
+                             Duration="00:00:00.3000000" To="40" From="32"/>
+            <DoubleAnimation Storyboard.TargetName="peopleFour" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)"
+                             Duration="00:00:00.3000000" To="-4" From="0"/>
+            <DoubleAnimation Storyboard.TargetName="peopleFour" Storyboard.TargetProperty="(UIElement.Opacity)"
+                             Duration="00:00:00.3000000" To="1" From="0.35"/>
+            <ColorAnimation  Storyboard.TargetName="peopleFour" Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+                             Duration="00:00:00.3000000" To="#FFDACB21" From="#FFFFFFFF"/>
+        </Storyboard>
+        <Storyboard x:Key="SmallTwoStory">
+            <DoubleAnimation Storyboard.TargetName="peopleTwo" Storyboard.TargetProperty="(TextElement.FontSize)"
+                             Duration="00:00:00.3000000" To="32" From="40"/>
+            <DoubleAnimation Storyboard.TargetName="peopleTwo" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)"
+                             Duration="00:00:00.3000000" To="0" From="-4"/>
+            <DoubleAnimation Storyboard.TargetName="peopleTwo" Storyboard.TargetProperty="(UIElement.Opacity)"
+                             Duration="00:00:00.3000000" To="0.35" From="1"/>
+            <ColorAnimation  Storyboard.TargetName="peopleTwo" Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+                             Duration="00:00:00.3000000" To="#FFFFFFFF" From="#FFDACB21"/>
+        </Storyboard>
+        <Storyboard x:Key="SmallThreeStory">
+            <DoubleAnimation Storyboard.TargetName="peopleThree" Storyboard.TargetProperty="(TextElement.FontSize)"
+                             Duration="00:00:00.3000000" To="32" From="40"/>
+            <DoubleAnimation Storyboard.TargetName="peopleThree" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)"
+                             Duration="00:00:00.3000000" To="0" From="-4"/>
+            <DoubleAnimation Storyboard.TargetName="peopleThree" Storyboard.TargetProperty="(UIElement.Opacity)"
+                             Duration="00:00:00.3000000" To="0.35" From="1"/>
+            <ColorAnimation  Storyboard.TargetName="peopleThree" Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+                             Duration="00:00:00.3000000" To="#FFFFFFFF" From="#FFDACB21"/>
+        </Storyboard>
+        <Storyboard x:Key="SmallFourStory">
+            <DoubleAnimation Storyboard.TargetName="peopleFour" Storyboard.TargetProperty="(TextElement.FontSize)"
+                             Duration="00:00:00.3000000" To="32" From="40"/>
+            <DoubleAnimation Storyboard.TargetName="peopleFour" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)"
+                             Duration="00:00:00.3000000" To="0" From="-4"/>
+            <DoubleAnimation Storyboard.TargetName="peopleFour" Storyboard.TargetProperty="(UIElement.Opacity)"
+                             Duration="00:00:00.3000000" To="0.35" From="1"/>
+            <ColorAnimation  Storyboard.TargetName="peopleFour" Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+                             Duration="00:00:00.3000000" To="#FFFFFFFF" From="#FFDACB21"/>
+        </Storyboard>
+    </UserControl.Resources>
 	<UserControl.Triggers>
 		<EventTrigger RoutedEvent="FrameworkElement.Loaded">
-			<BeginStoryboard Storyboard="{StaticResource ArrowMoveStory}"/>
+			<BeginStoryboard x:Name="LargeTwoStory_BeginStoryboard" Storyboard="{StaticResource onLoaded}"/>
 		</EventTrigger>
 	</UserControl.Triggers>
 	<Grid x:Name="LayoutRoot">
@@ -31,17 +102,53 @@
 			</Canvas.Background>
 		</Canvas>
 		<TextBlock x:Name="titleText" FontSize="32pt" Foreground="White" TextAlignment="Center"
-			FontFamily="微软雅黑" Text="选择地图" Margin="512,90,514,0" VerticalAlignment="Top" Height="50" />
-		<TextBlock x:Name="iconText" FontSize="24pt" Foreground="White" TextAlignment="Center" Width="512"
-			FontFamily="微软雅黑" Margin="0,192,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="50"/>
+			FontFamily="微软雅黑" Text="选择地图" Margin="512,75,514,0" VerticalAlignment="Top" Height="50" />
+		<TextBlock x:Name="mapText" FontSize="24pt" Foreground="White" TextAlignment="Center" Width="512"
+			FontFamily="微软雅黑" Margin="0,180,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="50"/>
 		<TextBlock x:Name="iconText2" FontSize="24pt" Foreground="White" TextAlignment="Center" 
-                   FontFamily="微软雅黑" Text="玩家上限: 4人" Margin="385,0,385,180" VerticalAlignment="Bottom" Height="50"/>
-		<Canvas x:Name="RightArrow" HorizontalAlignment="Right" Margin="0,330,128,380" Width="96">
+                   FontFamily="微软雅黑" Text="玩家上限:" Margin="313,0,747,166" VerticalAlignment="Bottom" Height="50" RenderTransformOrigin="0.5,0.5"/>
+		<TextBlock x:Name="peopleTwo" FontSize="24pt" Foreground="White" TextAlignment="Center" 
+                   FontFamily="微软雅黑" Text="2人" Margin="555,0,615,166" VerticalAlignment="Bottom" Height="50" RenderTransformOrigin="0.5,0.5" Opacity="0.35" Background="{x:Null}" FontWeight="Bold">
+			<TextBlock.RenderTransform>
+				<TransformGroup>
+					<ScaleTransform/>
+					<SkewTransform/>
+					<RotateTransform/>
+					<TranslateTransform/>
+				</TransformGroup>
+			</TextBlock.RenderTransform>
+		</TextBlock>
+        <TextBlock x:Name="peopleThree" FontSize="24pt" Foreground="White" TextAlignment="Center" 
+                   FontFamily="微软雅黑" Text="3人" Margin="681,0,489,166" VerticalAlignment="Bottom" Height="50" RenderTransformOrigin="0.5,0.5" Opacity="0.35" FontWeight="Bold">
+            <TextBlock.RenderTransform>
+				<TransformGroup>
+					<ScaleTransform/>
+					<SkewTransform/>
+					<RotateTransform/>
+					<TranslateTransform/>
+				</TransformGroup>
+			</TextBlock.RenderTransform>
+        </TextBlock>
+        <TextBlock x:Name="peopleFour" FontSize="24pt" Foreground="White" TextAlignment="Center" 
+				   FontFamily="微软雅黑" Text="4人" Margin="807,0,363,166" VerticalAlignment="Bottom" Height="50" RenderTransformOrigin="0.5,0.5" Opacity="0.35" FontWeight="Bold">
+			<TextBlock.RenderTransform>
+				<TransformGroup>
+					<ScaleTransform/>
+					<SkewTransform/>
+					<RotateTransform/>
+					<TranslateTransform/>
+				</TransformGroup>
+			</TextBlock.RenderTransform>
+		</TextBlock>
+		<Canvas Name="RightArrow" HorizontalAlignment="Right" Margin="0,330,128,0" Width="96" VerticalAlignment="Top" Height="92">
 			<Canvas.Background>
 				<ImageBrush Stretch="Fill" ImageSource="Contents\Images\little_arrow.png"/>
 			</Canvas.Background>
 		</Canvas>
-		<Canvas Name="LeftArrow" HorizontalAlignment="Left" Margin="126,330,0,380" Width="96" RenderTransformOrigin="0.5,0.5">
+		<Canvas Name="LeftArrow" HorizontalAlignment="Left" Margin="126,330,0,0" Width="96" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Height="92">
+			<Canvas.Background>
+				<ImageBrush ImageSource="Contents/Images/little_arrow.png" Stretch="Fill"/>
+			</Canvas.Background>
 			<Canvas.RenderTransform>
 				<TransformGroup>
 					<ScaleTransform ScaleX="-1"/>
@@ -50,9 +157,6 @@
 					<TranslateTransform/>
 				</TransformGroup>
 			</Canvas.RenderTransform>
-			<Canvas.Background>
-				<ImageBrush Stretch="Fill" ImageSource="Contents\Images\little_arrow.png"/>
-			</Canvas.Background>
 		</Canvas>
 	</Grid>
 </UserControl>
