@@ -27,9 +27,9 @@ namespace MyFirstWPF
         int state;										//哪个按钮被选中
         const int IconCount = 3;                        //按钮数量
         const double Left = 512;                        //初始Margin.Left
-        const double Top = 240;                         //初始Margin.Top
+        const double Top = 260;                         //初始Margin.Top
         const double Right = 514;                       //初始Margin.Right
-        const double Bottom = 306;                      //初始Margin.Bottom   (这些是正中间图标的坐标)
+        const double Bottom = 286;                      //初始Margin.Bottom   (这些是正中间图标的坐标)
         const int MoveUnit = 256;                       //图标移动尺寸
         const int ShrinkUnit = 80;                      //图标缩小尺寸
         Storyboard moveStory;
