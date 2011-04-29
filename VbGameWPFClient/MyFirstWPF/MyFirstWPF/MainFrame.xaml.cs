@@ -45,11 +45,11 @@ namespace MyFirstWPF
 
         void Client_ConnectError(object sender, System.IO.ErrorEventArgs e)
         {
-            MessageBox.Show("Connect Err.");
-            this.Dispatcher.Invoke(new Action(() =>
-            {
-                this.Close();                                               //匿名委托，支线程调用主线程函数
-            }));
+            //MessageBox.Show("Connect Err.");
+            //this.Dispatcher.Invoke(new Action(() =>
+            //{
+            //    this.Close();                                               //匿名委托，支线程调用主线程函数
+            //}));
         }
 
         void client_LoginSuccess(object sender, EventArgs e)
