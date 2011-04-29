@@ -63,6 +63,13 @@ namespace MyFirstWPF
         //从Server获取房间信息
         public void getRoomInfo(List<string> team, List<string> map, List<int> counts)   
         {
+            if (rooms != null)              //控件注销
+                for (int i = 0; i < rooms.Length; i++)
+                {
+                    LayoutRoot.Children.Remove(rooms[i]);
+                    UnregisterName(rooms[i].Name);
+                    rooms[i] = null;
+                }
             roomCount = team.Count;
             rooms = new RoomInfoBlock[roomCount];
             for (int i = 0; i < roomCount; i++)

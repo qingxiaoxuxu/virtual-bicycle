@@ -55,7 +55,7 @@ namespace MyFirstWPF
         void client_LoginSuccess(object sender, EventArgs e)
         {
             InfoControl.UserName = user;
-            MessageBox.Show("Login Success!");
+            //MessageBox.Show("Login Success!");
         }
 
         void client_LoginFailure(object sender, EventArgs e)
