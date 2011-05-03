@@ -12,6 +12,37 @@ namespace VbServer.Net
         public ServerEvt()
         {
             Server.ReceivedTxt += new ClientEventHandel(Server_ReceivedTxt);
+            Server.WrittenMsg += new ClientEventHandel(Server_WrittenMsg);
+            Server.AcceptedClient += new EventHandler(Server_AcceptedClient);
+        }
+
+        void Server_WrittenMsg(Client client, string msg)
+        {
+            Console.WriteLine("Sending:" + msg);
+        }
+
+        void Server_AcceptedClient(object sender, EventArgs e)
+        {
+            (sender as Client).DisConnect += new EventHandler(ServerEvt_DisConnect);
+        }
+
+        void ServerEvt_DisConnect(object sender, EventArgs e)
+        {
+            for (int i = teamList.Count - 1; i >= 0;i-- )
+            {
+                teamList[i].DelUser(sender as Client);
+                if (teamList[i].userList.Count == 0)
+                {
+                    teamList.RemoveAt(i);
+                }
+                else
+                {
+                    teamList[i].userList[0].client.SendTxt("host");
+                }
+
+            }
+            User u = FindUserByClient(User.allLoginUser, sender as Client);
+            User.allLoginUser.Remove(u);
         }
         //通过房间名找房间
         public static Team FindTeamByName(List<Team> list, string name)
@@ -34,7 +65,12 @@ namespace VbServer.Net
                 {
                     return t;
                 }
+                if (t.playerList.Contains(u))
+                {
+                    return t;
+                }
             }
+
             return null;
         }
          //通过Client寻找用户
@@ -49,11 +85,24 @@ namespace VbServer.Net
             }
             return null;
         }
+        //通过Id寻找用户
+        public static User FindUserById(List<User> list, string id)
+        {
+            foreach (User u in list)
+            {
+                if (u.userId == id)
+                {
+                    return u;
+                }
+            }
+            return null;
+        }
         void Server_ReceivedTxt(Client client, string msg)
         {
             string[] msgs = msg.Split('$');
             switch (msgs[0])
             {
+                #region 登录界面消息
                 case "login":
                     {
                         User u = new User(msgs[1], msgs[2], client);
@@ -61,6 +110,7 @@ namespace VbServer.Net
                         u.client.SendTxt("login$ok");
                         break;
                     }
+                
                 case "create":
                     {
                         Team t = new Team(msgs[1]);
@@ -79,9 +129,46 @@ namespace VbServer.Net
                         }
                         break;
                     }
+                case "setcar":
+                    {
+                        User temp=FindUserByClient(User.allLoginUser, client);
+                        Team t = FindTeamByUser(teamList, temp);
+                        temp.carId = msgs[1];
+                        foreach (User u in t.userList)
+                        {
+                            if(u.client!=client)
+                               u.client.SendTxt("setcar$"+temp.userId+"$" + temp.carId);
+                        }
+                        break;
+                    }
+                case "getroominfo":
+                    {
+                        string allInfo = "";
+                        Team t = FindTeamByUser(teamList, FindUserByClient(User.allLoginUser, client));
+                        allInfo += t.teamName + "$" + t.mapName + "$" + t.playerList.Count.ToString();
+                        foreach (User u in t.userList)
+                        {
+                            allInfo += "$" + u.userId + "$" + u.userName+"$"+u.carId;
+                        }
+                        client.SendTxt(allInfo);
+                        break;
+                        
+                    }
                 case "getlist":
                     {
                         string genmsg = "list";
+                        #region test
+                        //teamList.Clear();
+                        //for (int i = 0; i < 12; i++)
+                        //{
+                        //    Team t = new Team("lkq"+i.ToString());
+                        //    t.mapName = "forest"+i.ToString();
+                        //    teamList.Add(t);
+                        //}
+                        //Team p = new Team("Hello World!");
+                        //p.mapName = "看到我就对了~";
+                        //teamList.Add(p);
+                        #endregion
                         foreach (Team t in teamList)
                         {
                             genmsg += "$" + t.teamName + "$" + t.mapName+"$"+t.userList.Count.ToString();
@@ -107,6 +194,10 @@ namespace VbServer.Net
                         if (t.userList.Count == 0)
                         {
                             teamList.Remove(t);
+                        }
+                        else
+                        {
+                            t.userList[0].client.SendTxt("host");
                         }
                         break;
                     }
@@ -139,12 +230,60 @@ namespace VbServer.Net
                         }
                         break;
                     }
+                case "logout":
+                    {
+                        User u = FindUserByClient(User.allLoginUser,client);
+                        User.allLoginUser.Remove(u);
+                        break;
+                    }
+                #endregion 登录界面消息
+
+                #region 游戏中消息
+                case "connect":
+                    {
+                        User temp = FindUserById(User.allLoginUser, msgs[1]);
+                        User newTemp = new User(temp.userName, temp.userId, client);
+                        FindTeamByUser(teamList, temp).playerList.Add(newTemp);
+                        User.allLoginUser.Add(newTemp);
+                        client.DisConnect += new EventHandler(client_DisConnect);
+                        break;
+                    }
+                case "info":
+                    {
+                        string allInfo = "";
+                        Team t = FindTeamByUser(teamList, FindUserByClient(User.allLoginUser, client));
+                        allInfo+=t.teamName+"$"+t.mapName+"$"+t.playerList.Count.ToString();
+                        foreach(User u in t.playerList)
+                        {
+                            allInfo += "$" + u.userId + "$" + u.userName+"$"+u.carId;
+                        }
+                        client.SendTxt(allInfo);
+                        break;
+                    }
+                case "begingame":
+                    {
+                        
+                        Team t = FindTeamByUser(teamList, FindUserByClient(User.allLoginUser, client));
+                        t.loadingRightCount++;
+                        if (t.loadingRightCount == t.playerList.Count)
+                        {
+                            foreach (User u in t.playerList)
+                            {
+                                u.client.SendTxt("begingame");
+                            }
+                        }
+                        break;
+                        
+                    }
                 case "vb":
                     {
                         Team t = FindTeamByUser(teamList, FindUserByClient(User.allLoginUser, client));
-                        foreach (User u in t.userList)
+                        User current = FindUserByClient(User.allLoginUser, client);
+                        msg=msg.Replace("vb$", "");
+                        foreach (User u in t.playerList)
                         {
-                            u.client.SendTxt(msg);
+                            if(u.client!=client)
+                                u.client.SendTxt("vb$"+current.userId+"$"+msg);
                         }
                         break;
                     }
@@ -152,13 +291,24 @@ namespace VbServer.Net
                 case "obj":
                     {
                         Team t = FindTeamByUser(teamList, FindUserByClient(User.allLoginUser, client));
-                        foreach (User u in t.userList)
+                        User current = FindUserByClient(User.allLoginUser, client);
+                        msg = msg.Replace("obj$", "");
+                        foreach (User u in t.playerList)
                         {
-                            u.client.SendTxt(msg);
+                            if (u.client != client)
+                                u.client.SendTxt("obj$"+current.userId+"$"+msg);
                         }
                         break;
                     }
+                #endregion 游戏中消息
             }
+        }
+
+        void client_DisConnect(object sender, EventArgs e)
+        {
+            User u=FindUserByClient(User.allLoginUser, sender as Client);
+            FindTeamByUser(teamList, u).playerList.Remove(u);
+            User.allLoginUser.Remove(u);
         }
     }
 }
