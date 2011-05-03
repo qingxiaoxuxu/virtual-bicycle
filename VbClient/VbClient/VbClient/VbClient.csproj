@@ -60,6 +60,7 @@
     </Compile>
     <Compile Include="Net\ClientConfig.cs" />
     <Compile Include="Net\ClientEvt.cs" />
+    <Compile Include="Net\ClientGEvt.cs" />
     <Compile Include="Net\DataPort.cs" />
     <Compile Include="Net\OESClient.cs" />
     <Compile Include="Program.cs" />
