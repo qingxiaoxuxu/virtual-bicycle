@@ -25,6 +25,13 @@ namespace VbClient.Net
         /// </summary>
         public event Action BeginGame;
 
+        /// <summary>
+        /// 获得一个用户当前车子状态
+        /// </summary>
+        /// <param name="userId">用户Id</param>
+        /// <param name="states">12个用户状态参数</param>
+        public delegate void BikeState(string userId, double[] states);
+        public event BikeState GetBikeState;
 
         public ClientGEvt(string serverIp)
         {
@@ -48,9 +55,20 @@ namespace VbClient.Net
             Client.SendTxt("info");
         }
 
-        public void SendBikeState(string msg)
+        /// <summary>
+        /// 发送车子状态
+        /// </summary>
+        /// <param name="userId">用户ID</param>
+        /// <param name="states">12个浮点参数</param>
+        public void SendBikeState(string userId,double[] states )
         {
-            Client.SendTxt(msg);
+            string gen = "";
+            gen ="vb$"+ userId ;
+            for (int i = 0; i < states.Length; i++)
+            {
+                gen += "$" + states[i].ToString();
+            }
+            Client.SendTxt(gen);
         }
 
         void Client_ReceivedTxt(object sender, EventArgs e)
@@ -65,7 +83,12 @@ namespace VbClient.Net
                     }
                 case "vb":
                     {
-                        
+                        double[] para = new double[12];
+                        for (int i = 2; i < 14; i++)
+                        {
+                            para[i - 2] = Convert.ToDouble(msgs[i]);
+                        }
+                        GetBikeState(msgs[1], para);
                         break;
                     }
                 case "obj":
