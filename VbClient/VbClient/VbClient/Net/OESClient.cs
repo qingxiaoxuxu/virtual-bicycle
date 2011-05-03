@@ -16,7 +16,7 @@ namespace VbClient.Net
         //客户端Socket--用于和服务端通信
         private TcpClient client;
         //命令端口大小
-        private static int bufferSize = 128;  
+        private static int bufferSize = 12800;  
         //Byte数据数组
         private Byte[] buffer = new Byte[bufferSize];
         //网络流
