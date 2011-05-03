@@ -18,6 +18,12 @@ namespace VbServer
         //就绪人数
         public int readyCount = 0;
 
+        //进入游戏后的玩家用户
+        public List<User> playerList = new List<User>();
+
+        //游戏载入正确用户数
+        public int loadingRightCount = 0;
+
         //添加一个用户
         public void AddUser(Client c)
         {

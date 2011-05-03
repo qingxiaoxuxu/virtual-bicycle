@@ -15,6 +15,8 @@ namespace VbServer
         public Client client;
         //是否是房主
         public bool isAdmin;
+        //用户的自行车型号
+        public string carId="0";
         //用户构造函数
         public User(string name ,string id, Client c)
         {
