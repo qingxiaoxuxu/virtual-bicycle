@@ -158,5 +158,5 @@
 				</TransformGroup>
 			</Canvas.RenderTransform>
 		</Canvas>
-	</Grid>
+    </Grid>
 </UserControl>

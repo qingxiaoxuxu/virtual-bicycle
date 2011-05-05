@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
- 
+
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Net.NetworkInformation;
+//using System.Windows.Forms;
 using System.Threading;
 using System.IO;
 
@@ -15,7 +16,7 @@ namespace VbClient.Net
         //客户端Socket--用于和服务端通信
         private TcpClient client;
         //命令端口大小
-        private static int bufferSize = 1280;  
+        private static int bufferSize = 12800;
         //Byte数据数组
         private Byte[] buffer = new Byte[bufferSize];
         //网络流
@@ -23,7 +24,7 @@ namespace VbClient.Net
         //字符串类型的原始消息
         private string raw_msg = String.Empty;
         //服务器地址
-        public string server = ClientConfig.RemoteIp.ToString(); 
+        public string server = ClientConfig.RemoteIp.ToString();
         //服务器端口
         public int portNum = ClientConfig.RemotePort;
         //客户端数据端口
@@ -33,11 +34,11 @@ namespace VbClient.Net
         /// </summary>
         public DataPort Port
         {
-            get  
+            get
             {
-                return port; 
+                return port;
             }
-            set 
+            set
             {
                 port = value;
             }
@@ -88,7 +89,7 @@ namespace VbClient.Net
         /// </summary>
         public OESClient()
         {
-            
+
         }
         /// <summary>
         /// 开始连接服务端
@@ -130,7 +131,7 @@ namespace VbClient.Net
                 }
                 ns.BeginRead(buffer, 0, bufferSize, new AsyncCallback(receive_callBack), client);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 if (ConnectError != null)
                 {
@@ -243,11 +244,11 @@ namespace VbClient.Net
         /// </summary>
         public void SendFileMsg()
         {
-            FileInfo fi=new FileInfo(port.FilePath);
-            string tmsg = "cmd#2#"+fi.Length.ToString();
+            FileInfo fi = new FileInfo(port.FilePath);
+            string tmsg = "cmd#2#" + fi.Length.ToString();
             WriteMsg(tmsg);
         }
-        
+
         /// <summary>
         /// 向服务端请求上传文件
         /// </summary>
@@ -293,7 +294,7 @@ namespace VbClient.Net
             {
                 ns.BeginWrite(tBuffer, 0, tBuffer.Length, new AsyncCallback(write_callBack), client);
             }
-            catch
+            catch (Exception e)
             {
                 //网络出错处理程序
             }
@@ -308,7 +309,7 @@ namespace VbClient.Net
             {
                 ns.EndWrite(asy);
             }
-            catch
+            catch (Exception e)
             {
             }
         }

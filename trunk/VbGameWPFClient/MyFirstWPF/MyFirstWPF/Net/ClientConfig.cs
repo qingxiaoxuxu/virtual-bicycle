@@ -8,7 +8,7 @@ namespace VbClient.Net
 {
     public class ClientConfig
     {
-        const string FileTemplate = 
+        const string FileTemplate =
 @"RemoteIp=127.0.0.1
 RemotePort=20000";
         const string ConfName = "ClientConfig.ini";
@@ -37,7 +37,7 @@ RemotePort=20000";
         }
         private static ClientConfig GetInstence()
         {
-            if(instence==null)
+            if (instence == null)
             {
                 return new ClientConfig();
             }
