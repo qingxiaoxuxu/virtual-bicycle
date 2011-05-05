@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
- 
+
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
@@ -34,7 +34,7 @@ namespace VbClient.Net
                 filePath = value;
                 if (File.Exists(filePath))
                 {
-                    fileLength=new FileInfo(filePath).Length;
+                    fileLength = new FileInfo(filePath).Length;
                 }
                 else
                 {
@@ -110,11 +110,11 @@ namespace VbClient.Net
         {
             try
             {
-                client=  new TcpClient();
+                client = new TcpClient();
                 client.BeginConnect(remoteIp, remotePort, new AsyncCallback(connect_callBack), client);
                 return true;
             }
-            catch
+            catch (Exception e)
             {
                 if (ConnectError != null)
                 {
@@ -204,7 +204,7 @@ namespace VbClient.Net
             {
                 FileSendBegin(this, null);
             }
-            long totle=0L;
+            long totle = 0L;
             int byteRead;
             Byte[] buffer = new Byte[1024];
             FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
@@ -215,7 +215,7 @@ namespace VbClient.Net
                 data_ns.Write(buffer, 0, byteRead);
                 Array.Clear(buffer, 0, 1024);
                 byteRead = file.Read(buffer, 0, 1024);
-                totle+=byteRead;
+                totle += byteRead;
                 if (SendFileRate != null)
                 {
                     SendFileRate(totle / fileLength);

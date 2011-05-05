@@ -31,6 +31,13 @@ namespace VbClient.Net
         public event UpdateMapHandler GetObject;
 
         public event Action BecomeHost;
+
+        public delegate void RoomInfo(string teamName, string mapName, List<string> userId, List<string> userName, List<string> carId);
+        public event RoomInfo RoomDetail;
+
+        public delegate void CarState(string userId, string carId);
+        public event CarState ChangeCar;
+
         public ClientEvt(string serverIp)
         {
             //Client.server = serverIp;
@@ -181,16 +188,24 @@ namespace VbClient.Net
                         }
                         break;
                     }
-                case "vb":
+                case "getroominfo":
                     {
-                        if (GetOtherBike != null)
-                            GetOtherBike(this, sender.ToString());
+                        List<string> userId = new List<string>();
+                        List<string> userName = new List<string>();
+                        List<string> carId = new List<string>();
+                        int pointer = 4;
+                        for (int i = 0; i < Convert.ToInt32(msgs[3]); i++)
+                        {
+                            userId.Add(msgs[pointer++]);
+                            userName.Add(msgs[pointer++]);
+                            carId.Add(msgs[pointer++]);
+                        }
+                        RoomDetail(msgs[1], msgs[2], userId, userName, carId);
                         break;
                     }
-                case "obj":
+                case "setcar":
                     {
-                        if (GetObject != null)
-                            GetObject(this, sender.ToString());
+                        ChangeCar(msgs[1], msgs[2]);
                         break;
                     }
             }
