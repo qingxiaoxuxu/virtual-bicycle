@@ -158,16 +158,16 @@ namespace VbServer.Net
                     {
                         string genmsg = "list";
                         #region test
-                        //teamList.Clear();
-                        //for (int i = 0; i < 12; i++)
-                        //{
-                        //    Team t = new Team("lkq"+i.ToString());
-                        //    t.mapName = "forest"+i.ToString();
-                        //    teamList.Add(t);
-                        //}
-                        //Team p = new Team("Hello World!");
-                        //p.mapName = "看到我就对了~";
-                        //teamList.Add(p);
+                        teamList.Clear();
+                        for (int i = 0; i < 12; i++)
+                        {
+                            Team t = new Team("lkq" + i.ToString());
+                            t.mapName = "forest" + i.ToString();
+                            teamList.Add(t);
+                        }
+                        Team p = new Team("Hello World!");
+                        p.mapName = "看到我就对了~";
+                        teamList.Add(p);
                         #endregion
                         foreach (Team t in teamList)
                         {
@@ -184,7 +184,8 @@ namespace VbServer.Net
                             t.AddUser(client);
                             client.SendTxt("add$ok$" + t.mapName);
                         }
-                        client.SendTxt("add$error");
+                        else
+                            client.SendTxt("add$error");
                         break;
                     }
                 case "leave":
