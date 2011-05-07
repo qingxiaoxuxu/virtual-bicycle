@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
- 
+
 using System.Text;
 
 namespace VbClient.Net
@@ -11,14 +11,14 @@ namespace VbClient.Net
 
         public event EventHandler LoginSuccess;
         public event EventHandler LoginFailure;
-        
+
         public event EventHandler CreateSuccess;
         public event EventHandler CreateFailure;
-        
-        public delegate void UpdateMapHandler(object sender,string map);
+
+        public delegate void UpdateMapHandler(object sender, string map);
         public event UpdateMapHandler SettingMap;
-        
-        public delegate void TeamMapList(object sender, List<string> team, List<string> map,List<int> counts);
+
+        public delegate void TeamMapList(object sender, List<string> team, List<string> map, List<int> counts);
         public event TeamMapList GotTeamMapList;
 
         public event UpdateMapHandler AddSuccess;
@@ -32,7 +32,7 @@ namespace VbClient.Net
 
         public event Action BecomeHost;
 
-        public delegate void RoomInfo(string teamName,string mapName,List<string> userId,List<string> userName,List<string> carId);
+        public delegate void RoomInfo(string teamName, string mapName, List<string> userId, List<string> userName, List<string> carId);
         public event RoomInfo RoomDetail;
 
         public delegate void CarState(string userId, string carId);
@@ -41,7 +41,7 @@ namespace VbClient.Net
         public ClientEvt(string serverIp)
         {
             //Client.server = serverIp;
-            Client.ReceivedTxt+=new EventHandler(Client_ReceivedTxt);
+            Client.ReceivedTxt += new EventHandler(Client_ReceivedTxt);
             Client.InitializeClient();
         }
 
@@ -50,9 +50,9 @@ namespace VbClient.Net
             Client.SendTxt("login$" + name + "$" + id);
         }
 
-        public void CreateTeam(string teamName)
+        public void CreateTeam(string teamName, string mapName)
         {
-            Client.SendTxt("create$" + teamName);
+            Client.SendTxt("create$" + teamName + "$" + mapName);
         }
 
         public void SetMap(string mapName)
@@ -101,7 +101,7 @@ namespace VbClient.Net
         }
         void Client_ReceivedTxt(object sender, EventArgs e)
         {
-            string[] msgs=sender.ToString().Split('$');
+            string[] msgs = sender.ToString().Split('$');
             switch (msgs[0])
             {
                 case "login":
@@ -112,7 +112,7 @@ namespace VbClient.Net
                                 if (LoginSuccess != null)
                                     LoginSuccess(this, null);
                                 break;
-                            case"error":
+                            case "error":
                                 if (LoginFailure != null)
                                     LoginFailure(this, null);
                                 break;
@@ -136,23 +136,23 @@ namespace VbClient.Net
                     }
                 case "setmap":
                     {
-                        if(SettingMap!=null)
+                        if (SettingMap != null)
                             SettingMap(this, msgs[1]);
                         break;
                     }
                 case "list":
                     {
-                        List<string> team=new List<string>();
-                        List<string> map=new List<string>();
+                        List<string> team = new List<string>();
+                        List<string> map = new List<string>();
                         List<int> counts = new List<int>();
-                        for(int i=1;i<msgs.Length;)
+                        for (int i = 1; i < msgs.Length; )
                         {
                             team.Add(msgs[i++]);
                             map.Add(msgs[i++]);
                             counts.Add(Int32.Parse(msgs[i++]));
                         }
-                        if(GotTeamMapList!=null)
-                            GotTeamMapList(this,team,map,counts);
+                        if (GotTeamMapList != null)
+                            GotTeamMapList(this, team, map, counts);
                         break;
                     }
                 case "add":
@@ -163,7 +163,7 @@ namespace VbClient.Net
                                 if (AddSuccess != null)
                                     AddSuccess(this, msgs[2]);
                                 break;
-                            case"error":
+                            case "error":
                                 if (AddFailure != null)
                                     AddFailure(this, null);
                                 break;
@@ -198,7 +198,7 @@ namespace VbClient.Net
                         List<string> userId = new List<string>();
                         List<string> userName = new List<string>();
                         List<string> carId = new List<string>();
-                        int pointer=4;
+                        int pointer = 4;
                         for (int i = 0; i < Convert.ToInt32(msgs[3]); i++)
                         {
                             userId.Add(msgs[pointer++]);
