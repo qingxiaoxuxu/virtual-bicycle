@@ -149,7 +149,7 @@ namespace VbServer.Net
                         allInfo += "$" + t.teamName + "$" + t.mapName + "$" + t.userList.Count.ToString();
                         foreach (User u in t.userList)
                         {
-                            allInfo += "$" + u.userId + "$" + u.userName+"$"+u.carId;
+                            allInfo += "$" + u.userId + "$" + u.userName+"$"+u.carId+"$"+u.isReady.ToString();
                         }
                         client.SendTxt(allInfo);
                         break;
@@ -200,6 +200,20 @@ namespace VbServer.Net
                         else
                         {
                             t.userList[0].client.SendTxt("host");
+                            foreach (User u in t.userList)
+                            {
+                                u.client.SendTxt("update");
+                            }
+                        }
+                        break;
+                    }
+                case "ready":
+                    {
+                        FindUserByClient(User.allLoginUser,client).isReady = !FindUserByClient(User.allLoginUser,client).isReady;
+                        Team t = FindTeamByUser(teamList, FindUserByClient(User.allLoginUser, client));
+                        foreach (User u in t.userList)
+                        {
+                            u.client.SendTxt("update");
                         }
                         break;
                     }
