@@ -12,13 +12,15 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VbClient.Net;
+using System.Threading;
 
 namespace MyFirstWPF
 {
     /// <summary>
     /// SelectMap.xaml 的交互逻辑
     /// </summary>
-    public partial class SelectMapPage : UserControl, IKeyDown
+    public partial class SelectMapPage : UserControl, IKeyDown, IReload
     {
         public const int MODE_SINGLE = 0;
         public const int MODE_MULTI = 1;
@@ -40,6 +42,10 @@ namespace MyFirstWPF
         Canvas[] iconCanvas = new Canvas[IconCount];
         String[] showTexts = new String[IconCount]; 
         string[] msk = new string[] { "Two", "Three", "Four" }; //Storyboard对应名称
+        EventWaitHandle createRoomEvent = new EventWaitHandle(true, EventResetMode.ManualReset);
+        //控制创建房间的逻辑
+        int isCreated;
+        private ClientEvt client;
 
         public SelectMapPage(int md)
         {
@@ -58,6 +64,9 @@ namespace MyFirstWPF
             mapText.Text = showTexts[0];
             if (md == MODE_MULTI)
             {
+                client = InfoControl.Client;
+                client.CreateSuccess += new EventHandler(client_CreateSuccess);
+                client.CreateFailure += new EventHandler(client_CreateFailure);
                 string str = "Large" + msk[peopleState] + "Story";
                 (this.Resources[str] as Storyboard).Begin(this);
             }
@@ -71,6 +80,49 @@ namespace MyFirstWPF
                 peopleFour.Visibility = Visibility.Hidden;
             }
         }
+
+        #region client系列事件响应
+        //创建房间成功的响应
+        void client_CreateSuccess(object sender, EventArgs e)
+        {
+            isCreated = 1;
+            createRoomEvent.Set();
+        }
+
+        //创建房间失败的响应
+        void client_CreateFailure(object sender, EventArgs e)
+        {
+            isCreated = -1;
+            createRoomEvent.Set();
+        }
+        #endregion
+
+        #region 界面摆放
+        //图标位置初始化
+        private void initPosition()
+        {
+            int i, offset, off_abs;
+            for (i = 0; i < IconCount; i++)
+            {
+                offset = i - state;                                             //第i个按钮的偏移量（带符号）
+                off_abs = Math.Abs(offset);                                     //第i个按钮的偏移量（绝对值）
+                iconCanvas[i].Margin =
+                    new Thickness(Left + MoveUnit * offset + (ShrinkUnit / 2) * off_abs, Top + (ShrinkUnit / 2) * off_abs,
+                        Right - MoveUnit * offset + (ShrinkUnit / 2) * off_abs, Bottom + (ShrinkUnit / 2) * off_abs);
+                iconCanvas[i].Opacity = 1.0 - 0.5 * off_abs;
+            }
+        }
+        #endregion
+
+        #region IReload 成员
+
+        public void Reload()
+        {
+            isCreated = 0;
+            //TODO;
+        }
+
+        #endregion
 
         #region IKeyDown 成员
 
@@ -96,9 +148,20 @@ namespace MyFirstWPF
             }
             else                                //联网游戏
             {
-                MessageBox.Show("Waiting!");
-                return MainFrame.INDEX_WAITING_ROOM_PAGE;
+                client.CreateTeam(InfoControl.UserName + "的房间");
+                createRoomEvent.Reset();
+                if (createRoomEvent.WaitOne())
+                {
+                    if (isCreated == 1)
+                        return MainFrame.INDEX_WAITING_ROOM_PAGE;
+                    else if (isCreated == -1)
+                    {
+                        MessageBox.Show("创建房间失败！");
+                        return -1;
+                    }
+                }
             }
+            return -1;
         }
 
         public int MoveBack()
@@ -116,6 +179,7 @@ namespace MyFirstWPF
 
         #endregion
 
+        #region 移动操作
         //向上移动(仅多人游戏模式有效)
         private void moveUp()
         {
@@ -181,7 +245,9 @@ namespace MyFirstWPF
                 MovePeople(peopleState, peopleState - 1);
             }
         }
+        #endregion
 
+        #region 故事版
         //下方显示人数的TextBlock的移动
         private void MovePeople(int state, int lastState)
         {
@@ -190,21 +256,6 @@ namespace MyFirstWPF
             small = "Small" + msk[lastState] + "Story";
             (this.Resources[large] as Storyboard).Begin(this);
             (this.Resources[small] as Storyboard).Begin(this);
-        }
-
-        //图标位置初始化
-        private void initPosition()
-        {
-            int i, offset, off_abs;
-            for (i = 0; i < IconCount; i++)
-            {
-                offset = i - state;                                             //第i个按钮的偏移量（带符号）
-                off_abs = Math.Abs(offset);                                     //第i个按钮的偏移量（绝对值）
-                iconCanvas[i].Margin =
-                    new Thickness(Left + MoveUnit * offset + (ShrinkUnit / 2) * off_abs, Top + (ShrinkUnit / 2) * off_abs,
-                        Right - MoveUnit * offset + (ShrinkUnit / 2) * off_abs, Bottom + (ShrinkUnit / 2) * off_abs);
-                iconCanvas[i].Opacity = 1.0 - 0.5 * off_abs;
-            }
         }
 
         //生成Storyboard
@@ -236,5 +287,6 @@ namespace MyFirstWPF
             }
             return moveStory;
         }
+        #endregion
     }
 }
