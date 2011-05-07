@@ -50,9 +50,9 @@ namespace VbClient.Net
             Client.SendTxt("login$" + name + "$" + id);
         }
 
-        public void CreateTeam(string teamName)
+        public void CreateTeam(string teamName, string mapName)
         {
-            Client.SendTxt("create$" + teamName);
+            Client.SendTxt("create$" + teamName + "$" + mapName);
         }
 
         public void SetMap(string mapName)

@@ -99,5 +99,17 @@ namespace MyFirstWPF
             set { InfoControl.client = value; }
         }
 
+        public const int MapCount = 3;                                  //地图总数
+        public static String[] MapTexts = new String[MapCount]{
+            "森林小径",
+            "HUST街道赛",
+            "盘山公路"
+        };                                                              //地图名称
+        public static String[] MapPaths = new String[MapCount]{
+            @"level\scene1.png",
+            @"level\scene2.png",
+            @"level\scene3.png"
+        };                                                              //地图路径
+
     }
 }

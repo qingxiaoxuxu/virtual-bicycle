@@ -83,6 +83,7 @@ namespace MyFirstWPF
         #endregion
 
         #region 房间生成及摆放
+        
         //从Server获取房间信息
         public void getRoomInfo(List<string> team, List<string> map, List<int> counts)   
         {
@@ -103,11 +104,14 @@ namespace MyFirstWPF
             }
             if (roomCount != 0)
             {
-                initPosition();
                 flickerCanvas.Visibility = Visibility.Visible;
+                initPosition();
             }
             else
+            {
                 flickerCanvas.Visibility = Visibility.Hidden;
+                flickerState = blockState = -1;
+            }
         }
 
         //房间位置初始化
@@ -138,6 +142,7 @@ namespace MyFirstWPF
             }
             flickerCanvas.Margin = new Thickness(Left - 10, Top - 12, Right - 10, Bottom - 12);
         }
+
         #endregion
 
         #region IReload 成员
@@ -154,6 +159,8 @@ namespace MyFirstWPF
 
         public void KeyboardDown(object sender, KeyEventArgs e)         //重写键盘按下事件响应函数
         {
+            if (flickerCanvas.Visibility == Visibility.Hidden)
+                return;                                                 //没有任何房间，不进行处理
             if (e.Key == Key.Up)
                 moveUp();
             else if (e.Key == Key.Down)
@@ -166,7 +173,7 @@ namespace MyFirstWPF
 
         public int Choose()
         {
-            if (flickerState != -1)
+            if (flickerCanvas.Visibility == Visibility.Visible)
             {
                 client.AddTeam(rooms[blockState + flickerState].GetRoomName());
                 addRoomEvent.Reset();
@@ -177,6 +184,7 @@ namespace MyFirstWPF
                     else if (isEntered == -1)
                     {
                         MessageBox.Show("进入房间失败！");
+                        client.GetTeamList();       //重新获取房间信息
                         return -1;
                     }
                 }

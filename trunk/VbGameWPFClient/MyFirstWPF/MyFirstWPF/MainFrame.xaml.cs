@@ -88,6 +88,7 @@ namespace MyFirstWPF
                 if (index == INDEX_MULTI_SELECT_ROOM_PAGE ||
                     index == INDEX_WAITING_ROOM_PAGE)
                     ((IReload)pages[index]).Reload();
+                System.Threading.Thread.Sleep(50);                          //延迟0.05秒，进行界面变换
                 this.Content = pages[index];                                //显示新界面
             }
             else if (index == -2)                                           //退出程序
