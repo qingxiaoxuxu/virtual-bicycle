@@ -12,6 +12,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Threading;
 using VbClient.Net;
 
 namespace MyFirstWPF
@@ -31,10 +32,12 @@ namespace MyFirstWPF
         const int Bottom = 502;			//左上角RoomBlock的四个margin值
         const int HorMoveUnit = 580;
         const int VerMoveUnit = 140;
+        int isEntered;                  //判断是否成功进入房间
         RoomInfoBlock[] rooms = null;   //房间信息
         Storyboard blockMoveStory;
         Storyboard flickerMoveStory;
-
+        EventWaitHandle addRoomEvent = new EventWaitHandle(true, EventResetMode.ManualReset);
+        //控制进入房间的逻辑
         private ClientEvt client;
 
         delegate void Fun(List<string> team, List<string> map, List<int> counts);
@@ -43,13 +46,17 @@ namespace MyFirstWPF
         public SelectRoomPage()
         {
             InitializeComponent();
+            isEntered = 0;
             this.KeyDown += new KeyEventHandler(KeyboardDown);
             client = InfoControl.Client;
             client.GotTeamMapList += new ClientEvt.TeamMapList(client_GotTeamMapList);
+            client.AddSuccess += new ClientEvt.UpdateMapHandler(client_AddSuccess);
+            client.AddFailure += new EventHandler(client_AddFailure);
             roomCount = 0;
             showRoom = new Fun(this.getRoomInfo);
         }
 
+        #region client系列事件响应
         //生成房间信息
         void client_GotTeamMapList(object sender, List<string> team, List<string> map, List<int> counts)
         {
@@ -60,6 +67,22 @@ namespace MyFirstWPF
             this.Dispatcher.Invoke(showRoom, para);         //调用getRoomInfo方法
         }
 
+        //进入房间成功
+        void client_AddSuccess(object sender, string map)
+        {
+            isEntered = 1;
+            addRoomEvent.Set();
+        }
+
+        //进入房间失败
+        void client_AddFailure(object sender, EventArgs e)
+        {
+            isEntered = -1;
+            addRoomEvent.Set();
+        }
+        #endregion
+
+        #region 房间生成及摆放
         //从Server获取房间信息
         public void getRoomInfo(List<string> team, List<string> map, List<int> counts)   
         {
@@ -110,6 +133,7 @@ namespace MyFirstWPF
             }
             flickerCanvas.Margin = new Thickness(Left - 10, Top - 12, Right - 10, Bottom - 12);
         }
+        #endregion
 
         #region IReload 成员
 
@@ -135,9 +159,22 @@ namespace MyFirstWPF
         }
 
         public int Choose()
-        {   
+        {
             if (flickerState != -1)
-                return MainFrame.INDEX_WAITING_ROOM_PAGE;
+            {
+                client.AddTeam(rooms[blockState + flickerState].GetRoomName());
+                addRoomEvent.Reset();
+                if (addRoomEvent.WaitOne())
+                {
+                    if (isEntered == 1)
+                        return MainFrame.INDEX_WAITING_ROOM_PAGE;
+                    else if (isEntered == -1)
+                    {
+                        MessageBox.Show("进入房间失败！");
+                        return -1;
+                    }
+                }
+            }
             return -1;
         }
 
