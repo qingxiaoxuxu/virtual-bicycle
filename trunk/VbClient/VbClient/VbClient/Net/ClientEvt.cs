@@ -18,7 +18,7 @@ namespace VbClient.Net
         public delegate void UpdateMapHandler(object sender, string map);
         public event UpdateMapHandler SettingMap;
 
-        public delegate void TeamMapList(object sender, List<string> team, List<string> map, List<int> counts);
+        public delegate void TeamMapList(object sender, List<string> team, List<string> map, List<int> counts,List<bool> isReady);
         public event TeamMapList GotTeamMapList;
 
         public event UpdateMapHandler AddSuccess;
@@ -37,6 +37,8 @@ namespace VbClient.Net
 
         public delegate void CarState(string userId, string carId);
         public event CarState ChangeCar;
+
+        public event Action RefreshRoomInfo;
 
         public ClientEvt(string serverIp)
         {
@@ -99,6 +101,11 @@ namespace VbClient.Net
         {
             Client.SendTxt("logout");
         }
+
+        public void Ready()
+        {
+            Client.SendTxt("ready");
+        }
         void Client_ReceivedTxt(object sender, EventArgs e)
         {
             string[] msgs = sender.ToString().Split('$');
@@ -145,14 +152,16 @@ namespace VbClient.Net
                         List<string> team = new List<string>();
                         List<string> map = new List<string>();
                         List<int> counts = new List<int>();
+                        List<bool> isReady = new List<bool>();
                         for (int i = 1; i < msgs.Length; )
                         {
                             team.Add(msgs[i++]);
                             map.Add(msgs[i++]);
                             counts.Add(Int32.Parse(msgs[i++]));
+                            isReady.Add(Boolean.Parse(msgs[i++]));
                         }
                         if (GotTeamMapList != null)
-                            GotTeamMapList(this, team, map, counts);
+                            GotTeamMapList(this, team, map, counts,isReady);
                         break;
                     }
                 case "add":
@@ -211,6 +220,12 @@ namespace VbClient.Net
                 case "setcar":
                     {
                         ChangeCar(msgs[1], msgs[2]);
+                        break;
+                    }
+                case "refresh":
+                    {
+                        if(RefreshRoomInfo!=null)
+                            RefreshRoomInfo();
                         break;
                     }
             }
