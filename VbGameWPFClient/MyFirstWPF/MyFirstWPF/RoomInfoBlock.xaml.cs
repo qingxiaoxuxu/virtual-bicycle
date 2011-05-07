@@ -22,7 +22,12 @@ namespace MyFirstWPF
 		{
 			this.InitializeComponent();
 		}
-		
+
+        public string GetRoomName()
+        {
+            return RoomName.Content.ToString();
+        }
+
 		public RoomInfoBlock(string teamName, string mapName, int people)
 		{
             this.InitializeComponent();

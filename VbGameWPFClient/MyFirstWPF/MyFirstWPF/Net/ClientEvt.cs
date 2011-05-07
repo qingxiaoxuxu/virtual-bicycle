@@ -65,6 +65,11 @@ namespace VbClient.Net
             Client.SendTxt("getlist");
         }
 
+        public void GetRoomInfo()
+        {
+            Client.SendTxt("getroominfo");
+        }
+
         public void AddTeam(string teamName)
         {
             Client.SendTxt("add$" + teamName);
