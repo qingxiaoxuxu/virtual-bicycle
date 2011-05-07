@@ -46,7 +46,7 @@ namespace VbClient
             listBox1.Items.Add("LoginFailure");
         }
 
-        void client_GotTeamMapList(object sender, List<string> team, List<string> map,List<int> counts)
+        void client_GotTeamMapList(object sender, List<string> team, List<string> map,List<int> counts,List<bool> isReady)
         {
             foreach (string s in team)
                 listBox1.Items.Add("---" + s);
