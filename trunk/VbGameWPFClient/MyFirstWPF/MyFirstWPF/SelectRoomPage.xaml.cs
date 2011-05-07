@@ -46,7 +46,6 @@ namespace MyFirstWPF
         public SelectRoomPage()
         {
             InitializeComponent();
-            isEntered = 0;
             this.KeyDown += new KeyEventHandler(KeyboardDown);
             client = InfoControl.Client;
             client.GotTeamMapList += new ClientEvt.TeamMapList(client_GotTeamMapList);
@@ -145,6 +144,7 @@ namespace MyFirstWPF
 
         public void Reload()
         {
+            isEntered = 0;
             client.GetTeamList();
         }
 
