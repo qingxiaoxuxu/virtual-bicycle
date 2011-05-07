@@ -24,12 +24,11 @@ namespace MyFirstWPF
     {
         public const int MODE_SINGLE = 0;
         public const int MODE_MULTI = 1;
-
+        int mapCnt;                                     //地图数量
         int mode;                                       //单人模式（0） 或  联网模式（1）
-        int state;										//哪个按钮被选中
+        int state;										//哪个地图被选中
         int peopleState;                                //选择人数的状态
         int flickerState;                               //箭头的位置
-        const int IconCount = 3;                        //按钮数量
         const double Left = 512;                        //初始Margin.Left
         const double Top = 260;                         //初始Margin.Top
         const double Right = 514;                       //初始Margin.Right
@@ -39,8 +38,7 @@ namespace MyFirstWPF
         const int FlickerTop = 330;                     //箭头初始Margin.Top
         const int FlickerMoveUnit = 240;                //箭头上下移动尺寸
         Storyboard moveStory;
-        Canvas[] iconCanvas = new Canvas[IconCount];
-        String[] showTexts = new String[IconCount]; 
+        Canvas[] iconCanvas = new Canvas[InfoControl.MapCount];
         string[] msk = new string[] { "Two", "Three", "Four" }; //Storyboard对应名称
         EventWaitHandle createRoomEvent = new EventWaitHandle(true, EventResetMode.ManualReset);
         //控制创建房间的逻辑
@@ -50,6 +48,7 @@ namespace MyFirstWPF
         public SelectMapPage(int md)
         {
             InitializeComponent();
+            mapCnt = InfoControl.MapCount;
             mode = md;
             state = 0;									//初始地图是第一幅
             flickerState = 0;                           //flicker初始状态为修改地图
@@ -57,11 +56,8 @@ namespace MyFirstWPF
             iconCanvas[0] = singleCanvas;
             iconCanvas[1] = createGameCanvas;
             iconCanvas[2] = joinGameCanvas;
-            showTexts[0] = "丛林小径";
-            showTexts[1] = "城镇街区";
-            showTexts[2] = "盘山公路";
             initPosition();             				//按钮位置初始化
-            mapText.Text = showTexts[0];
+            mapText.Text = InfoControl.MapTexts[0];
             if (md == MODE_MULTI)
             {
                 client = InfoControl.Client;
@@ -102,7 +98,7 @@ namespace MyFirstWPF
         private void initPosition()
         {
             int i, offset, off_abs;
-            for (i = 0; i < IconCount; i++)
+            for (i = 0; i < mapCnt; i++)
             {
                 offset = i - state;                                             //第i个按钮的偏移量（带符号）
                 off_abs = Math.Abs(offset);                                     //第i个按钮的偏移量（绝对值）
@@ -148,7 +144,7 @@ namespace MyFirstWPF
             }
             else                                //联网游戏
             {
-                client.CreateTeam(InfoControl.UserName + "的房间");
+                client.CreateTeam(InfoControl.UserName + "的房间", InfoControl.MapTexts[state]);
                 createRoomEvent.Reset();
                 if (createRoomEvent.WaitOne())
                 {
@@ -218,7 +214,7 @@ namespace MyFirstWPF
             if (flickerState == 0 && state > 0)
             {
                 state--;
-                mapText.Text = showTexts[state];
+                mapText.Text = InfoControl.MapTexts[state];
                 moveStory = generateMoveStoryboard();
                 moveStory.Begin(this);
             }
@@ -232,10 +228,10 @@ namespace MyFirstWPF
         //向右移动
         private void moveRight()
         {
-            if (flickerState == 0 && state < IconCount - 1)
+            if (flickerState == 0 && state < mapCnt - 1)
             {
                 state++;
-                mapText.Text = showTexts[state];
+                mapText.Text = InfoControl.MapTexts[state];
                 moveStory = generateMoveStoryboard();
                 moveStory.Begin(this);
             }
@@ -263,9 +259,9 @@ namespace MyFirstWPF
         {
             int i;
             Storyboard moveStory = new Storyboard();
-            ThicknessAnimation[] posAnimation = new ThicknessAnimation[IconCount];
-            DoubleAnimation[] opacAnimation = new DoubleAnimation[IconCount];
-            for (i = 0; i < IconCount; i++)
+            ThicknessAnimation[] posAnimation = new ThicknessAnimation[mapCnt];
+            DoubleAnimation[] opacAnimation = new DoubleAnimation[mapCnt];
+            for (i = 0; i < mapCnt; i++)
             {
                 int offset = i - state;                                             //第i个按钮的偏移量（带符号）
                 int off_abs = Math.Abs(offset);                                     //第i个按钮的偏移量（绝对值）

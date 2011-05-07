@@ -22,6 +22,7 @@ namespace MyFirstWPF
         public const int MODE_HOST = 0;
         public const int MODE_JOIN = 1;
         UserInfoBlock[] users = new UserInfoBlock[6];
+        string teamName;
         private ClientEvt client;
 
 		public WaitingRoomPage()
@@ -44,12 +45,20 @@ namespace MyFirstWPF
             this.Dispatcher.Invoke(new Action(() =>
                 {
                     titleText.Text = teamName;
+                    this.teamName = teamName;
                     for (int i = 0; i < userId.Count; i++)
                     {
                         users[i].PlayerText.Text = userId[i] + userName[i] + carId[i];
                         users[0].ReadyCanvas.Background =
                             new ImageBrush(new BitmapImage(new Uri(@"level\scene1.png", UriKind.Relative)));
                     }
+                    for (int i = 0; i < InfoControl.MapCount; i++)
+                        if (InfoControl.MapTexts[i] == mapName)
+                        {
+                            MapCanvas.Background =
+                                new ImageBrush(new BitmapImage(new Uri(InfoControl.MapPaths[i], UriKind.Relative)));
+                            break;
+                        }
                 }
             ));
         }
@@ -58,6 +67,7 @@ namespace MyFirstWPF
 
         public void Reload()
         {
+            teamName = "";
             client.GetRoomInfo();       //获取房间具体信息，消息返回方法是client_RoomDetail
         }
 
@@ -77,6 +87,7 @@ namespace MyFirstWPF
 
         public int MoveBack()
         {
+            client.LeaveTeam(teamName);
             return MainFrame.INDEX_MULTI_SELECT_ROOM_PAGE;
         }
 
