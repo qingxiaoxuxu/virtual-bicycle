@@ -17,6 +17,8 @@ namespace VbServer
         public bool isAdmin;
         //用户的自行车型号
         public string carId="0";
+        //用户是否准备
+        public bool isReady = false;
         //用户构造函数
         public User(string name ,string id, Client c)
         {
