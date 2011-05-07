@@ -53,6 +53,7 @@ namespace MyFirstWPF
             client.AddSuccess += new ClientEvt.UpdateMapHandler(client_AddSuccess);
             client.AddFailure += new EventHandler(client_AddFailure);
             roomCount = 0;
+            flickerCanvas.Visibility = Visibility.Hidden;
             showRoom = new Fun(this.getRoomInfo);
         }
 
@@ -102,7 +103,12 @@ namespace MyFirstWPF
                 RegisterName(rooms[i].Name, rooms[i]);
             }
             if (roomCount != 0)
+            {
                 initPosition();
+                flickerCanvas.Visibility = Visibility.Visible;
+            }
+            else
+                flickerCanvas.Visibility = Visibility.Hidden;
         }
 
         //房间位置初始化
