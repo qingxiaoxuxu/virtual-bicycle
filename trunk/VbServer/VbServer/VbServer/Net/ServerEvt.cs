@@ -116,6 +116,7 @@ namespace VbServer.Net
                         Team t = new Team(msgs[1]);
                         teamList.Add(t);
                         t.AddUser(client);
+                        t.mapName = msgs[2];                //添加地图信息
                         client.SendTxt("create$ok");
                         break;
                     }
@@ -143,9 +144,9 @@ namespace VbServer.Net
                     }
                 case "getroominfo":
                     {
-                        string allInfo = "";
+                        string allInfo = "getroominfo";             //漏了标签
                         Team t = FindTeamByUser(teamList, FindUserByClient(User.allLoginUser, client));
-                        allInfo += t.teamName + "$" + t.mapName + "$" + t.playerList.Count.ToString();
+                        allInfo += "$" + t.teamName + "$" + t.mapName + "$" + t.userList.Count.ToString();
                         foreach (User u in t.userList)
                         {
                             allInfo += "$" + u.userId + "$" + u.userName+"$"+u.carId;
@@ -158,20 +159,20 @@ namespace VbServer.Net
                     {
                         string genmsg = "list";
                         #region test
-                        teamList.Clear();
-                        for (int i = 0; i < 12; i++)
-                        {
-                            Team t = new Team("lkq" + i.ToString());
-                            t.mapName = "forest" + i.ToString();
-                            teamList.Add(t);
-                        }
-                        Team p = new Team("Hello World!");
-                        p.mapName = "看到我就对了~";
-                        teamList.Add(p);
+                        //teamList.Clear();
+                        //for (int i = 0; i < 12; i++)
+                        //{
+                        //    Team t = new Team("lkq" + i.ToString());
+                        //    t.mapName = "forest" + i.ToString();
+                        //    teamList.Add(t);
+                        //}
+                        //Team p = new Team("Hello World!");
+                        //p.mapName = "看到我就对了~";
+                        //teamList.Add(p);
                         #endregion
                         foreach (Team t in teamList)
                         {
-                            genmsg += "$" + t.teamName + "$" + t.mapName+"$"+t.userList.Count.ToString();
+                            genmsg += "$" + t.teamName + "$" + t.mapName+ "$" + t.userList.Count.ToString();
                         }
                         client.SendTxt(genmsg);
                         break;
