@@ -102,7 +102,7 @@ namespace VbClient
 
         private void button2_Click(object sender, EventArgs e)
         {
-            client.CreateTeam("race");
+            //client.CreateTeam("race");
         }
 
         private void button3_Click(object sender, EventArgs e)
