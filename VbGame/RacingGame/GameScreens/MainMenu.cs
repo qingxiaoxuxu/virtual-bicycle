@@ -249,16 +249,16 @@ namespace RacingGame.GameScreens
                 switch (SelectedButton)
                 {
                     case 0:
-                        RacingGameManager.AddGameScreen(new CarSelection());
+                        //RacingGameManager.AddGameScreen(new CarSelection());
                         break;
                     case 1:
                         RacingGameManager.AddGameScreen(new Highscores());
                         break;
                     case 2:
-                        RacingGameManager.AddGameScreen(new Options());
+                        //RacingGameManager.AddGameScreen(new Options());
                         break;
                     case 3:
-                        RacingGameManager.AddGameScreen(new Help());
+                        //RacingGameManager.AddGameScreen(new Help());
                         break;
                     case 4:
                         // Exit
@@ -276,7 +276,7 @@ namespace RacingGame.GameScreens
             if (idleTime > TimeOutMenu)
             {
                 idleTime = 0.0f;
-                RacingGameManager.AddGameScreen(new SplashScreen());
+                //RacingGameManager.AddGameScreen(new SplashScreen());
             }
 
             return false;

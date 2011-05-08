@@ -1462,11 +1462,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="bike.FBX">
-      <Name>bike</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
     <None Include="CombiBuildings.CombiModel">
       <Name>CombiBuildings</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
