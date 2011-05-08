@@ -37,7 +37,8 @@ namespace VbServer.Net
 
         void ServerEvt_DisConnect(object sender, EventArgs e)
         {
-            for (int i = teamList.Count - 1; i >= 0;i-- )
+        
+            for (int i = teamList.Count - 1; i >= 0; i--)
             {
                 teamList[i].DelUser(sender as Client);
                 if (teamList[i].userList.Count == 0)
@@ -46,12 +47,15 @@ namespace VbServer.Net
                 }
                 else
                 {
-                    teamList[i].userList[0].client.SendTxt("host");
+                    if(teamList[i].userList[0].client!=null)
+                        teamList[i].userList[0].client.SendTxt("host");
                 }
 
             }
+     
             User u = FindUserByClient(User.allLoginUser, sender as Client);
             User.allLoginUser.Remove(u);
+
         }
         //通过房间名找房间
         public static Team FindTeamByName(List<Team> list, string name)
