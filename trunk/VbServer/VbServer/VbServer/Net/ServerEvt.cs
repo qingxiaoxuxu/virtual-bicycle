@@ -337,9 +337,12 @@ namespace VbServer.Net
 
         void client_DisConnect(object sender, EventArgs e)
         {
-            User u=FindUserByClient(User.allLoginUser, sender as Client);
-            FindTeamByUser(teamList, u).playerList.Remove(u);
-            User.allLoginUser.Remove(u);
+            User u = FindUserByClient(User.allLoginUser, sender as Client);
+            if (u != null)
+            {
+                FindTeamByUser(teamList, u).playerList.Remove(u);
+                User.allLoginUser.Remove(u);
+            }
         }
     }
 }
