@@ -166,8 +166,8 @@ namespace RacingGame
             {
                 // Only if not in Game, not in splash screen!
                 return gameScreens.Count > 0 &&
-                    gameScreens.Peek().GetType() != typeof(GameScreen) &&
-                    gameScreens.Peek().GetType() != typeof(SplashScreen);
+                    gameScreens.Peek().GetType() != typeof(GameScreen);// &&
+                    //gameScreens.Peek().GetType() != typeof(SplashScreen);
             }
         }
 
@@ -179,8 +179,8 @@ namespace RacingGame
         {
             get
             {
-                return gameScreens.Count > 0 &&
-                    gameScreens.Peek().GetType() == typeof(CarSelection);
+                return gameScreens.Count > 0;// &&
+                    //gameScreens.Peek().GetType() == typeof(CarSelection);
             }
         }
 
@@ -428,9 +428,9 @@ namespace RacingGame
             BaseGame.Device.RenderState.DepthBufferEnable = true;
 
             // Currently in car selection screen?
-            if (gameScreens.Count > 0 &&
-                gameScreens.Peek().GetType() == typeof(CarSelection))
-                ((CarSelection)gameScreens.Peek()).PostUIRender();
+            //if (gameScreens.Count > 0) &&
+               // gameScreens.Peek().GetType() == typeof(CarSelection))
+               // ((CarSelection)gameScreens.Peek()).PostUIRender();
 
             // Do menu shader after everything
             if (RacingGameManager.InMenu &&

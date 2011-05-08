@@ -35,6 +35,7 @@ namespace RacingGame
 #endif
         static void Main()
         {
+
             StartGame();
         }
         #endregion
