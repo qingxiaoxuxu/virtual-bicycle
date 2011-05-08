@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define DEBUG
+using System;
 using System.Collections.Generic;
  
 using System.Text;
@@ -14,6 +15,14 @@ namespace VbServer.Net
             Server.ReceivedTxt += new ClientEventHandel(Server_ReceivedTxt);
             Server.WrittenMsg += new ClientEventHandel(Server_WrittenMsg);
             Server.AcceptedClient += new EventHandler(Server_AcceptedClient);
+#if DEBUG
+            Team t=new Team("Team1");
+            teamList.Add(t);
+            t.userList.Add(new User("lkq","1",null));
+            t.userList.Add(new User("pl","2",null));
+            t.userList.Add(new User("xt","3",null));
+            User.allLoginUser.AddRange(t.userList);
+#endif
         }
 
         void Server_WrittenMsg(Client client, string msg)
