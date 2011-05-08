@@ -290,12 +290,14 @@ namespace VbServer.Net
                         
                         Team t = FindTeamByUser(teamList, FindUserByClient(User.allLoginUser, client));
                         t.loadingRightCount++;
-                        if (t.loadingRightCount == t.playerList.Count)
+                        if (t.loadingRightCount == t.playerList.Count && t.playerList.Count == t.userList.Count)
                         {
                             foreach (User u in t.playerList)
                             {
                                 u.client.SendTxt("begingame");
+
                             }
+                            t.loadingRightCount = 0;
                         }
                         break;
                         
