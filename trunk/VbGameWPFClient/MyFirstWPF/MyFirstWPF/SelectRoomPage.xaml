@@ -4,16 +4,40 @@
     xmlns:local="clr-namespace:MyFirstWPF" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Class="MyFirstWPF.SelectRoomPage"
     Height="802" Width="1282" x:Name="selectRoomPage" mc:Ignorable="d">
+	<UserControl.Resources>
+		<Storyboard x:Key="ArrowFlicker" RepeatBehavior="Forever" AutoReverse="True">
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="downArrow" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0.6"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:01" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="upArrow" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0.595"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:01" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+	</UserControl.Resources>
 	<Grid x:Name="LayoutRoot">
 		<Grid.Background>
 			<ImageBrush Stretch="Fill" ImageSource="Contents\Images\select.png"/>
 		</Grid.Background>
-        <Canvas Margin="90, 170, 672, 492" Name="flickerCanvas">
+        <Canvas Margin="90,200,692,482" Name="flickerCanvas">
             <Canvas.Background>
                 <ImageBrush Stretch="Fill" ImageSource="Contents\Images\Menu_Background_Rect.png" />
             </Canvas.Background>
         </Canvas>
 		<TextBlock x:Name="iconText" FontSize="32pt" Foreground="White" TextAlignment="Center"
-			FontFamily="微软雅黑" Text="选择房间" Margin="512,36,514,0" VerticalAlignment="Top" Height="50" />
+			FontFamily="微软雅黑" Text="选择房间" Margin="512,42,514,0" VerticalAlignment="Top" Height="50" />
+        <Canvas Height="75" Margin="0,114,0,0" Name="upArrow" VerticalAlignment="Top" HorizontalAlignment="Center" Width="500">
+			<Canvas.Background>
+				<ImageBrush Stretch="Fill" ImageSource="Contents\Images\fleche-droite-bleue.png"/>
+			</Canvas.Background>
+		</Canvas>
+        <Canvas Height="75" Margin="0,0,0,50" x:Name="downArrow" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="500">
+        	<Canvas.Background>
+        		<ImageBrush Stretch="Fill" ImageSource="Contents\Images\sort-down-red.png"/>
+        	</Canvas.Background>
+        </Canvas>
     </Grid>
 </UserControl>
