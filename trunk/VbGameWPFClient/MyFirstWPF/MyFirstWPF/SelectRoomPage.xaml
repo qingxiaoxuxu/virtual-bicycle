@@ -31,12 +31,12 @@
 			FontFamily="微软雅黑" Text="选择房间" Margin="512,42,514,0" VerticalAlignment="Top" Height="50" />
         <Canvas Height="75" Margin="0,114,0,0" Name="upArrow" VerticalAlignment="Top" HorizontalAlignment="Center" Width="500">
 			<Canvas.Background>
-				<ImageBrush Stretch="Fill" ImageSource="Contents\Images\fleche-droite-bleue.png"/>
+				<ImageBrush Stretch="Fill" ImageSource="Contents\Images\red.png"/>
 			</Canvas.Background>
 		</Canvas>
         <Canvas Height="75" Margin="0,0,0,50" x:Name="downArrow" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="500">
         	<Canvas.Background>
-        		<ImageBrush Stretch="Fill" ImageSource="Contents\Images\sort-down-red.png"/>
+        		<ImageBrush Stretch="Fill" ImageSource="Contents\Images\red.png"/>
         	</Canvas.Background>
         </Canvas>
     </Grid>
