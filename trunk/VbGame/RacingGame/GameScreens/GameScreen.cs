@@ -35,10 +35,10 @@ namespace RacingGame.GameScreens
         /// <summary>
         /// Create game screen
         /// </summary>
-        public GameScreen()
+        public GameScreen(RacingGameManager.Level mapName)
         {
             // Load level
-            RacingGameManager.LoadLevel(TrackSelection.SelectedTrack);
+            RacingGameManager.LoadLevel(mapName);
 
             // Reset player variables (start new game, reset time and position)
             RacingGameManager.Player.Reset();

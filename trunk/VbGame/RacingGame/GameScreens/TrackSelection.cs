@@ -211,7 +211,7 @@ namespace RacingGame.GameScreens
                 Input.KeyboardSpaceJustPressed)
             {
                 // Track selection is handled through SelectedTrackNumber
-                RacingGameManager.AddGameScreen(new GameScreen());
+                //RacingGameManager.AddGameScreen(new GameScreen());
             }
 
             if (Input.KeyboardEscapeJustPressed ||

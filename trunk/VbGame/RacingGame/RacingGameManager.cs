@@ -26,6 +26,7 @@ using Model = RacingGame.Graphics.Model;
 using Texture = RacingGame.Graphics.Texture;
 using RacingGame.Properties;
 using RacingGame.Shaders;
+using VbClient.Net;
 #endregion
 
 namespace RacingGame
@@ -44,6 +45,7 @@ namespace RacingGame
         /// </summary>
         private static Stack<IGameScreen> gameScreens = new Stack<IGameScreen>();
 
+
         /// <summary>
         /// Player for the game, also allows us to control the car and contains
         /// all the required code for the car physics, chase camera and basic
@@ -52,6 +54,7 @@ namespace RacingGame
         /// when the game starts depending on the selected level.
         /// </summary>
         private static Player player = new Player(new Vector3(0, 0, 0));
+
 
         /// <summary>
         /// Car model and selection plate for the car selection screen.
@@ -297,15 +300,31 @@ namespace RacingGame
         }
         #endregion
 
+        static StartUpParameters startUpParam;
+        static string localUID;
+        static ClientGEvt netClient;
+        static Dictionary<string, RemotePlayer> remotePlayers = new Dictionary<string, RemotePlayer>();
+
         #region Constructor
         /// <summary>
         /// Create Racing game
         /// </summary>
-        public RacingGameManager()
+        public RacingGameManager(ClientGEvt netCl, string uid, StartUpParameters sup)
             : base("Virutal Bicycle")
         {
             // Start playing the menu music
-            Sound.Play(Sound.Sounds.MenuMusic);
+            //Sound.Play(Sound.Sounds.MenuMusic);
+            localUID = uid;
+            startUpParam = sup;
+
+            netClient = netCl;
+            for (int i = 0; i < sup.Players.Length; i++)
+            {
+                if (sup.Players[i].ID != uid)
+                {
+
+                }
+            }
 
             // Create main menu at our main entry point
             
@@ -317,7 +336,7 @@ namespace RacingGame
         /// <summary>
         /// Create Racing game for unit tests, not used for anything else.
         /// </summary>
-        public RacingGameManager(string unitTestName)
+        public RacingGameManager(string unitTestName, ClientGEvt netCl)
             : base(unitTestName)
         {
             // Don't add game screens here
@@ -346,9 +365,13 @@ namespace RacingGame
             colorSelectionTexture = new Texture("ColorSelection");
             brakeTrackMaterial = new Material("track");
 
-            gameScreens.Push(new GameScreen());
+            gameScreens.Push(new GameScreen((Level)Enum.Parse(typeof(Level), startUpParam.MapName)));
 
+
+            netClient.BeginMyGame();
+            
         }
+
         #endregion
 
         #region Add game screen
@@ -377,6 +400,11 @@ namespace RacingGame
 
             // Update player and game logic
             player.Update();
+
+            foreach (var e in remotePlayers) 
+            {
+                e.Value.Update(gameTime);
+            }
         }
         #endregion
 
