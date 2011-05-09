@@ -21,6 +21,7 @@ namespace MyFirstWPF
 	{
         public const int MODE_HOST = 0;
         public const int MODE_JOIN = 1;
+        public const int TOTAL_USERS = 4;
         UserInfoBlock[] users = new UserInfoBlock[6];
         string teamName;
         private ClientEvt client;
@@ -30,6 +31,7 @@ namespace MyFirstWPF
 			this.InitializeComponent();
             client = InfoControl.Client;
             client.RoomDetail += new ClientEvt.RoomInfo(client_RoomDetail);
+            client.RefreshRoomInfo += new Action(client_RefreshRoomInfo);
             #region 分配位置
             users[0] = User0;
             users[1] = User1;
@@ -40,19 +42,29 @@ namespace MyFirstWPF
             #endregion
         }
 
-        void client_RoomDetail(string teamName, string mapName, List<string> userId, List<string> userName, List<string> carId)
+        #region client系列事件响应
+        //获取房间信息
+        void client_RoomDetail(string teamName, string mapName, string host,
+            List<string> userId, List<string> userName, List<string> carId, List<bool> isReady)
         {
             this.Dispatcher.Invoke(new Action(() =>
                 {
+                    int i;
                     titleText.Text = teamName;
                     this.teamName = teamName;
-                    for (int i = 0; i < userId.Count; i++)
+                    for (i = 0; i < userId.Count; i++)
                     {
                         users[i].PlayerText.Text = userId[i] + userName[i] + carId[i];
                         users[0].ReadyCanvas.Background =
                             new ImageBrush(new BitmapImage(new Uri(@"level\scene1.png", UriKind.Relative)));
                     }
-                    for (int i = 0; i < InfoControl.MapCount; i++)
+                    for (; i < TOTAL_USERS; i++)
+                    {
+                        users[i].PlayerText.Text = "";
+                        users[0].ReadyCanvas.Background =
+                            new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+                    }
+                    for (i = 0; i < InfoControl.MapCount; i++)
                         if (InfoControl.MapTexts[i] == mapName)
                         {
                             MapCanvas.Background =
@@ -62,6 +74,13 @@ namespace MyFirstWPF
                 }
             ));
         }
+        
+        //提示需要更新房间信息
+        void client_RefreshRoomInfo()
+        {
+            client.GetRoomInfo();               //请求重新获取房间信息
+        }
+        #endregion
 
         #region IReload 成员
 

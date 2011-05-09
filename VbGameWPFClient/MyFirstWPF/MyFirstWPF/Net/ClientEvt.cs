@@ -18,7 +18,8 @@ namespace VbClient.Net
         public delegate void UpdateMapHandler(object sender, string map);
         public event UpdateMapHandler SettingMap;
 
-        public delegate void TeamMapList(object sender, List<string> team, List<string> map, List<int> counts);
+        public delegate void TeamMapList(object sender, 
+            List<string> team, List<string> map, List<int> counts);
         public event TeamMapList GotTeamMapList;
 
         public event UpdateMapHandler AddSuccess;
@@ -32,11 +33,14 @@ namespace VbClient.Net
 
         public event Action BecomeHost;
 
-        public delegate void RoomInfo(string teamName, string mapName, List<string> userId, List<string> userName, List<string> carId);
+        public delegate void RoomInfo(string teamName, string mapName, string host, 
+            List<string> userId, List<string> userName, List<string> carId, List<bool> isReady);
         public event RoomInfo RoomDetail;
 
         public delegate void CarState(string userId, string carId);
         public event CarState ChangeCar;
+
+        public event Action RefreshRoomInfo;
 
         public ClientEvt(string serverIp)
         {
@@ -98,6 +102,11 @@ namespace VbClient.Net
         public void Logout()
         {
             Client.SendTxt("logout");
+        }
+
+        public void Ready()
+        {
+            Client.SendTxt("ready");
         }
         void Client_ReceivedTxt(object sender, EventArgs e)
         {
@@ -197,20 +206,28 @@ namespace VbClient.Net
                     {
                         List<string> userId = new List<string>();
                         List<string> userName = new List<string>();
-                        List<string> carId = new List<string>();
-                        int pointer = 4;
-                        for (int i = 0; i < Convert.ToInt32(msgs[3]); i++)
+                        List<string> carId = new List<string>(); 
+                        List<bool> isReady = new List<bool>();
+                        int pointer = 5;
+                        for (int i = 0; i < Convert.ToInt32(msgs[4]); i++)
                         {
                             userId.Add(msgs[pointer++]);
                             userName.Add(msgs[pointer++]);
                             carId.Add(msgs[pointer++]);
+                            isReady.Add(Boolean.Parse(msgs[pointer++]));
                         }
-                        RoomDetail(msgs[1], msgs[2], userId, userName, carId);
+                        RoomDetail(msgs[1], msgs[2], msgs[3], userId, userName, carId, isReady);
                         break;
                     }
                 case "setcar":
                     {
                         ChangeCar(msgs[1], msgs[2]);
+                        break;
+                    }
+                case "update":          //更新房间情况
+                    {
+                        if (RefreshRoomInfo != null)
+                            RefreshRoomInfo();
                         break;
                     }
             }

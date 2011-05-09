@@ -58,7 +58,8 @@ namespace MyFirstWPF
 
         #region client系列事件响应
         //生成房间信息
-        void client_GotTeamMapList(object sender, List<string> team, List<string> map, List<int> counts)
+        void client_GotTeamMapList(object sender, List<string> team, 
+            List<string> map, List<int> counts)
         {
             object[] para = new object[3];
             para[0] = team;
