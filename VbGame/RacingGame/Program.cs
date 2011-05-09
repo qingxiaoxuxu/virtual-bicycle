@@ -80,6 +80,9 @@ namespace RacingGame
             isRoomInfoAcquired = true;
         }
 
+        public static ClientGEvt netClient;
+        public static string Uid;
+
         #region StartGame
         /// <summary>
         /// Start game, is in a seperate method for 2 reasons: We want to catch
@@ -89,10 +92,14 @@ namespace RacingGame
         /// </summary>
         public static void StartGame(string uid)
         {
-            ClientGEvt netClient = new ClientGEvt("localhost");
-            netClient.ConnectToServer(uid);
+            Uid = uid;
+
+            netClient = new ClientGEvt("localhost");
+
+            netClient.Client.ConnectedServer += new EventHandler(Client_ConnectedServer);
+            
             netClient.RoomDetail += netClient_RoomDetail;
-            netClient.RequestRoomInfo();
+            
 
             while (!isRoomInfoAcquired)
             {
@@ -129,6 +136,12 @@ namespace RacingGame
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 #endif
+        }
+
+        static void Client_ConnectedServer(object sender, EventArgs e)
+        {
+            netClient.ConnectToServer(Uid);
+            netClient.RequestRoomInfo();
         }
 
         #endregion
