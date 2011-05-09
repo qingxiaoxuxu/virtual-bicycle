@@ -17,6 +17,7 @@ namespace VbServer.Net
             Server.AcceptedClient += new EventHandler(Server_AcceptedClient);
 #if DEBUG
             Team t=new Team("Team1");
+            t.mapName = "Forests";
             teamList.Add(t);
             t.userList.Add(new User("lkq","1",null));
             t.userList.Add(new User("pl","2",null));
