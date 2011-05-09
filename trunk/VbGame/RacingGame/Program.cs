@@ -98,8 +98,6 @@ namespace RacingGame
 
             netClient.Client.ConnectedServer += new EventHandler(Client_ConnectedServer);
             
-            netClient.RoomDetail += netClient_RoomDetail;
-            
 
             while (!isRoomInfoAcquired)
             {
@@ -140,7 +138,10 @@ namespace RacingGame
 
         static void Client_ConnectedServer(object sender, EventArgs e)
         {
+            
+            netClient.RoomDetail += netClient_RoomDetail;
             netClient.ConnectToServer(Uid);
+            Thread.Sleep(100);
             netClient.RequestRoomInfo();
         }
 
