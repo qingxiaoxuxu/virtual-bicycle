@@ -279,7 +279,7 @@ namespace VbServer.Net
                     }
                 case "info":
                     {
-                        string allInfo = "";
+                        string allInfo = "info$";
                         Team t = FindTeamByUser(teamList, FindUserByClient(User.allLoginUser, client));
                         allInfo+=t.teamName+"$"+t.mapName+"$"+t.playerList.Count.ToString();
                         foreach(User u in t.playerList)
