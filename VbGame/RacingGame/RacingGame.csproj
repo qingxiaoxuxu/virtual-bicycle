@@ -65,6 +65,7 @@
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
   </ItemGroup>
@@ -75,6 +76,7 @@
     <Compile Include="GameLogic\Input.cs" />
     <Compile Include="GameLogic\Physics\SpringPhysicsObject.cs" />
     <Compile Include="GameLogic\Player.cs" />
+    <Compile Include="GameLogic\RemotePlayer.cs" />
     <Compile Include="GameLogic\Replay.cs" />
     <Compile Include="GameLogic\ScreenshotCapturer.cs" />
     <Compile Include="GameScreens\GameScreen.cs">
@@ -185,6 +187,12 @@
       <ProductName>Microsoft XNA Framework Redistributable 3.0</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VbClient\VbClient.csproj">
+      <Project>{EDF4816D-B5D0-45BC-BEDA-12115F6CA332}</Project>
+      <Name>VbClient</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" Condition="" />
