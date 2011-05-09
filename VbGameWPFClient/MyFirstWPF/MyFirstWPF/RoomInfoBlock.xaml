@@ -5,19 +5,19 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
 	x:Class="MyFirstWPF.RoomInfoBlock"
-	x:Name="UserControl" Height="120" Width="500">
-	<Grid x:Name="LayoutRoot">
+	x:Name="UserControl" Height="100" Width="500">
+	<Grid x:Name="LayoutRoot" Margin="0" Height="100">
 		<Grid.Background>
 			<ImageBrush Stretch="Fill" ImageSource="Contents\Images\bgButton.png"/>
 		</Grid.Background>
-        <Label Margin="15,10,0,0" Name="RoomName"
-                FontSize="20pt" FontFamily="微软雅黑" 
-				Height="45" VerticalAlignment="Top" HorizontalAlignment="Left" Width="470"/>
-        <Label Margin="15,0,0,10" Name="RoomMap"
+        <Label Margin="15,0,0,0" Name="RoomName"
+                FontSize="20pt" FontFamily="微软雅黑"
+				Height="49" VerticalAlignment="Top" HorizontalAlignment="Left" Width="470"/>
+        <Label Margin="15,0,0,0" Name="RoomMap"
 			FontSize="20pt" FontFamily="微软雅黑" 
-			VerticalAlignment="Bottom" Height="45" Width="300" HorizontalAlignment="Left"/>
-        <Label Margin="0,0,15,10" x:Name="PeopleLabel"
+			VerticalAlignment="Bottom" Height="49" Width="300" HorizontalAlignment="Left" d:LayoutOverrides="VerticalAlignment"/>
+        <Label Margin="0,0,15,0" x:Name="PeopleLabel"
         	FontSize="20pt" FontFamily="微软雅黑" HorizontalContentAlignment="Right"
-        	VerticalAlignment="Bottom" Height="45" Width="160" HorizontalAlignment="Right"/>
+        	VerticalAlignment="Bottom" Height="49" Width="160" HorizontalAlignment="Right" d:LayoutOverrides="VerticalAlignment"/>
     </Grid>
 </UserControl>

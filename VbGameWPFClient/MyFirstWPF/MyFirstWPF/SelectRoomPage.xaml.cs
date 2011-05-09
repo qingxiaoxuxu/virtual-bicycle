@@ -27,11 +27,11 @@ namespace MyFirstWPF
         int roomCount;                  //总房间数
         public const int MaxPeople = 4;       //每个房间的最大人数
         const int Left = 100;
-        const int Top = 180;
+        const int Top = 200;
         const int Right = 682;
-        const int Bottom = 502;			//左上角RoomBlock的四个margin值
+        const int Bottom = 482;			//左上角RoomBlock的四个margin值
         const int HorMoveUnit = 580;
-        const int VerMoveUnit = 140;
+        const int VerMoveUnit = 120;
         int isEntered;                  //判断是否成功进入房间
         RoomInfoBlock[] rooms = null;   //房间信息
         Storyboard blockMoveStory;
@@ -110,6 +110,7 @@ namespace MyFirstWPF
             }
             else
             {
+                (this.Resources["ArrowFlicker"] as Storyboard).Stop(this);
                 flickerCanvas.Visibility = Visibility.Hidden;
                 flickerState = blockState = -1;
             }
@@ -137,11 +138,17 @@ namespace MyFirstWPF
                     Right - HorMoveUnit * col_offset,
                     Bottom - VerMoveUnit * row_offset);
                 rooms[i].Margin = pos;
-                rooms[i].Height = 120;
+                rooms[i].Height = 100;
                 rooms[i].Width = 500;
                 rooms[i].Opacity = ((row_offset >= 0 && row_offset <= 3) ? 1.0 : 0.0);
             }
-            flickerCanvas.Margin = new Thickness(Left - 10, Top - 12, Right - 10, Bottom - 12);
+            flickerCanvas.Margin = new Thickness(Left - 10, Top, Right - 10, Bottom);
+            if (roomCount > 8)
+            {
+                (this.Resources["ArrowFlicker"] as Storyboard).Begin(this);
+                upArrow.Visibility = Visibility.Hidden;
+                downArrow.Visibility = Visibility.Visible;
+            }
         }
 
         #endregion
@@ -181,7 +188,10 @@ namespace MyFirstWPF
                 if (addRoomEvent.WaitOne())
                 {
                     if (isEntered == 1)
+                    {
+                        (this.Resources["ArrowFlicker"] as Storyboard).Stop(this);
                         return MainFrame.INDEX_WAITING_ROOM_PAGE;
+                    }
                     else if (isEntered == -1)
                     {
                         MessageBox.Show("进入房间失败！");
@@ -246,6 +256,10 @@ namespace MyFirstWPF
             {
                         
             }
+            if (blockState < 2)
+                upArrow.Visibility = Visibility.Hidden;
+            if (blockState + 8 < roomCount)
+                downArrow.Visibility = Visibility.Visible;
         }
 
         //向下移动
@@ -278,7 +292,10 @@ namespace MyFirstWPF
             {
 
             }
-
+            if (blockState >= 2)
+                upArrow.Visibility = Visibility.Visible;
+            if (blockState + 8 >= roomCount)
+                downArrow.Visibility = Visibility.Hidden;
         }
         #endregion
 
@@ -292,9 +309,9 @@ namespace MyFirstWPF
             ThicknessAnimation posAnimation = new ThicknessAnimation();
             posAnimation.To = new Thickness(
                     Left - 10 + HorMoveUnit * col_offset,
-                    Top - 10+ VerMoveUnit * row_offset,
+                    Top + VerMoveUnit * row_offset,
                     Right - 10 - HorMoveUnit * col_offset,
-                    Bottom - 10 - VerMoveUnit * row_offset);
+                    Bottom - VerMoveUnit * row_offset);
             posAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.3));
             Storyboard.SetTargetName(posAnimation, flickerCanvas.Name);
             Storyboard.SetTargetProperty(posAnimation, new PropertyPath(Canvas.MarginProperty));
@@ -349,6 +366,10 @@ namespace MyFirstWPF
         {
             blockMoveStory = generateBlockMoveStoryboard();
             blockMoveStory.Begin(this, HandoffBehavior.SnapshotAndReplace, true);
+        }
+
+        private void arrowFlicker()
+        { 
         }
         #endregion
     }
