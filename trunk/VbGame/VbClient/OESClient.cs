@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
- 
+
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
@@ -15,7 +15,7 @@ namespace VbClient.Net
         //客户端Socket--用于和服务端通信
         private TcpClient client;
         //命令端口大小
-        private static int bufferSize = 12800;  
+        private static int bufferSize = 128;
         //Byte数据数组
         private Byte[] buffer = new Byte[bufferSize];
         //网络流
@@ -23,9 +23,12 @@ namespace VbClient.Net
         //字符串类型的原始消息
         private string raw_msg = String.Empty;
         //服务器地址
-        public string server = ClientConfig.RemoteIp.ToString(); 
+        public string server = ClientConfig.RemoteIp.ToString();
         //服务器端口
         public int portNum = ClientConfig.RemotePort;
+        //消息末尾字符
+        public char EndOfMsg = '`';
+
         //客户端数据端口
         private DataPort port;
         /// <summary>
@@ -33,15 +36,23 @@ namespace VbClient.Net
         /// </summary>
         public DataPort Port
         {
-            get  
+            get
             {
-                return port; 
+                return port;
             }
-            set 
+            set
             {
                 port = value;
             }
         }
+        /// <summary>
+        /// 远程文件命令列表
+        /// </summary>
+        private List<string> remoteCmd = new List<string>();
+        /// <summary>
+        /// 本地存储文件路径列表
+        /// </summary>
+        private List<string> localPath = new List<string>();
 
         #region 事件定义
         /// <summary>
@@ -80,6 +91,27 @@ namespace VbClient.Net
         /// 与服务端断开连接(一般为服务端网络出现问题)
         /// </summary>
         public event ErrorEventHandler DisConnectError;
+        /// <summary>
+        /// 返回当前列表中文件剩余数量
+        /// </summary>
+        public event FileListSize FileListCount;
+        /// <summary>
+        /// 文件列表发送开始
+        /// </summary>
+        public event Action FileListSendStart;
+        /// <summary>
+        /// 文件列表发送完毕
+        /// </summary>
+        public event Action FileListSendEnd;
+        /// <summary>
+        /// 文件列表接收开始
+        /// </summary>
+        public event Action FileListRecieveStart;
+        /// <summary>
+        /// 文件列表接收完毕
+        /// </summary>
+        public event Action FileListRecieveEnd;
+
         #endregion
 
 
@@ -88,7 +120,7 @@ namespace VbClient.Net
         /// </summary>
         public OESClient()
         {
-            
+
         }
         /// <summary>
         /// 开始连接服务端
@@ -130,7 +162,7 @@ namespace VbClient.Net
                 }
                 ns.BeginRead(buffer, 0, bufferSize, new AsyncCallback(receive_callBack), client);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 if (ConnectError != null)
                 {
@@ -180,62 +212,69 @@ namespace VbClient.Net
         /// </summary>
         private void DispatchMessage()
         {
-            string[] messages;
-            char[] sparator = new char[] { '#' };
-
-            raw_msg = System.Text.Encoding.Default.GetString(buffer, 0, buffer.Length).Trim('\0');
-            Array.Clear(buffer, 0, bufferSize);
-
-            if (ReceivedMsg != null)
+            string raw_msgs = System.Text.Encoding.Default.GetString(buffer, 0, buffer.Length).Trim('\0');
+            foreach (string onemsg in raw_msgs.Split(EndOfMsg))
             {
-                ReceivedMsg(raw_msg, null);
-            }
+                if (!String.IsNullOrEmpty(onemsg))
+                {
+                    string[] messages;
+                    char[] sparator = new char[] { '#' };
 
-            messages = raw_msg.Split(sparator, StringSplitOptions.RemoveEmptyEntries);
-            switch (messages[0])
-            {
-                case "cmd":
-                    switch (messages[1])
+                    raw_msg = onemsg;
+                    Array.Clear(buffer, 0, bufferSize);
+
+                    if (ReceivedMsg != null)
                     {
-                        case "1":
-                            port.remoteIp = IPAddress.Parse(messages[3]);
-                            port.remotePort = Int32.Parse(messages[4]);
-                            switch (messages[2])
+                        ReceivedMsg(raw_msg, null);
+                    }
+
+                    messages = raw_msg.Split(sparator, StringSplitOptions.RemoveEmptyEntries);
+                    switch (messages[0])
+                    {
+                        case "cmd":
+                            switch (messages[1])
                             {
-                                case "0":
-                                    if (ReceivedDataRequest != null)
-                                    {
-                                        ReceivedDataRequest(this, null);
-                                    }
-                                    SendFileMsg();
-                                    port.IsSend = true;
-                                    port.Connect();
-                                    break;
                                 case "1":
-                                    if (ReceivedDataSubmit != null)
+                                    port.remoteIp = IPAddress.Parse(messages[3]);
+                                    port.remotePort = Int32.Parse(messages[4]);
+                                    switch (messages[2])
                                     {
-                                        ReceivedDataSubmit(this, null);
+                                        case "0":
+                                            if (ReceivedDataRequest != null)
+                                            {
+                                                ReceivedDataRequest(this, null);
+                                            }
+                                            SendFileMsg();
+                                            port.IsSend = true;
+                                            port.Connect();
+                                            break;
+                                        case "1":
+                                            if (ReceivedDataSubmit != null)
+                                            {
+                                                ReceivedDataSubmit(this, null);
+                                            }
+                                            port.IsSend = false;
+                                            //port.filePath += messages[5];
+                                            port.fileLength = Int64.Parse(messages[6]);
+                                            port.Connect();
+                                            break;
                                     }
-                                    port.IsSend = false;
-                                    //port.filePath += messages[5];
-                                    port.fileLength = Int64.Parse(messages[6]);
-                                    port.Connect();
+                                    break;
+                                case "-1":
+                                    break;
+                                case "-2":
+                                    SendFile();
                                     break;
                             }
                             break;
-                        case "-1":
-                            break;
-                        case "-2":
-                            SendFile();
+                        case "txt":
+                            if (ReceivedTxt != null)
+                            {
+                                ReceivedTxt(messages[1], null);
+                            }
                             break;
                     }
-                    break;
-                case "txt":
-                    if (ReceivedTxt != null)
-                    {
-                        ReceivedTxt(messages[1], null);
-                    }
-                    break;
+                }
             }
         }
         /// <summary>
@@ -243,11 +282,11 @@ namespace VbClient.Net
         /// </summary>
         public void SendFileMsg()
         {
-            FileInfo fi=new FileInfo(port.FilePath);
-            string tmsg = "cmd#2#"+fi.Length.ToString();
+            FileInfo fi = new FileInfo(port.FilePath);
+            string tmsg = "cmd#2#" + fi.Length.ToString();
             WriteMsg(tmsg);
         }
-        
+
         /// <summary>
         /// 向服务端请求上传文件
         /// </summary>
@@ -288,7 +327,7 @@ namespace VbClient.Net
         /// <param name="msg"></param>
         private void WriteMsg(String msg)
         {
-            byte[] tBuffer = System.Text.Encoding.Default.GetBytes(msg);
+            byte[] tBuffer = System.Text.Encoding.Default.GetBytes(msg + EndOfMsg);
             try
             {
                 ns.BeginWrite(tBuffer, 0, tBuffer.Length, new AsyncCallback(write_callBack), client);
@@ -312,5 +351,112 @@ namespace VbClient.Net
             {
             }
         }
+
+        /// <summary>
+        /// 发送文件列表
+        /// </summary>
+        /// <param name="remoteCmd">远程文件命令列表</param>
+        /// <param name="localPath">本地文件路径列表</param>
+        public void SendFileList(List<string> remoteCmd, List<string> localPath)
+        {
+            if (FileListSendStart != null)
+                FileListSendStart();
+
+            this.remoteCmd = remoteCmd;
+            this.localPath = localPath;
+            this.Port.FileSendEnd += new EventHandler(Port_FileSendEnd);
+
+            if (remoteCmd.Count != localPath.Count) return;
+
+            if (remoteCmd.Count == 0 || localPath.Count == 0) return;
+
+            this.SendTxt(remoteCmd[0]);
+            this.Port.FilePath = localPath[0];
+            this.SendFile();
+
+            remoteCmd.RemoveAt(0);
+            localPath.RemoveAt(0);
+
+            if (FileListCount != null)
+                FileListCount(remoteCmd.Count);
+        }
+
+        private void Port_FileSendEnd(object sender, EventArgs e)
+        {
+            if (remoteCmd.Count != localPath.Count) return;
+
+            if (remoteCmd.Count != 0)
+            {
+                this.SendTxt(remoteCmd[0]);
+                this.Port.FilePath = localPath[0];
+                this.SendFile();
+
+                remoteCmd.RemoveAt(0);
+                localPath.RemoveAt(0);
+
+                if (FileListCount != null)
+                    FileListCount(remoteCmd.Count);
+            }
+            else
+            {
+                this.Port.FileSendEnd -= Port_FileSendEnd;
+                if (FileListSendEnd != null)
+                    FileListSendEnd();
+            }
+        }
+        /// <summary>
+        /// 接收文件列表
+        /// </summary>
+        /// <param name="remoteCmd">远程文件命令列表</param>
+        /// <param name="localPath">本地文件路径列表</param>
+        public void ReceiveFileList(List<string> remoteCmd, List<string> localPath)
+        {
+            if (FileListRecieveStart != null)
+                FileListRecieveStart();
+
+            this.remoteCmd = remoteCmd;
+            this.localPath = localPath;
+            this.Port.FileReceiveEnd += new EventHandler(Port_FileReceiveEnd);
+
+            if (remoteCmd.Count != localPath.Count) return;
+
+            if (remoteCmd.Count == 0 || localPath.Count == 0) return;
+
+            this.SendTxt(remoteCmd[0]);
+            this.Port.FilePath = localPath[0];
+            this.ReceiveFile();
+
+            remoteCmd.RemoveAt(0);
+            localPath.RemoveAt(0);
+
+            if (FileListCount != null)
+                FileListCount(remoteCmd.Count);
+        }
+
+        private void Port_FileReceiveEnd(object sender, EventArgs e)
+        {
+            if (remoteCmd.Count != localPath.Count) return;
+
+            if (remoteCmd.Count != 0)
+            {
+                this.SendTxt(remoteCmd[0]);
+                this.Port.FilePath = localPath[0];
+                this.ReceiveFile();
+
+                remoteCmd.RemoveAt(0);
+                localPath.RemoveAt(0);
+
+                if (FileListCount != null)
+                    FileListCount(remoteCmd.Count);
+            }
+            else
+            {
+                this.Port.FileReceiveEnd -= Port_FileReceiveEnd;
+
+                if (FileListRecieveEnd != null)
+                    FileListRecieveEnd();
+            }
+        }
     }
+    public delegate void FileListSize(int count);
 }
