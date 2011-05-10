@@ -185,7 +185,7 @@ namespace VbServer.Net
                         string genmsg = "list";
                         #region test
                         teamList.Clear();
-                        for (int i = 0; i < 12; i++)
+                        for (int i = 0; i < 6; i++)
                         {
                             Team t = new Team("lkq" + i.ToString());
                             t.mapName = "forest" + i.ToString();

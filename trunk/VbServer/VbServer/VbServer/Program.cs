@@ -22,6 +22,7 @@ namespace VbServer
             while ( cmd!= "exit")
             {
                 cmd = Console.ReadLine();
+                //Console.WriteLine(Environment.CurrentDirectory);
                 if (cmd == "team")
                 {
                     foreach(Team t in server.teamList)
