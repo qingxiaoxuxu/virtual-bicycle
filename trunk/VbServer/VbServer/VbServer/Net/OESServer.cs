@@ -30,7 +30,7 @@ namespace VbServer.Net
         //线程同步锁
         private object syncLock = new object();
         //数据端口预定个数
-        private int portsRequest = ServerConfig.DataPortNum;      
+        private int portsRequest = ServerConfig.DataPortNum;
         //数据端口准备就绪
         private bool isPortAvailable = false;
 
@@ -120,7 +120,7 @@ namespace VbServer.Net
 
         #endregion
         #region 出错事件定义
-        
+
         /// <summary>
         /// 数据端口出错
         /// </summary>
@@ -142,7 +142,7 @@ namespace VbServer.Net
         /// </summary>
         public void StartServer()
         {
-            if(ip==null)
+            if (ip == null)
                 ip = ServerConfig.HostIp;
             if (ip != null)
             {
@@ -176,7 +176,7 @@ namespace VbServer.Net
         /// </summary>
         private void InitializeDataPorts()
         {
-            isPortAvailable= SearchSparePort();
+            isPortAvailable = SearchSparePort();
             for (int i = availablePorts.Count - 1; i >= 0; i--)
             {
                 DataPort dport = new DataPort(ip, availablePorts.Dequeue());
@@ -191,7 +191,7 @@ namespace VbServer.Net
                     dport.FileSendBegin += this.FileSendBegin;
                 if (this.FileSendEnd != null)
                     dport.FileSendEnd += this.FileSendEnd;
-                
+
                 ports.Add(dport);
                 PortQueue.Enqueue(dport);
             }
@@ -235,12 +235,12 @@ namespace VbServer.Net
                     availablePorts.Enqueue(port);
                     port++;
                     if (--portsRequest == 0)
-                        return true ;
+                        return true;
                 }
             }
             if (portsRequest != 0)
             {
-                if(OnDataPortError!=null)
+                if (OnDataPortError != null)
                     OnDataPortError("可用端口数量不足！");
             }
             return false;
@@ -252,7 +252,7 @@ namespace VbServer.Net
         /// <param name="port"></param>
         private void PortRecycler(DataPort port)
         {
-            if(!PortQueue.Contains(port))
+            if (!PortQueue.Contains(port))
                 PortQueue.Enqueue(port);
             ProvideClientService();
         }
@@ -293,7 +293,7 @@ namespace VbServer.Net
 
             Client client = new Client(tclient);
             client.MessageScheduler += MessageScheduler;
-            if(this.ReceivedDataRequest!=null)
+            if (this.ReceivedDataRequest != null)
                 client.ReceivedDataRequest += this.ReceivedDataRequest;
             if (this.ReceivedDataSubmit != null)
                 client.ReceivedDataSubmit += this.ReceivedDataSubmit;
@@ -320,15 +320,15 @@ namespace VbServer.Net
         /// </summary>
         /// <param name="client">活动的客户端</param>
         /// <param name="type">消息类型</param>
-        private void MessageScheduler(Client client,int type)
+        private void MessageScheduler(Client client, int type)
         {
-            lock(syncLock)
+            lock (syncLock)
             {
                 switch (type)
                 {
-                    
+
                     case 0:
-                    #region 搜索空闲数据端口，准备传送数据
+                        #region 搜索空闲数据端口，准备传送数据
                         if (PortQueue.Count != 0 && isPortAvailable)
                         {
                             client.Port = PortQueue.Dequeue();
@@ -340,10 +340,10 @@ namespace VbServer.Net
                             RequestingQueue.Enqueue(client);
                         }
                         break;
-                    #endregion
+                        #endregion
 
                     case 1:
-                    #region 搜索空闲数据端口，准备接受数据
+                        #region 搜索空闲数据端口，准备接受数据
                         if (PortQueue.Count != 0 && isPortAvailable)
                         {
                             client.Port = PortQueue.Dequeue();
@@ -355,7 +355,7 @@ namespace VbServer.Net
                             SubmitingQueue.Enqueue(client);
                         }
                         break;
-                    #endregion
+                        #endregion
                     case -1:
                         PortRecycler(client.Port);
                         break;
