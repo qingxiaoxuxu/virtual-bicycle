@@ -30,7 +30,7 @@ namespace VbClient.Net
         /// </summary>
         /// <param name="userId">用户Id</param>
         /// <param name="states">12个用户状态参数</param>
-        public delegate void BikeState(string userId, double[] states);
+        public delegate void BikeState(string userId, float[] states);
         public event BikeState GetBikeState;
 
         public ClientGEvt(string serverIp)
@@ -60,7 +60,7 @@ namespace VbClient.Net
         /// </summary>
         /// <param name="userId">用户ID</param>
         /// <param name="states">12个浮点参数</param>
-        public void SendBikeState(string userId,double[] states )
+        public void SendBikeState(string userId,float[] states )
         {
             string gen = "";
             gen ="vb$"+ userId ;
@@ -83,10 +83,10 @@ namespace VbClient.Net
                     }
                 case "vb":
                     {
-                        double[] para = new double[12];
+                        float[] para = new float[12];
                         for (int i = 2; i < 14; i++)
                         {
-                            para[i - 2] = Convert.ToDouble(msgs[i]);
+                            para[i - 2] = Convert.ToSingle(msgs[i]);
                         }
                         GetBikeState(msgs[1], para);
                         break;
