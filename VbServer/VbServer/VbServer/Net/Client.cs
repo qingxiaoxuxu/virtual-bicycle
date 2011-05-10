@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Collections;
 using System.Threading;
-using System.Windows.Forms;
 using System.IO;
 
 namespace VbServer.Net
@@ -15,7 +14,7 @@ namespace VbServer.Net
         //客户端Socket--用于和服务端通信
         private TcpClient client;
         //命令端口大小
-        private static int bufferSize = 12800;
+        private static int bufferSize = 128;
         //Byte数据数组
         private Byte[] buffer = new Byte[bufferSize];
         //网络流
@@ -24,6 +23,8 @@ namespace VbServer.Net
         private string raw_msg = String.Empty;
         //得到的消息
         public string msg;
+        //消息末尾字符
+        public char EndOfMsg = '`';
 
         #region 事件定义
         /// <summary>
@@ -31,7 +32,7 @@ namespace VbServer.Net
         /// </summary>
         /// <param name="client">活动的Client</param>
         /// <param name="type">消息类型</param>
-        public delegate void MsgFun(Client client,int type);
+        public delegate void MsgFun(Client client, int type);
         public MsgFun MessageScheduler;
         /// <summary>
         /// 接收到消息
@@ -73,11 +74,11 @@ namespace VbServer.Net
 
         public DataPort Port
         {
-            get 
+            get
             {
                 return port;
             }
-            set 
+            set
             {
                 port = value;
                 port.InitDataPort(this.client.Client.RemoteEndPoint);
@@ -139,63 +140,69 @@ namespace VbServer.Net
         /// </summary>
         private void DispatchMessage()
         {
-            string[] messages;
-            char[] sparator = new char[] { '#' };
-
-            raw_msg = System.Text.Encoding.Default.GetString(buffer, 0, buffer.Length).Trim('\0');
-            Array.Clear(buffer, 0, bufferSize);
-
-            if (ReceivedMsg != null)
+            string raw_msgs = System.Text.Encoding.Default.GetString(buffer, 0, buffer.Length).Trim('\0');
+            foreach (string onemsg in raw_msgs.Split(EndOfMsg))
             {
-                ReceivedMsg(this,raw_msg);
-            }
+                if (!String.IsNullOrEmpty(onemsg))
+                {
+                    string[] messages;
+                    char[] sparator = new char[] { '#' };
 
-            messages = raw_msg.Split(sparator, StringSplitOptions.RemoveEmptyEntries);
+                    raw_msg = onemsg;
+                    Array.Clear(buffer, 0, bufferSize);
 
-            switch (messages[0])
-            {
-                case "cmd":                             //命令
-                    switch (messages[1])
+                    if (ReceivedMsg != null)
                     {
-                        case "0":                       //申请数据端口
-                            switch (messages[2])
+                        ReceivedMsg(this, raw_msg);
+                    }
+
+                    messages = raw_msg.Split(sparator, StringSplitOptions.RemoveEmptyEntries);
+
+                    switch (messages[0])
+                    {
+                        case "cmd":                             //命令
+                            switch (messages[1])
                             {
-                                case "0":               //上传文件
-                                    if (ReceivedDataSubmit != null)
+                                case "0":                       //申请数据端口
+                                    switch (messages[2])
                                     {
-                                        ReceivedDataSubmit(this, raw_msg);
+                                        case "0":               //上传文件
+                                            if (ReceivedDataSubmit != null)
+                                            {
+                                                ReceivedDataSubmit(this, raw_msg);
+                                            }
+                                            MessageScheduler(this, 0);
+                                            break;
+                                        case "1":               //下载文件
+                                            if (ReceivedDataRequest != null)
+                                            {
+                                                ReceivedDataRequest(this, raw_msg);
+                                            }
+                                            MessageScheduler(this, 1);
+                                            break;
                                     }
-                                    MessageScheduler(this, 0);
                                     break;
-                                case "1":               //下载文件
-                                    if (ReceivedDataRequest != null)
-                                    {
-                                        ReceivedDataRequest(this, raw_msg);
-                                    }
-                                    MessageScheduler(this, 1);
+                                case "2":
+                                    port.fileLength = Int64.Parse(messages[2]);
+                                    break;
+                                case "-1":
+                                    MessageScheduler(this, -1);
+                                    break;
+                                default:
                                     break;
                             }
                             break;
-                        case "2":
-                            port.fileLength = Int64.Parse(messages[2]);
+                        case "txt":
+                            if (ReceivedTxt != null)
+                            {
+                                ReceivedTxt(this, messages[1]);
+                            }
                             break;
-                        case "-1":
-                            MessageScheduler(this, -1);
-                            break;
-                        default :
+                        default:
                             break;
                     }
-                    break;
-                case "txt":
-                    if (ReceivedTxt != null)
-                    {
-                        ReceivedTxt(this,messages[1]);
-                    }
-                    break;
-                default:
-                    break;
+                }
             }
-            
         }
 
         /// <summary>
@@ -204,7 +211,7 @@ namespace VbServer.Net
         public void sendData()
         {
             if (SendDataReady != null)
-                SendDataReady(this,null);
+                SendDataReady(this, null);
             WriteMsg(SendFileMsg(port.FilePath));
         }
 
@@ -259,13 +266,13 @@ namespace VbServer.Net
         /// <param name="msg"></param>
         private void WriteMsg(String msg)
         {
-            byte[] tBuffer = System.Text.Encoding.Default.GetBytes(msg);
+            byte[] tBuffer = System.Text.Encoding.Default.GetBytes(msg + EndOfMsg);
             try
             {
                 ns.BeginWrite(tBuffer, 0, tBuffer.Length, new AsyncCallback(write_callBack), client);
                 if (WrittenMsg != null)
                 {
-                    WrittenMsg(this,msg);
+                    WrittenMsg(this, msg);
                 }
             }
             catch (Exception e)
@@ -283,7 +290,7 @@ namespace VbServer.Net
             string tmsg = "txt#" + content;
             WriteMsg(tmsg);
         }
-        
+
         /// <summary>
         /// 重传消息
         /// </summary>
