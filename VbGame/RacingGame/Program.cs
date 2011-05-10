@@ -141,7 +141,6 @@ namespace RacingGame
             
             netClient.RoomDetail += netClient_RoomDetail;
             netClient.ConnectToServer(Uid);
-            Thread.Sleep(100);
             netClient.RequestRoomInfo();
         }
 
