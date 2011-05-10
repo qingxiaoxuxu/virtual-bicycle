@@ -21,9 +21,8 @@ namespace MyFirstWPF
 		public UserInfoBlock()
 		{
 			this.InitializeComponent();
-			SolidColorBrush solidBrush = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-			ReadyCanvas.Background = solidBrush;
-				
+			//SolidColorBrush solidBrush = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+			//ReadyCanvas.Background = solidBrush;
 		}
 	}
 }

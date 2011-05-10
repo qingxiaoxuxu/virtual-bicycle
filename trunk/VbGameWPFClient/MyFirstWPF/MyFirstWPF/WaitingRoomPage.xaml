@@ -21,27 +21,27 @@
 			Width="360" VerticalAlignment="Top" Height="260" Background="Cyan"/>
         
 		<Canvas x:Name="PlayerCanvas1" Margin="0,150,50,0" VerticalAlignment="Top" 
-			Height="80" HorizontalAlignment="Right" Width="800" Background="Red">
+			Height="80" HorizontalAlignment="Right" Width="800">
 			<local:UserInfoBlock x:Name="User0" d:LayoutOverrides="Width, Height" d:IsHidden="True"/>
 		</Canvas>
         <Canvas x:Name="PlayerCanvas2" Margin="0,240,50,0" VerticalAlignment="Top" 
-			Height="80" HorizontalAlignment="Right" Width="800" Background="Blue">
+			Height="80" HorizontalAlignment="Right" Width="800">
             <local:UserInfoBlock x:Name="User1" d:LayoutOverrides="Width, Height" d:IsHidden="True"/>
         </Canvas>
         <Canvas x:Name="PlayerCanvas3" Margin="0,330,50,0" VerticalAlignment="Top" 
-			Height="80" HorizontalAlignment="Right" Width="800" Background="Yellow">
+			Height="80" HorizontalAlignment="Right" Width="800">
             <local:UserInfoBlock x:Name="User2" d:LayoutOverrides="Width, Height" d:IsHidden="True"/>
         </Canvas>
         <Canvas x:Name="PlayerCanvas4" Margin="0,420,50,0" VerticalAlignment="Top" 
-			Height="80" HorizontalAlignment="Right" Width="800" Background="AntiqueWhite">
+			Height="80" HorizontalAlignment="Right" Width="800">
             <local:UserInfoBlock x:Name="User3" d:LayoutOverrides="Width, Height" d:IsHidden="True"/>
         </Canvas>
         <Canvas x:Name="PlayerCanvas5" Margin="0,510,50,0" VerticalAlignment="Top" 
-			Height="80" HorizontalAlignment="Right" Width="800" Background="AliceBlue">
+			Height="80" HorizontalAlignment="Right" Width="800">
             <local:UserInfoBlock x:Name="User4" d:LayoutOverrides="Width, Height" d:IsHidden="True"/>
         </Canvas>
         <Canvas x:Name="PlayerCanvas6" Margin="0,600,50,0" VerticalAlignment="Top" 
-			Height="80" HorizontalAlignment="Right" Width="800" Background="Aqua">
+			Height="80" HorizontalAlignment="Right" Width="800">
             <local:UserInfoBlock x:Name="User5" d:LayoutOverrides="Width, Height" d:IsHidden="True"/>
         </Canvas>
 
