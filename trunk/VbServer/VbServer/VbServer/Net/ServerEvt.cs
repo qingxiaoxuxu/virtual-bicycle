@@ -8,6 +8,7 @@ namespace VbServer.Net
 {
     public class ServerEvt
     {
+        public const int MAX_USER = 4;
         public OESServer Server = new OESServer();
         public List<Team> teamList = new List<Team>();
         public ServerEvt()
@@ -22,6 +23,8 @@ namespace VbServer.Net
             t.userList.Add(new User("lkq","1",null));
             t.userList.Add(new User("pl","2",null));
             t.userList.Add(new User("xt","3",null));
+            t.userList[0].isAdmin = true;       //
+            t.mapName = "HUST街道赛";           //
             User.allLoginUser.AddRange(t.userList);
 #endif
         }
@@ -130,6 +133,7 @@ namespace VbServer.Net
                         Team t = new Team(msgs[1]);
                         teamList.Add(t);
                         t.AddUser(client);
+                        t.userList[0].isAdmin = true;
                         t.mapName = msgs[2];                //添加地图信息
                         client.SendTxt("create$ok");
                         break;
@@ -160,7 +164,14 @@ namespace VbServer.Net
                     {
                         string allInfo = "getroominfo";             //漏了标签
                         Team t = FindTeamByUser(teamList, FindUserByClient(User.allLoginUser, client));
-                        allInfo += "$" + t.teamName + "$" + t.mapName + "$" + t.userList.Count.ToString();
+                        allInfo += "$" + t.teamName + "$" + t.mapName + "$";
+                        foreach (User u in t.userList)
+                            if (u.isAdmin)
+                            {
+                                allInfo += u.userName;            //
+                                break;
+                            }
+                        allInfo += "$" + t.userList.Count.ToString();
                         foreach (User u in t.userList)
                         {
                             allInfo += "$" + u.userId + "$" + u.userName+"$"+u.carId+"$"+u.isReady.ToString();
@@ -173,16 +184,16 @@ namespace VbServer.Net
                     {
                         string genmsg = "list";
                         #region test
-                        //teamList.Clear();
-                        //for (int i = 0; i < 12; i++)
-                        //{
-                        //    Team t = new Team("lkq" + i.ToString());
-                        //    t.mapName = "forest" + i.ToString();
-                        //    teamList.Add(t);
-                        //}
-                        //Team p = new Team("Hello World!");
-                        //p.mapName = "看到我就对了~";
-                        //teamList.Add(p);
+                        teamList.Clear();
+                        for (int i = 0; i < 12; i++)
+                        {
+                            Team t = new Team("lkq" + i.ToString());
+                            t.mapName = "forest" + i.ToString();
+                            teamList.Add(t);
+                        }
+                        Team p = new Team("Hello World!");
+                        p.mapName = "看到我就对了~";
+                        teamList.Add(p);
                         #endregion
                         foreach (Team t in teamList)
                         {
@@ -194,10 +205,13 @@ namespace VbServer.Net
                 case "add":
                     {
                         Team t=FindTeamByName(teamList, msgs[1]);
-                        if (t != null)
+                        if (t != null && t.userList.Count < MAX_USER)
                         {
                             t.AddUser(client);
                             client.SendTxt("add$ok$" + t.mapName);
+                            for (int i = 0; i < t.userList.Count - 1; i++)
+                                if (t.userList[i].client != null)
+                                    t.userList[i].client.SendTxt("update");         //
                         }
                         else
                             client.SendTxt("add$error");
@@ -213,10 +227,13 @@ namespace VbServer.Net
                         }
                         else
                         {
-                            t.userList[0].client.SendTxt("host");
+                            t.userList[0].isAdmin = true;           //
+                            //if (t.userList[0].client != null)
+                            //    t.userList[0].client.SendTxt("host");
                             foreach (User u in t.userList)
                             {
-                                u.client.SendTxt("update");
+                                if (u.client != null)
+                                    u.client.SendTxt("update");
                             }
                         }
                         break;
