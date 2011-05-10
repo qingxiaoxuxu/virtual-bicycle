@@ -25,6 +25,9 @@ namespace VbClient.Net
         private string raw_msg = String.Empty;
         //服务器地址
         public string server = ClientConfig.RemoteIp.ToString();
+        //消息末尾字符
+        public char EndOfMsg = '`';
+
         //服务器端口
         public int portNum = ClientConfig.RemotePort;
         //客户端数据端口
@@ -181,62 +184,69 @@ namespace VbClient.Net
         /// </summary>
         private void DispatchMessage()
         {
-            string[] messages;
-            char[] sparator = new char[] { '#' };
-
-            raw_msg = System.Text.Encoding.Default.GetString(buffer, 0, buffer.Length).Trim('\0');
-            Array.Clear(buffer, 0, bufferSize);
-
-            if (ReceivedMsg != null)
+            string raw_msgs = System.Text.Encoding.Default.GetString(buffer, 0, buffer.Length).Trim('\0');
+            foreach (string onemsg in raw_msgs.Split(EndOfMsg))
             {
-                ReceivedMsg(raw_msg, null);
-            }
+                if (!String.IsNullOrEmpty(onemsg))
+                {
+                    string[] messages;
+                    char[] sparator = new char[] { '#' };
 
-            messages = raw_msg.Split(sparator, StringSplitOptions.RemoveEmptyEntries);
-            switch (messages[0])
-            {
-                case "cmd":
-                    switch (messages[1])
+                    raw_msg = onemsg;
+                    Array.Clear(buffer, 0, bufferSize);
+
+                    if (ReceivedMsg != null)
                     {
-                        case "1":
-                            port.remoteIp = IPAddress.Parse(messages[3]);
-                            port.remotePort = Int32.Parse(messages[4]);
-                            switch (messages[2])
+                        ReceivedMsg(raw_msg, null);
+                    }
+
+                    messages = raw_msg.Split(sparator, StringSplitOptions.RemoveEmptyEntries);
+                    switch (messages[0])
+                    {
+                        case "cmd":
+                            switch (messages[1])
                             {
-                                case "0":
-                                    if (ReceivedDataRequest != null)
-                                    {
-                                        ReceivedDataRequest(this, null);
-                                    }
-                                    SendFileMsg();
-                                    port.IsSend = true;
-                                    port.Connect();
-                                    break;
                                 case "1":
-                                    if (ReceivedDataSubmit != null)
+                                    port.remoteIp = IPAddress.Parse(messages[3]);
+                                    port.remotePort = Int32.Parse(messages[4]);
+                                    switch (messages[2])
                                     {
-                                        ReceivedDataSubmit(this, null);
+                                        case "0":
+                                            if (ReceivedDataRequest != null)
+                                            {
+                                                ReceivedDataRequest(this, null);
+                                            }
+                                            SendFileMsg();
+                                            port.IsSend = true;
+                                            port.Connect();
+                                            break;
+                                        case "1":
+                                            if (ReceivedDataSubmit != null)
+                                            {
+                                                ReceivedDataSubmit(this, null);
+                                            }
+                                            port.IsSend = false;
+                                            //port.filePath += messages[5];
+                                            port.fileLength = Int64.Parse(messages[6]);
+                                            port.Connect();
+                                            break;
                                     }
-                                    port.IsSend = false;
-                                    //port.filePath += messages[5];
-                                    port.fileLength = Int64.Parse(messages[6]);
-                                    port.Connect();
+                                    break;
+                                case "-1":
+                                    break;
+                                case "-2":
+                                    SendFile();
                                     break;
                             }
                             break;
-                        case "-1":
-                            break;
-                        case "-2":
-                            SendFile();
+                        case "txt":
+                            if (ReceivedTxt != null)
+                            {
+                                ReceivedTxt(messages[1], null);
+                            }
                             break;
                     }
-                    break;
-                case "txt":
-                    if (ReceivedTxt != null)
-                    {
-                        ReceivedTxt(messages[1], null);
-                    }
-                    break;
+                }
             }
         }
         /// <summary>

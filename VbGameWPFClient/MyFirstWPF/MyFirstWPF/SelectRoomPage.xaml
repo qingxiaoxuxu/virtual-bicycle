@@ -22,21 +22,21 @@
 		<Grid.Background>
 			<ImageBrush Stretch="Fill" ImageSource="Contents\Images\select.png"/>
 		</Grid.Background>
-        <Canvas Margin="90,200,692,482" Name="flickerCanvas">
+        <Canvas Margin="90,190,692,492" Name="flickerCanvas">
             <Canvas.Background>
                 <ImageBrush Stretch="Fill" ImageSource="Contents\Images\Menu_Background_Rect.png" />
             </Canvas.Background>
         </Canvas>
 		<TextBlock x:Name="iconText" FontSize="32pt" Foreground="White" TextAlignment="Center"
-			FontFamily="微软雅黑" Text="选择房间" Margin="512,42,514,0" VerticalAlignment="Top" Height="50" />
-        <Canvas Height="75" Margin="0,114,0,0" Name="upArrow" VerticalAlignment="Top" HorizontalAlignment="Center" Width="500">
+			FontFamily="微软雅黑" Text="选择房间" Margin="512,50,514,0" VerticalAlignment="Top" Height="50" />
+        <Canvas Height="75" Margin="391,116,391,0" Name="upArrow" VerticalAlignment="Top">
 			<Canvas.Background>
-				<ImageBrush Stretch="Fill" ImageSource="Contents\Images\red.png"/>
+				<ImageBrush Stretch="Fill" ImageSource="Contents\Images\blue_up.png"/>
 			</Canvas.Background>
 		</Canvas>
-        <Canvas Height="75" Margin="0,0,0,50" x:Name="downArrow" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="500">
+        <Canvas Height="75" Margin="391,0,391,58" x:Name="downArrow" VerticalAlignment="Bottom">
         	<Canvas.Background>
-        		<ImageBrush Stretch="Fill" ImageSource="Contents\Images\red.png"/>
+        		<ImageBrush Stretch="Fill" ImageSource="Contents\Images\blue_down.png"/>
         	</Canvas.Background>
         </Canvas>
     </Grid>

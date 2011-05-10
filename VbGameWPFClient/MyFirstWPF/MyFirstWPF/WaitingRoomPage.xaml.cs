@@ -54,15 +54,20 @@ namespace MyFirstWPF
                     this.teamName = teamName;
                     for (i = 0; i < userId.Count; i++)
                     {
-                        users[i].PlayerText.Text = userId[i] + userName[i] + carId[i];
-                        users[0].ReadyCanvas.Background =
-                            new ImageBrush(new BitmapImage(new Uri(@"level\scene1.png", UriKind.Relative)));
+                        users[i].PlayerText.Text = userName[i];
+						users[i].Opacity = 0.9;
+                        //users[i].ReadyCanvas.Background =
+                        //    new ImageBrush(new BitmapImage(new Uri(@"level\scene1.png", UriKind.Relative)));
+                        users[i].ReadyCanvas.Background =
+                            new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
                     }
                     for (; i < TOTAL_USERS; i++)
                     {
                         users[i].PlayerText.Text = "";
-                        users[0].ReadyCanvas.Background =
-                            new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+						users[i].Opacity = 0.6;
+                        //users[i].ReadyCanvas.Background =
+                        //    new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+                        users[i].ReadyCanvas.Background = null;
                     }
                     for (i = 0; i < InfoControl.MapCount; i++)
                         if (InfoControl.MapTexts[i] == mapName)

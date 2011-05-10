@@ -93,7 +93,7 @@ namespace MyFirstWPF
             get 
             {
                 if (client == null)
-                    client = new ClientEvt("");
+                    client = new ClientEvt("192.168.137.33");
                 return InfoControl.client; 
             }
             set { InfoControl.client = value; }

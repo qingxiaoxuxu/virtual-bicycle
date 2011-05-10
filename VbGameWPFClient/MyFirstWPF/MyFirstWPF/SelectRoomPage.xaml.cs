@@ -27,9 +27,9 @@ namespace MyFirstWPF
         int roomCount;                  //总房间数
         public const int MaxPeople = 4;       //每个房间的最大人数
         const int Left = 100;
-        const int Top = 200;
+        const int Top = 190;
         const int Right = 682;
-        const int Bottom = 482;			//左上角RoomBlock的四个margin值
+        const int Bottom = 492;			//左上角RoomBlock的四个margin值
         const int HorMoveUnit = 580;
         const int VerMoveUnit = 120;
         int isEntered;                  //判断是否成功进入房间
@@ -126,6 +126,7 @@ namespace MyFirstWPF
             if (blockMoveStory != null)
                 blockMoveStory.Remove(this);    //释放被动画占用的依赖属性
 
+            upArrow.Visibility = downArrow.Visibility = Visibility.Hidden;
             flickerState = blockState = 0;      //初始定位
             for (i = 0; i < roomCount; i++)
             {
@@ -140,9 +141,14 @@ namespace MyFirstWPF
                 rooms[i].Margin = pos;
                 rooms[i].Height = 100;
                 rooms[i].Width = 500;
-                rooms[i].Opacity = ((row_offset >= 0 && row_offset <= 3) ? 1.0 : 0.0);
+                rooms[i].Opacity = ((row_offset >= 0 && row_offset <= 3) ? 0.9 : 0.0);
             }
-            flickerCanvas.Margin = new Thickness(Left - 10, Top, Right - 10, Bottom);
+            flickerCanvas.Margin = new Thickness(
+                Left - 10,
+                Top,
+                Right - 10,
+                Bottom
+            );
             if (roomCount > 8)
             {
                 (this.Resources["ArrowFlicker"] as Storyboard).Begin(this);
@@ -158,6 +164,7 @@ namespace MyFirstWPF
         public void Reload()
         {
             isEntered = 0;
+            flickerState = 0;
             client.GetTeamList();
         }
 
@@ -272,7 +279,8 @@ namespace MyFirstWPF
                     flickerState += 2;
                     moveFlicker();
                 }
-                else if (blockState + flickerState + 1 < roomCount)      //flicker必须左移
+                else if (blockState + flickerState + 1 < roomCount
+                    && flickerState % 2 == 1)                            //flicker必须左移
                 {
                     flickerState++;
                     moveFlicker();
@@ -282,7 +290,7 @@ namespace MyFirstWPF
             {
                 blockState += 2;
                 moveBlock();
-                if (blockState + flickerState >= roomCount)                 //flicker必须左移
+                if (blockState + flickerState >= roomCount)              //flicker必须左移
                 {
                     flickerState--;
                     moveFlicker();
@@ -345,7 +353,7 @@ namespace MyFirstWPF
                 moveStory.Children.Add(posAnimation[i]);
 
                 opacAnimation[i] = new DoubleAnimation();
-                opacAnimation[i].To = ((row_offset >= 0 && row_offset <= 3) ? 1.0 : 0.0);
+                opacAnimation[i].To = ((row_offset >= 0 && row_offset <= 3) ? 0.9 : 0.0);
                 opacAnimation[i].Duration = new Duration(TimeSpan.FromSeconds(0.1));
                 Storyboard.SetTargetName(opacAnimation[i], rooms[i].Name);
                 Storyboard.SetTargetProperty(opacAnimation[i], new PropertyPath(RoomInfoBlock.OpacityProperty));
