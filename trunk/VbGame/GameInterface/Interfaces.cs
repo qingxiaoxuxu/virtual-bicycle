@@ -2,6 +2,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework.Graphics;
 namespace RacingGame
 {
     /// <summary>
@@ -66,6 +67,8 @@ namespace RacingGame
             public string ID;
             public string Name;
             public string CarID;
+            public Color CarColor;
+
         }
         public string TeamName;
         public string MapName;
