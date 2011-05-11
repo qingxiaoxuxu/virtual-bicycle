@@ -73,7 +73,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="InterfacePlugin.cs" />
     <Compile Include="ClientConfig.cs" />
     <Compile Include="ClientEvt.cs" />
     <Compile Include="ClientGEvt.cs" />

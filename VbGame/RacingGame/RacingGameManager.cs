@@ -303,7 +303,7 @@ namespace RacingGame
 
         static StartUpParameters startUpParam;
         static string localUID;
-        //static ClientGEvt netClient;
+        static INetInterface netClient;
         static Dictionary<string, RemotePlayer> remotePlayers = new Dictionary<string, RemotePlayer>();
         static bool canBeginGame = true;
 
@@ -311,7 +311,7 @@ namespace RacingGame
         /// <summary>
         /// Create Racing game
         /// </summary>
-        public RacingGameManager(ClientGEvt netCl, string uid, StartUpParameters sup)
+        public RacingGameManager(INetInterface netCl, string uid, StartUpParameters sup)
             : base("Virutal Bicycle")
         {
             // Start playing the menu music
@@ -319,7 +319,7 @@ namespace RacingGame
             localUID = uid;
             startUpParam = sup;
 
-            //netClient = netCl;
+            netClient = netCl;
             for (int i = 0; i < sup.Players.Length; i++)
             {
                 if (sup.Players[i].ID != uid)
@@ -332,6 +332,13 @@ namespace RacingGame
 
             // Create main menu at our main entry point
             
+            netClient.TellReady();
+            while (!netClient.CanStartGame())
+            {
+                Thread.Sleep(10);
+            }
+
+
             //// But start with splash screen, if user clicks or presses Start,
             //// we are back in the main menu.
             //gameScreens.Push(new SplashScreen());

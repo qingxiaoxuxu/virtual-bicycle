@@ -31,7 +31,8 @@ namespace RacingGame
 
         private InterfaceFactory()
         {
-
+            currentInputInterface = new KeyboardInterface();
+            currentNetInterface = new DebugNetInterface();
         }
 
         /// <summary>
@@ -219,7 +220,54 @@ namespace RacingGame
         void Update(GameTime time);
     }
 
+    class DebugNetInterface : INetInterface
+    {
+        bool isReady;
+        #region INetInterface 成员
 
+        public void Connect()
+        {
+        }
+
+        public StartUpParameters DownloadStartUpParameters()
+        {
+            StartUpParameters startUpParams;
+            startUpParams.MapName = "Beginner";
+            startUpParams.TeamName = "Test Team";
+            startUpParams.Players = new StartUpParameters.PlayerInfo[1];
+            startUpParams.Players[0].CarID = "0";
+            startUpParams.Players[0].ID = "1";
+            startUpParams.Players[0].Name = "Test Player";
+            return startUpParams;
+        }
+
+        public void SendBikeState(BikeState[] state)
+        {
+
+        }
+
+        public BikeState[] DownloadBikeState()
+        {
+            return new BikeState[0];
+        }
+
+        public void TellReady()
+        {
+            isReady = true;
+        }
+
+        public bool CanStartGame()
+        {
+            return isReady;
+        }
+
+        public void Disconnect()
+        {
+          
+        }
+
+        #endregion
+    }
     class KeyboardInterface : IInputInterface
     {
         enum VKeys : short
