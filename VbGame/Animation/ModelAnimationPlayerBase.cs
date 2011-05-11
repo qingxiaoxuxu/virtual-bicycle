@@ -55,6 +55,33 @@ namespace Apoc3D.Graphics.Animation
             }
         }
 
+
+        protected void InitSetTime(TimeSpan value) 
+        {
+            TimeSpan time = value;
+
+            currentTimeValue = time;
+
+            // Read keyframe matrices.
+            IList<ModelKeyframe> keyframes = currentClipValue.Keyframes;
+
+            while (currentKeyframe < keyframes.Count)
+            {
+                ModelKeyframe keyframe = keyframes[currentKeyframe];
+
+                // Stop when we've read up to the current time position.                    
+                if (keyframe.Time > currentTimeValue)
+                {
+                    break;
+                }
+
+                // Use this keyframe
+                SetKeyframe(keyframe);
+
+                currentKeyframe++;
+            }
+        }
+
         /// <summary>
         /// Gets/set the current play position.
         /// </summary>

@@ -1245,7 +1245,7 @@ namespace RacingGame.GameLogic
 
             // For rendering rotate car to stay correctly on the road
             carMatrix =
-                Matrix.CreateRotationX(MathHelper.Pi / 2.0f -
+                Matrix.CreateRotationX(MathHelper.Pi -
                 carPitchPhysics.pos / 60) *
                 Matrix.CreateRotationZ(MathHelper.Pi) *
                 carMatrix;

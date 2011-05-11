@@ -55,20 +55,20 @@ namespace Apoc3D.Graphics.Animation
                 bindPose.CopyTo(boneTransforms);
                 isFirstPlay = false;
             }
-
+            InitSetTime(TimeSpan.FromSeconds(0.07));
             //List<ModelKeyframe> keyframes = CurrentClip.Keyframes;
 
             //for (int i = 0; i < keyframes.Count; i++)
             //{
-                //ModelKeyframe keyframe = keyframes[i];
+            //    ModelKeyframe keyframe = keyframes[i];
 
-                //if (keyframe.Time.TotalSeconds > 0.33)
-                //{
-                    //break;
-                //}
+            //    if (keyframe.Time.TotalSeconds > 0.1)
+            //    {
+            //        break;
+            //    }
 
-                //// Use this keyframe
-                //SetKeyframe(keyframe);
+            //    // Use this keyframe
+            //    SetKeyframe(keyframe);
             //}
         }
 

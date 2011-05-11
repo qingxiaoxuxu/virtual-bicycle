@@ -60,8 +60,7 @@ namespace RacingGame
         /// <summary>
         /// Car model and selection plate for the car selection screen.
         /// </summary>
-        private static Model carModel = null,
-            carSelectionPlate = null;
+        private static Cyclist carModel = null;
 
         /// <summary>
         /// Car textures we exchange for our car model.
@@ -90,24 +89,24 @@ namespace RacingGame
         /// </summary>
         private static Material brakeTrackMaterial = null;
 
-        /// <summary>
-        /// Car colors for the car selection screen.
-        /// </summary>
-        public static List<Color> CarColors = new List<Color>(
-            new Color[]
-            {
-                Color.White,
-                Color.Yellow,
-                Color.Blue,
-                Color.Purple,
-                Color.Red,
-                Color.Green,
-                Color.Teal,
-                Color.Gray,
-                Color.Chocolate,
-                Color.Orange,
-                Color.SeaGreen,
-            });
+        ///// <summary>
+        ///// Car colors for the car selection screen.
+        ///// </summary>
+        //public static List<Color> CarColors = new List<Color>(
+        //    new Color[]
+        //    {
+        //        Color.White,
+        //        Color.Yellow,
+        //        Color.Blue,
+        //        Color.Purple,
+        //        Color.Red,
+        //        Color.Green,
+        //        Color.Teal,
+        //        Color.Gray,
+        //        Color.Chocolate,
+        //        Color.Orange,
+        //        Color.SeaGreen,
+        //    });
 
         /// <summary>
         /// Landscape we are currently using.
@@ -209,7 +208,7 @@ namespace RacingGame
         /// Car model
         /// </summary>
         /// <returns>Model</returns>
-        public static Model CarModel
+        public static Cyclist CarModel
         {
             get
             {
@@ -223,23 +222,11 @@ namespace RacingGame
         /// <returns>Color</returns>
         public static Color CarColor
         {
-            get
-            {
-                return CarColors[currentCarColor % CarColors.Count];
-            }
+            get;
+            private set;
         }
 
-        /// <summary>
-        /// Number of car colors
-        /// </summary>
-        /// <returns>Int</returns>
-        public static int NumberOfCarColors
-        {
-            get
-            {
-                return CarColors.Count;
-            }
-        }
+
 
         /// <summary>
         /// Number of car texture types
@@ -275,17 +262,17 @@ namespace RacingGame
             }
         }
 
-        /// <summary>
-        /// Car selection plate
-        /// </summary>
-        /// <returns>Model</returns>
-        public static Model CarSelectionPlate
-        {
-            get
-            {
-                return carSelectionPlate;
-            }
-        }
+        ///// <summary>
+        ///// Car selection plate
+        ///// </summary>
+        ///// <returns>Model</returns>
+        //public static Model CarSelectionPlate
+        //{
+        //    get
+        //    {
+        //        return carSelectionPlate;
+        //    }
+        //}
 
         /// <summary>
         /// Landscape we are currently using, used for several things (menu
@@ -328,6 +315,10 @@ namespace RacingGame
 
                     remotePlayers.Add(plr.ID, plr);
                 }
+                else
+                {
+                    CarColor = sup.Players[i].CarColor;
+                }
             }
 
             // Create main menu at our main entry point
@@ -361,8 +352,8 @@ namespace RacingGame
             base.Initialize();
 
             // Load models
-            carModel = new Model("Car");
-            carSelectionPlate = new Model("CarSelectionPlate");
+            carModel = new Cyclist();
+            //carSelectionPlate = new Model("CarSelectionPlate");
 
             // Load landscape
             landscape = new Landscape(Level.Beginner);
@@ -425,6 +416,7 @@ namespace RacingGame
             {
                 e.Value.Update(gameTime);
             }
+            carModel.Update(gameTime);
         }
         #endregion
 

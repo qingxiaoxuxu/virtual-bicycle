@@ -83,11 +83,11 @@ namespace CustomModelAnimationPipeline
                 rootClips.Add(animation.Key, processed);
             }
 
-            
+            //context.Logger.LogImportantMessage((animationClips != null).ToString());
  
             // Store our custom animation data in the Tag property of the model.
             model.Tag = new AnimationData(animationClips, null, bindPose, inverseBindPose, skeletonHierarchy);
-
+            
 
             return model;
         }
@@ -109,6 +109,30 @@ namespace CustomModelAnimationPipeline
             }
         }
 
+        
+        /// <summary>
+        ///Overriding the ConvertMaterial function of ModelProcessor so that we can
+        ///replace the BasicEffect with our own ShatterEffect.   
+        /// </summary>
+        /// <param name="material">input Material</param>
+        /// <param name="context">Content processor context</param>
+        /// <returns></returns>
+        protected override MaterialContent ConvertMaterial(MaterialContent material,
+                                                    ContentProcessorContext context)
+        {
+            EffectMaterialContent effect = new EffectMaterialContent();
+            // Use our own ShatterEffect.fx instead of BasicEffect.
+            effect.Effect =
+                new ExternalReference<EffectContent>("..\\Content\\Shaders\\skinned.fx");
+
+            foreach (ExternalReference<TextureContent> texture in
+                                                            material.Textures.Values)
+            {
+                // Add the textures in the source Material to our effect.
+                effect.Textures.Add("diffuseTexture", texture);
+            }
+            return base.ConvertMaterial(effect, context);
+        }   
 
         /// <summary>
         /// Converts an intermediate format content pipeline AnimationContentDictionary

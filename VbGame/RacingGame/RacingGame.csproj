@@ -96,6 +96,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GameSettings.cs" />
+    <Compile Include="Graphics\AnimatedModel.cs" />
     <Compile Include="Graphics\BaseGame.cs" />
     <Compile Include="Graphics\LensFlare.cs" />
     <Compile Include="Graphics\LineManager2D.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Graphics\MeshRenderManager.cs" />
     <Compile Include="Graphics\Model.cs" />
     <Compile Include="Graphics\PlaneRenderer.cs" />
+    <Compile Include="Graphics\Cyclist.cs" />
     <Compile Include="Graphics\TangentVertex.cs" />
     <Compile Include="Graphics\Texture.cs" />
     <Compile Include="Graphics\TextureFont.cs" />
