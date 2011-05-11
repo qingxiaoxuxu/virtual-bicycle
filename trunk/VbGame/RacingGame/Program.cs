@@ -18,6 +18,7 @@ using Microsoft.Xna.Framework.Graphics;
 using VbClient.Net;
 using System.Threading;
 using System.Collections.Generic;
+using VbClient;
 #endif
 #endregion
 
@@ -45,27 +46,11 @@ namespace RacingGame
                 MessageBox.Show("This program requires command line parameters to run.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            InterfacePlugin.Load();
 
             StartGame(args[0]);
         }
         #endregion
-
-
-
-        //static void netClient_RoomDetail(string teamName, string mapName, List<string> userId, List<string> userName, List<string> carId)
-        //{
-        //    startUpParams.TeamName = teamName;
-        //    startUpParams.MapName = mapName;
-        //    startUpParams.Players = new StartUpParameters.PlayerInfo[userId.Count];
-        //    for (int i = 0; i < userId.Count; i++)
-        //    {
-        //        startUpParams.Players[i].ID = userId[i];
-        //        startUpParams.Players[i].Name = userName[i];
-        //        startUpParams.Players[i].CarID = carId[i];
-        //    }
-        //    isRoomInfoAcquired = true;
-        //}
-
 
         #region StartGame
         /// <summary>
@@ -76,32 +61,17 @@ namespace RacingGame
         /// </summary>
         public static void StartGame(string uid)
         {
-            INetInterface netClient;
+            INetInterface netClient = InterfaceFactory.Instance.GetNetwork();
 
+            netClient.Connect();
 
-            StartUpParameters startUpParams;
-            startUpParams.MapName = "Beginner";
-            startUpParams.TeamName = "Test Team";
-            startUpParams.Players = new StartUpParameters.PlayerInfo[1];
-            startUpParams.Players[0].CarID = "0";
-            startUpParams.Players[0].ID = uid;
-            startUpParams.Players[0].Name = "Test Player";
-
-            //netClient = new ClientGEvt("localhost");
-
-            //netClient.Client.ConnectedServer += new EventHandler(Client_ConnectedServer);
+            StartUpParameters sup = netClient.DownloadStartUpParameters();
             
-
-            //while (!isRoomInfoAcquired)
-            //{
-                //Thread.Sleep(10);
-            //}
-            //netClient.RoomDetail -= netClient_RoomDetail;
 #if !XBOX360
             try
             {
 #endif
-                using (RacingGameManager game = new RacingGameManager(netClient, uid, startUpParams))
+                using (RacingGameManager game = new RacingGameManager(netClient, uid, sup))
                 {
                     game.Run();
                 }
@@ -127,15 +97,8 @@ namespace RacingGame
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 #endif
+            netClient.Disconnect();
         }
-
-            //static void Client_ConnectedServer(object sender, EventArgs e)
-            //{
-                
-            //    netClient.RoomDetail += netClient_RoomDetail;
-            //    netClient.ConnectToServer(Uid);
-            //    netClient.RequestRoomInfo();
-            //}
 
         #endregion
     }
