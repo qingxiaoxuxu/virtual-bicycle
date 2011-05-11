@@ -77,7 +77,8 @@ namespace RacingGame
     public unsafe struct BikeState
     {
         public string ID;
-
+        public int Rank;
+        public Vector3 Velocity;
         public fixed float Transform[16];
     }
 

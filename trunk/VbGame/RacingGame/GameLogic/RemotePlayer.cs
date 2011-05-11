@@ -9,13 +9,13 @@ namespace RacingGame.GameLogic
     class RemotePlayer
     {
         string playerId;
-        
+
         Matrix transform;
 
         string carStyle;
         Color carColor;
 
-        public string  ID { get { return playerId; } }
+        public string ID { get { return playerId; } }
         public string CarStyle { get { return carStyle; } }
         public Color CarColor { get { return carColor; } }
 
@@ -30,7 +30,7 @@ namespace RacingGame.GameLogic
 
         public void Update(GameTime time)
         {
-            
+
         }
 
     }
