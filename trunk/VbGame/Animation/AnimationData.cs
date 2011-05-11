@@ -1071,6 +1071,21 @@ namespace Apoc3D.Graphics.Animation
             VirtualStream vs = new VirtualStream(input.BaseStream, input.BaseStream.Position, size);
             ad =  new BinaryDataReader(vs);
 
+            #region BindPoseTag
+            if (ad.Contains(BindPoseCountTag))
+            {
+                int count = ad.GetDataInt32(BindPoseCountTag);
+                bindPose = new List<Matrix>(count);
+
+                ContentBinaryReader br2 = ad.GetData(BindPoseTag);
+                for (int i = 0; i < count; i++)
+                {
+                    bindPose.Add(br2.ReadMatrix());
+                }
+                br2.Close();
+            }
+
+            #endregion
             #region InvBindPoseTag
 
             

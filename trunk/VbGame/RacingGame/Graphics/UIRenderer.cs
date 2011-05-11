@@ -478,7 +478,6 @@ namespace RacingGame.Graphics
                 RacingGameManager.CarModel.RenderCar(
                     randomCarNumber,
                     randomCarColor,
-                    false,
                     RacingGameManager.Player.CarRenderMatrix);
             }
         }

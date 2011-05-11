@@ -158,7 +158,7 @@ namespace RacingGame.GameLogic
 
                     dstTexture.Save(
                         ScreenshotNameBuilder(screenshotNum),
-                        ImageFileFormat.Jpg);
+                        ImageFileFormat.Bmp);
                 }
             }
             catch (Exception ex)

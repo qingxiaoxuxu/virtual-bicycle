@@ -438,8 +438,8 @@ namespace RacingGame.Shaders
                     delegate
                     {
                         RacingGameManager.Landscape.GenerateShadow();
-                        RacingGameManager.CarModel.GenerateShadow(
-                            RacingGameManager.Player.CarRenderMatrix);
+                        //RacingGameManager.CarModel.GenerateShadow(
+                            //RacingGameManager.Player.CarRenderMatrix);
                     });
 
                 // Render shadows
@@ -447,8 +447,8 @@ namespace RacingGame.Shaders
                     delegate
                     {
                         RacingGameManager.Landscape.UseShadow();
-                        RacingGameManager.CarModel.UseShadow(
-                            RacingGameManager.Player.CarRenderMatrix);
+                        //RacingGameManager.CarModel.UseShadow(
+                            //RacingGameManager.Player.CarRenderMatrix);
                     });
             }
         }

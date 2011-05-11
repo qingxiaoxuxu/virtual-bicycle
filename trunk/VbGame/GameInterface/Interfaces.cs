@@ -241,6 +241,7 @@ namespace RacingGame
             startUpParams.Players = new StartUpParameters.PlayerInfo[1];
             startUpParams.Players[0].CarID = "0";
             startUpParams.Players[0].ID = "1";
+            startUpParams.Players[0].CarColor = Color.Red;
             startUpParams.Players[0].Name = "Test Player";
             return startUpParams;
         }

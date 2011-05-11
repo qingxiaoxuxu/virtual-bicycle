@@ -154,15 +154,25 @@ namespace CustomModelAnimationPipeline
 
             #endregion
 
-            MemoryStream ms = new MemoryStream();
-            data.Save(ms);
-            output.Write(ms.ToArray());
-            ms.Close();
+
+            output.Write(0); //Õ¼¸öÎ»ÖÃ
+            output.Flush();
+
+            long start = output.BaseStream.Position;
+
+            data.Save(new VirtualStream(output.BaseStream, output.BaseStream.Position));
+
+            long end = output.BaseStream.Position;
+            int size = (int)(end - start);
+
+            output.BaseStream.Position = start - 4;
+            output.Write(size);
+            output.BaseStream.Position = end;
         }
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return "CustomModelAnimationPipeline.AnimationDataWriter";
+            return "Apoc3D.Graphics.Animation.AnimationDataReader, Animation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
         }
     }
 
@@ -206,8 +216,7 @@ namespace CustomModelAnimationPipeline
             ProcessAnimations(input, model, animationClips, rootClips);
                         
             // Store the data for the model
-            model.Tag = new AnimationData(animationClips, rootClips, null, null, boneHierarchy);
-
+            model.Tag = new AnimationData(animationClips, rootClips, null, null, boneHierarchy);            
             
 
             return model;
