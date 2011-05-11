@@ -27,6 +27,7 @@ using Texture = RacingGame.Graphics.Texture;
 using RacingGame.Properties;
 using RacingGame.Shaders;
 using VbClient.Net;
+using System.Threading;
 #endregion
 
 namespace RacingGame
@@ -71,13 +72,13 @@ namespace RacingGame
         /// The player can select between the 3 cars: 0 (white), 1 (red) and
         /// 2 (yellow).
         /// </summary>
-        public static int currentCarNumber = 0;
+        public static int currentCarNumber = 2;
 
         /// <summary>
         /// The player can also select a car color, which will be used to
         /// recolor the car. Looks best for the first car (white).
         /// </summary>
-        public static int currentCarColor;// Color carColor = Color.White;
+        public static int currentCarColor = 1;// Color carColor = Color.White;
 
         /// <summary>
         /// Helper texture for color selection
@@ -302,8 +303,9 @@ namespace RacingGame
 
         static StartUpParameters startUpParam;
         static string localUID;
-        static ClientGEvt netClient;
+        //static ClientGEvt netClient;
         static Dictionary<string, RemotePlayer> remotePlayers = new Dictionary<string, RemotePlayer>();
+        static bool canBeginGame = true;
 
         #region Constructor
         /// <summary>
@@ -317,12 +319,14 @@ namespace RacingGame
             localUID = uid;
             startUpParam = sup;
 
-            netClient = netCl;
+            //netClient = netCl;
             for (int i = 0; i < sup.Players.Length; i++)
             {
                 if (sup.Players[i].ID != uid)
                 {
+                    RemotePlayer plr = new RemotePlayer(sup.Players[i].ID);
 
+                    remotePlayers.Add(sup.Players[i].ID, plr);
                 }
             }
 
@@ -368,8 +372,17 @@ namespace RacingGame
             gameScreens.Push(new GameScreen((Level)Enum.Parse(typeof(Level), startUpParam.MapName)));
 
 
-            netClient.BeginMyGame();
-            
+            //netClient.BeginGame += netClient_BeginGame;
+            //netClient.BeginMyGame();
+            while (!canBeginGame) 
+            {
+                Thread.Sleep(10);
+            }
+        }
+
+        void netClient_BeginGame()
+        {
+            canBeginGame = true;
         }
 
         #endregion

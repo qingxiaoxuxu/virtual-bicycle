@@ -313,7 +313,12 @@ namespace RacingGame.Properties
         {
             get
             {
+#if DEBUG
+                return false;
+#else
+
                 return fullscreen;
+#endif
             }
             set
             {

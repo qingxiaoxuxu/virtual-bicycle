@@ -924,13 +924,13 @@ namespace RacingGame.GameLogic
             Vector3[] carCorners = new Vector3[]
             {
                 // Top left
-                pos + carDir * 5.6f/2.0f - carRight * 2.6f/2.0f,
+                pos + carDir * 3.5f/2.0f - carRight * 1.0f/2.0f,
                 // Top right
-                pos + carDir * 5.6f/2.0f + carRight * 2.6f/2.0f,
+                pos + carDir * 3.5f/2.0f + carRight * 1.0f/2.0f,
                 // Bottom right
-                pos - carDir * 5.6f/2.0f + carRight * 2.6f/2.0f,
+                pos - carDir * 3.5f/2.0f + carRight * 1.0f/2.0f,
                 // Bottom left
-                pos - carDir * 5.6f/2.0f - carRight * 2.6f/2.0f,
+                pos - carDir * 3.5f/2.0f - carRight * 1.0f/2.0f,
             };
 
             float applyGravity = 0;
