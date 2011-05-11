@@ -9,6 +9,7 @@
 
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 
 namespace Apoc3D.Graphics.Animation
 {
@@ -20,16 +21,19 @@ namespace Apoc3D.Graphics.Animation
         /// <summary>
         /// Gets the index of the target bone that is animated by this keyframe.
         /// </summary>
+        [ContentSerializer]
         public int Bone { get; private set; }
 
         /// <summary>
         /// Gets the time offset from the start of the animation to this keyframe.
         /// </summary>
+        [ContentSerializer]
         public TimeSpan Time { get; private set; }
 
         /// <summary>
         /// Gets the bone transform for this keyframe.
         /// </summary>
+        [ContentSerializer]
         public Matrix Transform { get; private set; }
 
         /// <summary>

@@ -193,6 +193,10 @@
       <Project>{1985F477-F00F-4AC0-8671-3444A9E35822}</Project>
       <Name>Animation</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GameInterface\GameInterface.csproj">
+      <Project>{A3BAE9AC-0CD3-47C4-A19A-05E8059B52B8}</Project>
+      <Name>GameInterface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VbClient\VbClient.csproj">
       <Project>{EDF4816D-B5D0-45BC-BEDA-12115F6CA332}</Project>
       <Name>VbClient</Name>

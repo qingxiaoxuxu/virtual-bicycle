@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Content;
 
 namespace Apoc3D.Graphics.Animation
 {
@@ -15,12 +16,14 @@ namespace Apoc3D.Graphics.Animation
         /// <summary>
         /// Gets the total length of the model animation clip
         /// </summary>
+        [ContentSerializer]
         public TimeSpan Duration { get; private set; }
         
         /// <summary>
         /// Gets a combined list containing all the keyframes for all bones,
         /// sorted by time.
         /// </summary>
+        [ContentSerializer]
         public List<ModelKeyframe> Keyframes { get; private set; }
 
         /// <summary>
