@@ -231,6 +231,7 @@ namespace RacingGame.Graphics
                 foreach (BasicEffect effect in mesh.Effects)
                 {
                     effect.EnableDefaultLighting();
+                    effect.DiffuseColor = Color.Lerp(Color.White, carColor, 0.5f).ToVector3();
                     effect.Projection = BaseGame.ProjectionMatrix;
                     effect.View = BaseGame.ViewMatrix;
                     if (boneTransforms != null)
