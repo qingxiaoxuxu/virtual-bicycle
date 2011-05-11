@@ -17,10 +17,155 @@ using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 using System.Text;
 using System.IO;
 using Apoc3D.Graphics.Animation;
+using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 #endregion
 
 namespace CustomModelAnimationPipeline
 {
+    [ContentTypeWriter]
+    public class AnimationDataWriter : ContentTypeWriter<AnimationData>
+    {
+        static readonly string BindPoseTag = "BindPose";
+        static readonly string BindPoseCountTag = "BindPoseCount";
+
+        static readonly string InvBindPoseTag = "InvBindPose";
+        static readonly string InvBindPoseCountTag = "InvBindPoseCount";
+
+        static readonly string ModelAnimationClipTag = "ModelAnimationClip";
+        static readonly string ModelAnimationClipCountTag = "ModelAnimationClipCount";
+
+        static readonly string RootAnimationClipTag = "RootAnimationClip";
+        static readonly string RootAnimationClipCountTag = "RootAnimationClipCount";
+
+        static readonly string BoneHierarchyTag = "BoneHierarchy";
+        static readonly string BoneHierarchyCountTag = "BoneHierarchyCount";
+
+        protected override void Write(ContentWriter output, AnimationData animData)
+        {
+            BinaryDataWriter data = new BinaryDataWriter();
+
+            ContentBinaryWriter bw;
+            #region BindPoseTag
+            List<Matrix> bindPose = animData.BindPose;
+
+            if (bindPose != null)
+            {
+                data.AddEntry(BindPoseCountTag, bindPose.Count);
+
+                bw = data.AddEntry(BindPoseTag);
+                for (int i = 0; i < bindPose.Count; i++)
+                {
+                    bw.Write(bindPose[i]);
+                }
+                bw.Close();
+            }
+            #endregion
+
+            #region InvBindPoseTag
+            List<Matrix> invBindPose = animData.InverseBindPose;
+            if (invBindPose != null)
+            {
+                data.AddEntry(InvBindPoseCountTag, invBindPose.Count);
+
+                bw = data.AddEntry(InvBindPoseTag);
+                for (int i = 0; i < invBindPose.Count; i++)
+                {
+                    bw.Write(invBindPose[i]);
+                }
+                bw.Close();
+            }
+
+            #endregion
+
+            #region AnimationClipTag
+
+            var aclip = animData.ModelAnimationClips;
+
+            if (aclip != null)
+            {
+                data.AddEntry(ModelAnimationClipCountTag, aclip.Count);
+
+                bw = data.AddEntry(ModelAnimationClipTag);
+                foreach (var e in aclip)
+                {
+                    bw.WriteStringUnicode(e.Key);
+
+                    ModelAnimationClip clip = e.Value;
+                    bw.Write(clip.Duration.TotalSeconds);
+
+                    bw.Write(clip.Keyframes.Count);
+
+                    for (int i = 0; i < clip.Keyframes.Count; i++)
+                    {
+                        bw.Write(clip.Keyframes[i].Bone);
+                        bw.Write(clip.Keyframes[i].Time.TotalSeconds);
+                        bw.Write(clip.Keyframes[i].Transform);
+                    }
+                }
+                bw.Close();
+            }
+
+
+            #endregion
+
+            #region RootAnimationClipTag
+            aclip = animData.RootAnimationClips;
+
+            if (aclip != null)
+            {
+                data.AddEntry(RootAnimationClipCountTag, aclip.Count);
+
+                bw = data.AddEntry(RootAnimationClipTag);
+                foreach (var e in aclip)
+                {
+                    bw.WriteStringUnicode(e.Key);
+
+                    ModelAnimationClip clip = e.Value;
+                    bw.Write(clip.Duration.TotalSeconds);
+
+                    bw.Write(clip.Keyframes.Count);
+
+                    for (int i = 0; i < clip.Keyframes.Count; i++)
+                    {
+                        bw.Write(clip.Keyframes[i].Bone);
+                        bw.Write(clip.Keyframes[i].Time.TotalSeconds);
+                        bw.Write(clip.Keyframes[i].Transform);
+                    }
+                }
+                bw.Close();
+            }
+
+            #endregion
+
+            #region BoneHierarchyTag
+
+            List<int> bh = animData.SkeletonHierarchy;
+            if (bh != null)
+            {
+                data.AddEntry(BoneHierarchyCountTag, bh.Count);
+
+                bw = data.AddEntry(BoneHierarchyTag);
+                for (int i = 0; i < bh.Count; i++)
+                {
+                    bw.Write(bh[i]);
+                }
+                bw.Close();
+            }
+
+            #endregion
+
+            MemoryStream ms = new MemoryStream();
+            data.Save(ms);
+            output.Write(ms.ToArray());
+            ms.Close();
+        }
+
+        public override string GetRuntimeReader(TargetPlatform targetPlatform)
+        {
+            return "CustomModelAnimationPipeline.AnimationDataWriter";
+        }
+    }
+
     /// <summary>
     /// Custom processor extends the builtin framework ModelProcessor class,
     /// adding animation support.

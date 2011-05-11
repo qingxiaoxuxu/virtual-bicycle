@@ -1506,6 +1506,16 @@
       <Name>LandscapeHeights</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Compile Include="Models\bike.FBX">
+      <Name>bike</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>AnimatedModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\bike_boy.FBX">
+      <Name>bike_boy</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
     <None Include="TrackAdvanced.Track">
       <Name>TrackAdvanced</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

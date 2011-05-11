@@ -23,26 +23,12 @@ using System.Collections.Generic;
 
 namespace RacingGame
 {
-    public struct StartUpParameters 
-    {
-        public struct PlayerInfo 
-        {
-            public string ID;
-            public string Name;
-            public string CarID;
-        }
-        public string TeamName;
-        public string MapName;
-        public PlayerInfo[] Players;
-    }
-
     /// <summary>
     /// Program
     /// </summary>
     static class Program
     {
-        static bool isRoomInfoAcquired;
-        static StartUpParameters startUpParams;
+        
 
         #region Main
         /// <summary>
@@ -66,22 +52,20 @@ namespace RacingGame
 
 
 
-        static void netClient_RoomDetail(string teamName, string mapName, List<string> userId, List<string> userName, List<string> carId)
-        {
-            startUpParams.TeamName = teamName;
-            startUpParams.MapName = mapName;
-            startUpParams.Players = new StartUpParameters.PlayerInfo[userId.Count];
-            for (int i = 0; i < userId.Count; i++)
-            {
-                startUpParams.Players[i].ID = userId[i];
-                startUpParams.Players[i].Name = userName[i];
-                startUpParams.Players[i].CarID = carId[i];
-            }
-            isRoomInfoAcquired = true;
-        }
+        //static void netClient_RoomDetail(string teamName, string mapName, List<string> userId, List<string> userName, List<string> carId)
+        //{
+        //    startUpParams.TeamName = teamName;
+        //    startUpParams.MapName = mapName;
+        //    startUpParams.Players = new StartUpParameters.PlayerInfo[userId.Count];
+        //    for (int i = 0; i < userId.Count; i++)
+        //    {
+        //        startUpParams.Players[i].ID = userId[i];
+        //        startUpParams.Players[i].Name = userName[i];
+        //        startUpParams.Players[i].CarID = carId[i];
+        //    }
+        //    isRoomInfoAcquired = true;
+        //}
 
-        static ClientGEvt netClient;
-        static string Uid;
 
         #region StartGame
         /// <summary>
@@ -92,8 +76,10 @@ namespace RacingGame
         /// </summary>
         public static void StartGame(string uid)
         {
-            Uid = uid;
+            INetInterface netClient;
 
+
+            StartUpParameters startUpParams;
             startUpParams.MapName = "Beginner";
             startUpParams.TeamName = "Test Team";
             startUpParams.Players = new StartUpParameters.PlayerInfo[1];
@@ -143,13 +129,13 @@ namespace RacingGame
 #endif
         }
 
-        static void Client_ConnectedServer(object sender, EventArgs e)
-        {
-            
-            netClient.RoomDetail += netClient_RoomDetail;
-            netClient.ConnectToServer(Uid);
-            netClient.RequestRoomInfo();
-        }
+            //static void Client_ConnectedServer(object sender, EventArgs e)
+            //{
+                
+            //    netClient.RoomDetail += netClient_RoomDetail;
+            //    netClient.ConnectToServer(Uid);
+            //    netClient.RequestRoomInfo();
+            //}
 
         #endregion
     }
