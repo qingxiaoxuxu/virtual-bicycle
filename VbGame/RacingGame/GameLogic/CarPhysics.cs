@@ -203,6 +203,10 @@ namespace RacingGame.GameLogic
         /// </summary>
         float speed;
 
+
+        //float desiredSpeed;
+        float speedChange;
+
         /// <summary>
         /// Car up vector for orientation.
         /// </summary>
@@ -242,7 +246,7 @@ namespace RacingGame.GameLogic
         /// wheel, but it always moves back to 1. The real view distance is
         /// also changed depending on how fast we drive (see UpdateCar stuff below)
         /// </summary>
-        float viewDistance = 1.0f;
+        float viewDistance = 0.4f;
 
         /// <summary>
         /// Wheel position, used for animating the wheels
@@ -264,6 +268,8 @@ namespace RacingGame.GameLogic
         /// speed changing if we are on ground and adding brake tracks.
         /// </summary>
         protected bool isCarOnGround = false;
+
+        protected float TrackSegment { get { return trackSegmentNumber; } }
 
         /// <summary>
         /// Helper variables to keep track of our car position on the current
@@ -414,9 +420,9 @@ namespace RacingGame.GameLogic
         /// </summary>
         /// <param name="setCarPosition">Set car position</param>
         public CarPhysics(Vector3 setCarPosition)
-        {
-            SetCarPosition(setCarPosition,
-                new Vector3(0, 1, 0), new Vector3(0, 0, 1));
+            : this(setCarPosition,
+                new Vector3(0, 1, 0), new Vector3(0, 0, 1))
+        {            
         }
 
         /// <summary>
@@ -430,7 +436,42 @@ namespace RacingGame.GameLogic
             Vector3 setUp)
         {
             SetCarPosition(setCarPosition, setDirection, setUp);
+
+            RacingGameManager.InputInterface.HandlebarRotated += new HandlebarRotatedHandler(InputInterface_HandlebarRotated);
+            RacingGameManager.InputInterface.WheelSpeedChanged += new WheelSpeedChangedHandler(InputInterface_WheelSpeedChanged);
+            RacingGameManager.InputInterface.Reset += new EventHandler(InputInterface_Reset);
         }
+
+        void InputInterface_Reset(object sender, EventArgs e)
+        {
+            float roadWidth;
+            float nextRoadWidth;
+
+            Matrix trackMatrix =
+                RacingGameManager.Landscape.GetTrackPositionMatrix(
+                trackSegmentNumber, trackSegmentPercent,
+                out roadWidth, out nextRoadWidth);
+            
+            speed = 0;
+            carForce = Vector3.Zero;
+            carPos = trackMatrix.Translation;
+            carUp = trackMatrix.Up;
+            carDir = trackMatrix.Forward;
+        }
+
+        void InputInterface_WheelSpeedChanged(WheelSpeedChangedEventArgs e)
+        {
+            //desiredSpeed = e.Speed;
+            speedChange = e.SpeedChange;
+        }
+
+        void InputInterface_HandlebarRotated(HandlebarRotatedEventArgs e)
+        {
+            rotationChange = e.Angle;
+        }
+
+        
+
         #endregion
 
         #region SetCarPosition
@@ -497,6 +538,8 @@ namespace RacingGame.GameLogic
             if (ZoomInTime > 0)
                 isCarOnGround = false;
 
+
+
             wheelPos += BaseGame.MoveFactorPerSecond * speed / WheelMovementSpeed;
 
             float moveFactor = BaseGame.MoveFactorPerSecond;
@@ -511,40 +554,40 @@ namespace RacingGame.GameLogic
             float effectiveSensitivity = MinSensitivity +
                 GameSettings.Default.ControllerSensitivity;
 
-            // First handle rotations (reduce last value)
-            rotationChange *= 0.95f;
+            //// First handle rotations (reduce last value)
+            //rotationChange *= 0.95f;
 
-            // Left/right changes rotation
-            if (Input.KeyboardLeftPressed ||
-                Input.Keyboard.IsKeyDown(Keys.A))
-                rotationChange += effectiveSensitivity *
-                    MaxRotationPerSec * moveFactor / 2.5f;
-            else if (Input.KeyboardRightPressed ||
-                Input.Keyboard.IsKeyDown(Keys.D) ||
-                Input.Keyboard.IsKeyDown(Keys.E))
-                rotationChange -= effectiveSensitivity *
-                    MaxRotationPerSec * moveFactor / 2.5f;
-            else
-                rotationChange = 0;
+            //// Left/right changes rotation
+            //if (Input.KeyboardLeftPressed ||
+            //    Input.Keyboard.IsKeyDown(Keys.A))
+            //    rotationChange += effectiveSensitivity *
+            //        MaxRotationPerSec * moveFactor / 2.5f;
+            //else if (Input.KeyboardRightPressed ||
+            //    Input.Keyboard.IsKeyDown(Keys.D) ||
+            //    Input.Keyboard.IsKeyDown(Keys.E))
+            //    rotationChange -= effectiveSensitivity *
+            //        MaxRotationPerSec * moveFactor / 2.5f;
+            //else
+            //    rotationChange = 0;
 
-            if (Input.MouseXMovement != 0)
-                rotationChange -= effectiveSensitivity *
-                    (Input.MouseXMovement / 15.0f) *
-                    MaxRotationPerSec * moveFactor;
-            if (Input.IsGamePadConnected)
-            {
-                // More dynamic force changing with gamepad (slow, faster, etc.)
-                rotationChange -= effectiveSensitivity *
-                    Input.GamePad.ThumbSticks.Left.X *
-                    MaxRotationPerSec * moveFactor / 1.12345f;
-                // Also allow pad to simulate same behaviour as on keyboard
-                if (Input.GamePad.DPad.Left == ButtonState.Pressed)
-                    rotationChange += effectiveSensitivity *
-                        MaxRotationPerSec * moveFactor / 1.5f;
-                else if (Input.GamePad.DPad.Right == ButtonState.Pressed)
-                    rotationChange -= effectiveSensitivity *
-                        MaxRotationPerSec * moveFactor / 1.5f;
-            }
+            //if (Input.MouseXMovement != 0)
+            //    rotationChange -= effectiveSensitivity *
+            //        (Input.MouseXMovement / 15.0f) *
+            //        MaxRotationPerSec * moveFactor;
+            //if (Input.IsGamePadConnected)
+            //{
+            //    // More dynamic force changing with gamepad (slow, faster, etc.)
+            //    rotationChange -= effectiveSensitivity *
+            //        Input.GamePad.ThumbSticks.Left.X *
+            //        MaxRotationPerSec * moveFactor / 1.12345f;
+            //    // Also allow pad to simulate same behaviour as on keyboard
+            //    if (Input.GamePad.DPad.Left == ButtonState.Pressed)
+            //        rotationChange += effectiveSensitivity *
+            //            MaxRotationPerSec * moveFactor / 1.5f;
+            //    else if (Input.GamePad.DPad.Right == ButtonState.Pressed)
+            //        rotationChange -= effectiveSensitivity *
+            //            MaxRotationPerSec * moveFactor / 1.5f;
+            //}
 
             float maxRot = MaxRotationPerSec * moveFactor * 1.25f;
 
@@ -570,10 +613,10 @@ namespace RacingGame.GameLogic
             else
             {
                 // If we are staying or moving very slowly, limit rotation!
-                if (speed < 10.0f)
-                    rotationChange *= 0.67f + 0.33f * speed / 10.0f;
-                else
-                    rotationChange *= 1.0f + (speed - 10) / 100.0f;
+                //if (speed < 10.0f)
+                //    rotationChange *= 0.67f + 0.33f * speed / 10.0f;
+                //else
+                //    rotationChange *= 1.0f + (speed - 10) / 20.0f;
             }
 
             // Limit rotation change to MaxRotationPerSec * 1.5 (usually for mouse)
@@ -596,14 +639,14 @@ namespace RacingGame.GameLogic
             #endregion
 
             #region Handle view distance (page up/down and mouse wheel)
-            if (Input.Keyboard.IsKeyDown(Keys.PageUp) ||
-                Input.GamePadXPressed)
-                viewDistance -= moveFactor * 2.0f;
-            if (Input.Keyboard.IsKeyDown(Keys.PageDown) ||
-                Input.GamePadYPressed)
-                viewDistance += moveFactor * 2.0f;
-            if (Input.MouseWheelDelta != 0)
-                viewDistance -= Input.MouseWheelDelta / 500.0f;
+            //if (Input.Keyboard.IsKeyDown(Keys.PageUp) ||
+            //    Input.GamePadXPressed)
+            //    viewDistance -= moveFactor * 2.0f;
+            //if (Input.Keyboard.IsKeyDown(Keys.PageDown) ||
+            //    Input.GamePadYPressed)
+            //    viewDistance += moveFactor * 2.0f;
+            //if (Input.MouseWheelDelta != 0)
+            //    viewDistance -= Input.MouseWheelDelta / 500.0f;
 
             // Restrict the camera's distance to a range, but allow the camera
             // to be as far as it likes during the start of race zoom in
@@ -615,37 +658,44 @@ namespace RacingGame.GameLogic
             #endregion
 
             #region Handle speed
-            // With keyboard, do heavy changes, but still smooth over 200ms
-            // Up or left mouse button accelerates
-            // Also support ASDW (querty) and AOEW (dvorak) shooter like controlling!
-            float newAccelerationForce = 0.0f;
-            if (Input.KeyboardUpPressed ||
-                Input.Keyboard.IsKeyDown(Keys.W) ||
-                Input.MouseLeftButtonPressed ||
-                Input.GamePadAPressed)
-                newAccelerationForce +=
-                    maxAccelerationPerSec;// * moveFactor;
-            // Down or right mouse button decelerates
-            else if (Input.KeyboardDownPressed ||
-                Input.Keyboard.IsKeyDown(Keys.S) ||
-                Input.Keyboard.IsKeyDown(Keys.O) ||
-                Input.MouseRightButtonPressed)
-                newAccelerationForce -=
-                    maxAccelerationPerSec;// * moveFactor;
-            else if (Input.IsGamePadConnected)
-            {
-                // More dynamic force changing with gamepad (slow, faster, etc.)
-                newAccelerationForce +=
-                    (Input.GamePad.Triggers.Right) *
-                    maxAccelerationPerSec;// *moveFactor;
-                // Also allow pad to simulate same behaviour as on keyboard
-                if (Input.GamePad.DPad.Up == ButtonState.Pressed)
-                    newAccelerationForce +=
-                        maxAccelerationPerSec;
-                else if (Input.GamePad.DPad.Down == ButtonState.Pressed)
-                    newAccelerationForce -=
-                        maxAccelerationPerSec;
-            }
+
+            float newAccelerationForce = 0;
+            if (newAccelerationForce < -maxAccelerationPerSec)
+                newAccelerationForce = 0;
+            if (newAccelerationForce > maxAccelerationPerSec)
+                newAccelerationForce = maxAccelerationPerSec;
+
+            //// With keyboard, do heavy changes, but still smooth over 200ms
+            //// Up or left mouse button accelerates
+            //// Also support ASDW (querty) and AOEW (dvorak) shooter like controlling!
+            //float newAccelerationForce = 0.0f;
+            //if (Input.KeyboardUpPressed ||
+            //    Input.Keyboard.IsKeyDown(Keys.W) ||
+            //    Input.MouseLeftButtonPressed ||
+            //    Input.GamePadAPressed)
+            //    newAccelerationForce +=
+            //        maxAccelerationPerSec;// * moveFactor;
+            //// Down or right mouse button decelerates
+            //else if (Input.KeyboardDownPressed ||
+            //    Input.Keyboard.IsKeyDown(Keys.S) ||
+            //    Input.Keyboard.IsKeyDown(Keys.O) ||
+            //    Input.MouseRightButtonPressed)
+            //    newAccelerationForce -=
+            //        maxAccelerationPerSec;// * moveFactor;
+            //else if (Input.IsGamePadConnected)
+            //{
+            // More dynamic force changing with gamepad (slow, faster, etc.)
+            newAccelerationForce +=
+                speedChange *
+                maxAccelerationPerSec;
+            //// Also allow pad to simulate same behaviour as on keyboard
+            //if (Input.GamePad.DPad.Up == ButtonState.Pressed)
+            //    newAccelerationForce +=
+            //        maxAccelerationPerSec;
+            //else if (Input.GamePad.DPad.Down == ButtonState.Pressed)
+            //    newAccelerationForce -=
+            //        maxAccelerationPerSec;
+            //}
 
             // Limit acceleration (but drive as fast forwards as possible if we
             // are moving backwards)
@@ -710,44 +760,51 @@ namespace RacingGame.GameLogic
 
             if (isCarOnGround)
             {
-                bool downPressed =
-                    Input.MouseRightButtonPressed ||
-                    Input.KeyboardDownPressed ||
-                    Input.GamePad.DPad.Down == ButtonState.Pressed;
+                //bool downPressed = false;
 
-                if (Input.Keyboard.IsKeyDown(Keys.Space) ||
-                    Input.MouseMiddleButtonPressed ||
-                    Input.GamePad.Triggers.Left > 0.5f ||
-                    Input.GamePadBPressed ||
-                    // Also use back for this
-                    downPressed)
+                //float acc = 0.1f * (desiredSpeed - speed);
+                //if (acc < -maxAccelerationPerSec)
+                //{
+                //    float slowdown =
+                //        1.0f - moveFactor *
+                //        // Use only half if we just decelerate
+                //        (downPressed ? BrakeSlowdown / 2 : BrakeSlowdown) *
+                //        // Don't brake so much if we are already driving backwards
+                //        (speed < 0 ? 0.33f : 1.0f);
+                //    speed *= Math.Max(0, slowdown);
+                //    // Limit to max. 100 mph slowdown per sec
+                //    if (speed > oldSpeed + 100 * moveFactor)
+                //        speed = (oldSpeed + 100 * moveFactor);
+                //    if (speed < oldSpeed - 100 * moveFactor)
+                //        speed = (oldSpeed - 100 * moveFactor);
+
+                //    // Remember that we slowed down for generating tracks.
+                //    downPressed = true;
+                //}
+                //bool downPressed =
+                //    Input.MouseRightButtonPressed ||
+                //    Input.KeyboardDownPressed ||
+                //    Input.GamePad.DPad.Down == ButtonState.Pressed;
+
+                //if (Input.Keyboard.IsKeyDown(Keys.Space) ||
+                //    Input.MouseMiddleButtonPressed ||
+                //    Input.GamePad.Triggers.Left > 0.5f ||
+                //    Input.GamePadBPressed ||
+                //    // Also use back for this
+                //    downPressed)
                 {
-                    float slowdown =
-                        1.0f - moveFactor *
-                        // Use only half if we just decelerate
-                        (downPressed ? BrakeSlowdown / 2 : BrakeSlowdown) *
-                        // Don't brake so much if we are already driving backwards
-                        (speed < 0 ? 0.33f : 1.0f);
-                    speed *= Math.Max(0, slowdown);
-                    // Limit to max. 100 mph slowdown per sec
-                    if (speed > oldSpeed + 100 * moveFactor)
-                        speed = (oldSpeed + 100 * moveFactor);
-                    if (speed < oldSpeed - 100 * moveFactor)
-                        speed = (oldSpeed - 100 * moveFactor);
-
-                    // Remember that we slowed down for generating tracks.
-                    downPressed = true;
+                    
                 }
 
                 // Calculate pitch depending on the force
-                float speedChange = speed - oldSpeed;
+                float speedChange2 = speed - oldSpeed;
 
                 // Add brake tracks.
-                if (speed > 0.5f && speed < 7.5f && speedChange > 5.5f * moveFactor ||
-                    speed > 0.75f && speedChange < 10 * moveFactor && downPressed)
+                if (speed > 0.5f && speed < 7.5f && speedChange2 > 5.5f * moveFactor ||
+                    speed > 0.75f && speedChange2 < -10 * moveFactor)
                 {
                     Sound.Sounds brakeType =
-                        Sound.GetBreakSoundType(speed, speedChange, rotationChange);
+                        Sound.GetBreakSoundType(speed, speedChange2, rotationChange);
 
                     // Add brake tracks for major breaks
                     if (brakeType == Sound.Sounds.BrakeCurveMajor ||
@@ -761,11 +818,11 @@ namespace RacingGame.GameLogic
                 }
 
                 // Limit speed change, never apply more than 5 per sec.
-                if (speedChange < -8 * moveFactor)
-                    speedChange = -8 * moveFactor;
-                if (speedChange > 8 * moveFactor)
-                    speedChange = 8 * moveFactor;
-                carPitchPhysics.ChangePos(speedChange);
+                if (speedChange2 < -8 * moveFactor)
+                    speedChange2 = -8 * moveFactor;
+                if (speedChange2 > 8 * moveFactor)
+                    speedChange2 = 8 * moveFactor;
+                carPitchPhysics.ChangePos(speedChange2);
             }
 
             // Limit speed
@@ -776,6 +833,8 @@ namespace RacingGame.GameLogic
 
             // Apply speed and calculate new car position.
             carPos += speed * carDir * moveFactor * 1.75f;
+
+            RacingGameManager.CarModel.TimeScale = speed / DefaultMaxSpeed;
 
             // Handle pitch spring
             carPitchPhysics.Simulate(moveFactor);
@@ -792,10 +851,10 @@ namespace RacingGame.GameLogic
                 RacingGameManager.InGame && !GameOver)
             {
                 // Was this the start? Did we finish a lap?
-                if (trackSegmentNumber == 0 &&
-                    // Ignore if we missed one checkpoint.
-                    RacingGameManager.Landscape.NewReplay.CheckpointTimes.Count >=
-                    RacingGameManager.Landscape.CheckpointSegmentPositions.Count - 1)
+                if (trackSegmentNumber == 0)// &&
+                   // // Ignore if we missed one checkpoint.
+                   // RacingGameManager.Landscape.NewReplay.CheckpointTimes.Count >=
+                    //RacingGameManager.Landscape.CheckpointSegmentPositions.Count - 1)
                 {
                     // Show time we made for this lap
                     BaseGame.UI.AddTimeFadeupEffect((int)GameTimeMilliseconds,
@@ -806,37 +865,37 @@ namespace RacingGame.GameLogic
                 }
                 else
                 {
-                    // Always only check for the next checkpoint
-                    int num =
-                        RacingGameManager.Landscape.NewReplay.CheckpointTimes.Count;
-                    if (ZoomInTime <= 0 && // Do not check before race starts
-                        num <
-                        RacingGameManager.Landscape.CheckpointSegmentPositions.Count &&
-                        RacingGameManager.Landscape.CheckpointSegmentPositions[num] >
-                        oldTrackSegmentNumber &&
-                        RacingGameManager.Landscape.CheckpointSegmentPositions[num] <=
-                        trackSegmentNumber)
-                    {
-                        // We passed that checkpoint, show time
-                        // Show improvements of time stored in best replay.
-                        int differenceMs =
-                            RacingGameManager.Landscape.CompareCheckpointTime(num);
+                    //// Always only check for the next checkpoint
+                    //int num =
+                    //    RacingGameManager.Landscape.NewReplay.CheckpointTimes.Count;
+                    //if (ZoomInTime <= 0 && // Do not check before race starts
+                    //    num <
+                    //    RacingGameManager.Landscape.CheckpointSegmentPositions.Count &&
+                    //    RacingGameManager.Landscape.CheckpointSegmentPositions[num] >
+                    //    oldTrackSegmentNumber &&
+                    //    RacingGameManager.Landscape.CheckpointSegmentPositions[num] <=
+                    //    trackSegmentNumber)
+                    //{
+                    //    // We passed that checkpoint, show time
+                    //    // Show improvements of time stored in best replay.
+                    //    int differenceMs =
+                    //        RacingGameManager.Landscape.CompareCheckpointTime(num);
 
-                        if (differenceMs < 0)
-                            Sound.Play(Sound.Sounds.CheckpointBetter);
-                        else
-                            Sound.Play(Sound.Sounds.CheckpointWorse);
+                    //    if (differenceMs < 0)
+                    //        Sound.Play(Sound.Sounds.CheckpointBetter);
+                    //    else
+                    //        Sound.Play(Sound.Sounds.CheckpointWorse);
 
-                        BaseGame.UI.AddTimeFadeupEffect(
-                            //normal: (int)GameTimeMilliseconds,
-                            Math.Abs(differenceMs),
-                            differenceMs < 0 ? UIRenderer.TimeFadeupMode.Minus :
-                            UIRenderer.TimeFadeupMode.Plus);
+                    //    BaseGame.UI.AddTimeFadeupEffect(
+                    //        //normal: (int)GameTimeMilliseconds,
+                    //        Math.Abs(differenceMs),
+                    //        differenceMs < 0 ? UIRenderer.TimeFadeupMode.Minus :
+                    //        UIRenderer.TimeFadeupMode.Plus);
 
-                        // Add this checkpoint time to the current replay
-                        RacingGameManager.Landscape.NewReplay.CheckpointTimes.Add(
-                            RacingGameManager.Player.GameTimeMilliseconds / 1000.0f);
-                    }
+                    //    // Add this checkpoint time to the current replay
+                    //    RacingGameManager.Landscape.NewReplay.CheckpointTimes.Add(
+                    //        RacingGameManager.Player.GameTimeMilliseconds / 1000.0f);
+                    //}
                 }
             }
 
@@ -846,7 +905,7 @@ namespace RacingGame.GameLogic
                 RacingGameManager.Landscape.GetTrackPositionMatrix(
                 trackSegmentNumber, trackSegmentPercent,
                 out roadWidth, out nextRoadWidth);
-
+            
             // Just set car up from trackMatrix, this should be done
             // better with a more accurate gravity model (see gravity calculation!)
             Vector3 remOldRightVec = CarRight;
@@ -1236,12 +1295,12 @@ namespace RacingGame.GameLogic
                     carMatrix.Forward * chaseCamDistance / 1.125f -
                     carMatrix.Up * 0.8f);
 
-            // Save this carMatrix into the current replay every time the
-            // replay interval passes.
-            if (RacingGameManager.Player.GameTimeMilliseconds >
-                RacingGameManager.Landscape.NewReplay.NumberOfTrackMatrices *
-                Replay.TrackMatrixIntervals * 1000.0f)
-                RacingGameManager.Landscape.NewReplay.AddCarMatrix(carMatrix);
+            //// Save this carMatrix into the current replay every time the
+            //// replay interval passes.
+            //if (RacingGameManager.Player.GameTimeMilliseconds >
+            //    RacingGameManager.Landscape.NewReplay.NumberOfTrackMatrices *
+            //    Replay.TrackMatrixIntervals * 1000.0f)
+            //    RacingGameManager.Landscape.NewReplay.AddCarMatrix(carMatrix);
 
             // For rendering rotate car to stay correctly on the road
             carMatrix =

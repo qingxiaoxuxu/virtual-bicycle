@@ -460,7 +460,7 @@ namespace RacingGame.Graphics
         #region Render menu background
         private Vector3 oldCarForward = Vector3.Zero;
         private Vector3 oldCarUp = Vector3.Zero;
-        private float carMenuTime = 0.0f;
+        //private float carMenuTime = 0.0f;
         private Vector3 carPos = RacingGameManager.Player.CarPosition;
         private int randomCarNumber = RandomHelper.GetRandomInt(3);
         private Color randomCarColor = RandomHelper.RandomColor;
@@ -476,7 +476,7 @@ namespace RacingGame.Graphics
                 RacingGameManager.Landscape.Render();
 
                 RacingGameManager.CarModel.RenderCar(
-                    randomCarNumber,
+                    true,
                     randomCarColor,
                     RacingGameManager.Player.CarRenderMatrix);
             }
@@ -487,37 +487,37 @@ namespace RacingGame.Graphics
         /// </summary>
         public void UpdateCarInMenu()
         {
-            // Advance menu car preview time
-            carMenuTime += BaseGame.ElapsedTimeThisFrameInMilliseconds / 1000.0f;
-            if (carMenuTime > RacingGameManager.Landscape.BestReplay.LapTime)
-                carMenuTime -= RacingGameManager.Landscape.BestReplay.LapTime;
+            //// Advance menu car preview time
+            //carMenuTime += BaseGame.ElapsedTimeThisFrameInMilliseconds / 1000.0f;
+            //if (carMenuTime > RacingGameManager.Landscape.BestReplay.LapTime)
+            //    carMenuTime -= RacingGameManager.Landscape.BestReplay.LapTime;
 
-            // Use data from replay
-            Matrix carMatrix =
-                RacingGameManager.Landscape.BestReplay.GetCarMatrixAtTime(
-                carMenuTime);
+            //// Use data from replay
+            //Matrix carMatrix =
+            //    RacingGameManager.Landscape.BestReplay.GetCarMatrixAtTime(
+            //    carMenuTime);
 
-            // Interpolate carPos a little
-            carPos = carMatrix.Translation;
+            //// Interpolate carPos a little
+            //carPos = carMatrix.Translation;
 
-            // Set carPos for camera (else the car will drive away from us ^^)
-            RacingGameManager.Player.SetCarPosition(
-                carPos, carMatrix.Forward, carMatrix.Up);
+            //// Set carPos for camera (else the car will drive away from us ^^)
+            //RacingGameManager.Player.SetCarPosition(
+            //    carPos, carMatrix.Forward, carMatrix.Up);
 
-            // Put camera behind car, but make it move smoothly
-            Vector3 newCarForward = carMatrix.Forward;
-            Vector3 newCarUp = carMatrix.Up;
-            if (oldCarForward == Vector3.Zero)
-                oldCarForward = newCarForward;
-            if (oldCarUp == Vector3.Zero)
-                oldCarUp = newCarUp;
-            oldCarForward = oldCarForward * 0.95f + newCarForward * 0.05f;
-            oldCarUp = oldCarUp * 0.95f + newCarUp * 0.05f;
-            RacingGameManager.Player.SetCameraPosition(
-                // Mix camera positions, interpolate slowly, much smoother camera!
-                carPos + oldCarForward * 13 - oldCarUp * 1.3f);
+            //// Put camera behind car, but make it move smoothly
+            //Vector3 newCarForward = carMatrix.Forward;
+            //Vector3 newCarUp = carMatrix.Up;
+            //if (oldCarForward == Vector3.Zero)
+            //    oldCarForward = newCarForward;
+            //if (oldCarUp == Vector3.Zero)
+            //    oldCarUp = newCarUp;
+            //oldCarForward = oldCarForward * 0.95f + newCarForward * 0.05f;
+            //oldCarUp = oldCarUp * 0.95f + newCarUp * 0.05f;
+            //RacingGameManager.Player.SetCameraPosition(
+            //    // Mix camera positions, interpolate slowly, much smoother camera!
+            //    carPos + oldCarForward * 13 - oldCarUp * 1.3f);
 
-            RacingGameManager.Player.Update();
+            //RacingGameManager.Player.Update();
         }
 
         /// <summary>
@@ -564,59 +564,70 @@ namespace RacingGame.Graphics
         }
         #endregion
 
-        #region RenderBottomButtons
-        public bool backButtonPressed = false;
-        /// <summary>
-        /// Render bottom buttons (select, back, etc.)
-        /// </summary>
-        /// <param name="onlyBack">Only back</param>
-        public bool RenderBottomButtons(bool onlyBack)
+        //#region RenderBottomButtons
+        //public bool backButtonPressed = false;
+        ///// <summary>
+        ///// Render bottom buttons (select, back, etc.)
+        ///// </summary>
+        ///// <param name="onlyBack">Only back</param>
+        //public bool RenderBottomButtons(bool onlyBack)
+        //{
+        //    Rectangle bButtonRect = BaseGame.CalcRectangleCenteredWithGivenHeight(
+        //        0, 587, 48, BottomButtonBButtonGfxRect);
+        //    bButtonRect.X = BaseGame.Width - bButtonRect.Width - BaseGame.XToRes(25 + 25);
+        //    bool overBButton = false;// Input.MouseInBox(bButtonRect);
+        //    int xAdd = BaseGame.XToRes(16);
+        //    int yAdd = BaseGame.YToRes(9);
+        //    if (overBButton)
+        //        bButtonRect = new Rectangle(
+        //            bButtonRect.X - xAdd / 2, bButtonRect.Y - yAdd / 2,
+        //            bButtonRect.Width + xAdd, bButtonRect.Height + yAdd);
+        //    buttons.RenderOnScreen(bButtonRect, BottomButtonBButtonGfxRect);
+
+        //    // Is mouse over button?
+        //    if (overBButton)
+        //        buttons.RenderOnScreen(bButtonRect, BottomButtonSelectionGfxRect);
+
+        //    // Store value if back button was pressed;
+        //    backButtonPressed = overBButton && Input.MouseLeftButtonJustPressed;
+
+        //    // Don't show button a if there is nothing to select here
+        //    if (onlyBack)
+        //        return false;
+
+        //    Rectangle aButtonRect = BaseGame.CalcRectangleCenteredWithGivenHeight(
+        //        0, 587, 48, BottomButtonAButtonGfxRect);
+        //    aButtonRect.X = BaseGame.Width -
+        //        aButtonRect.Width * 2 - BaseGame.XToRes(55 + 25);
+        //    bool overAButton = Input.MouseInBox(aButtonRect);
+        //    if (overAButton)
+        //        aButtonRect = new Rectangle(
+        //            aButtonRect.X - xAdd / 2, aButtonRect.Y - yAdd / 2,
+        //            aButtonRect.Width + xAdd, aButtonRect.Height + yAdd);
+        //    buttons.RenderOnScreen(aButtonRect, BottomButtonAButtonGfxRect);
+
+        //    // Is mouse over button?
+        //    if (overAButton)
+        //    {
+        //        buttons.RenderOnScreen(aButtonRect, BottomButtonSelectionGfxRect);
+        //        if (Input.MouseLeftButtonJustPressed)
+        //            return true;
+        //    }
+        //    return false;
+        //}
+        //#endregion
+        #endregion
+
+        int RankComparision(RankEntry a, RankEntry b) 
         {
-            Rectangle bButtonRect = BaseGame.CalcRectangleCenteredWithGivenHeight(
-                0, 587, 48, BottomButtonBButtonGfxRect);
-            bButtonRect.X = BaseGame.Width - bButtonRect.Width - BaseGame.XToRes(25 + 25);
-            bool overBButton = Input.MouseInBox(bButtonRect);
-            int xAdd = BaseGame.XToRes(16);
-            int yAdd = BaseGame.YToRes(9);
-            if (overBButton)
-                bButtonRect = new Rectangle(
-                    bButtonRect.X - xAdd / 2, bButtonRect.Y - yAdd / 2,
-                    bButtonRect.Width + xAdd, bButtonRect.Height + yAdd);
-            buttons.RenderOnScreen(bButtonRect, BottomButtonBButtonGfxRect);
-
-            // Is mouse over button?
-            if (overBButton)
-                buttons.RenderOnScreen(bButtonRect, BottomButtonSelectionGfxRect);
-
-            // Store value if back button was pressed;
-            backButtonPressed = overBButton && Input.MouseLeftButtonJustPressed;
-
-            // Don't show button a if there is nothing to select here
-            if (onlyBack)
-                return false;
-
-            Rectangle aButtonRect = BaseGame.CalcRectangleCenteredWithGivenHeight(
-                0, 587, 48, BottomButtonAButtonGfxRect);
-            aButtonRect.X = BaseGame.Width -
-                aButtonRect.Width * 2 - BaseGame.XToRes(55 + 25);
-            bool overAButton = Input.MouseInBox(aButtonRect);
-            if (overAButton)
-                aButtonRect = new Rectangle(
-                    aButtonRect.X - xAdd / 2, aButtonRect.Y - yAdd / 2,
-                    aButtonRect.Width + xAdd, aButtonRect.Height + yAdd);
-            buttons.RenderOnScreen(aButtonRect, BottomButtonAButtonGfxRect);
-
-            // Is mouse over button?
-            if (overAButton)
-            {
-                buttons.RenderOnScreen(aButtonRect, BottomButtonSelectionGfxRect);
-                if (Input.MouseLeftButtonJustPressed)
-                    return true;
-            }
-            return false;
+            return a.Progress.CompareTo(b.Progress);
         }
-        #endregion
-        #endregion
+        struct RankEntry
+        {
+            public float Progress;
+            public string Name;
+            public string ID;
+        }
 
         #region Game UI
         /// <summary>
@@ -631,10 +642,9 @@ namespace RacingGame.Graphics
         /// <param name="top5LapTimes">Top 5 lap times</param>
         public void RenderGameUI(int currentGameTime, int bestLapTime,
             int lapNumber, float speed, int gear, float acceleration,
-            string trackName, int[] top5LapTimes)
+            string trackName, Dictionary<string,RemotePlayer> players)
         {
-            if (top5LapTimes == null)
-                throw new ArgumentNullException("top5LapTimes");
+            
 
             Color baseUIColor = Color.White;//ColorHelper.HalfAlpha;
 
@@ -702,24 +712,7 @@ namespace RacingGame.Graphics
                 10, 10, TrackNameGfxRect.Width, TrackNameGfxRect.Height);
             trackNameRect.X = BaseGame.Width - trackNameRect.Right;
             ingame.RenderOnScreen(trackNameRect, TrackNameGfxRect, baseUIColor);
-            Rectangle top5Rect1 = BaseGame.CalcRectangle1600(
-                10, 4, Best5GfxRect.Width, Best5GfxRect.Height);
-            top5Rect1.X = trackNameRect.X;
-            int top5Distance = top5Rect1.Y;
-            top5Rect1.Y += trackNameRect.Bottom;
-            ingame.RenderOnScreen(top5Rect1, Best5GfxRect, baseUIColor);
-            Rectangle top5Rect2 = new Rectangle(top5Rect1.X,
-                top5Rect1.Bottom + top5Distance, top5Rect1.Width, top5Rect1.Height);
-            ingame.RenderOnScreen(top5Rect2, Best5GfxRect, baseUIColor);
-            Rectangle top5Rect3 = new Rectangle(top5Rect1.X,
-                top5Rect2.Bottom + top5Distance, top5Rect1.Width, top5Rect1.Height);
-            ingame.RenderOnScreen(top5Rect3, Best5GfxRect, baseUIColor);
-            Rectangle top5Rect4 = new Rectangle(top5Rect1.X,
-                top5Rect3.Bottom + top5Distance, top5Rect1.Width, top5Rect1.Height);
-            ingame.RenderOnScreen(top5Rect4, Best5GfxRect, baseUIColor);
-            Rectangle top5Rect5 = new Rectangle(top5Rect1.X,
-                top5Rect4.Bottom + top5Distance, top5Rect1.Width, top5Rect1.Height);
-            ingame.RenderOnScreen(top5Rect5, Best5GfxRect, baseUIColor);
+           
 
             Rectangle tachoRect = BaseGame.CalcRectangle1600(
                 10, 10, TachoGfxRect.Width, TachoGfxRect.Height);
@@ -757,68 +750,119 @@ namespace RacingGame.Graphics
                 trackNameRect.Y + blockHeight / 2,
                 trackName);
 
-            // Top 5
-            // Possible improvement: Show currentRank here (insert us)
-            Color rankColor =
-                bestLapTime == top5LapTimes[0] ?
-                highlightColor : Color.White;
-            TextureFont.WriteTextCentered(
-                top5Rect1.X + BaseGame.XToRes(32) / 2,
-                top5Rect1.Y + blockHeight / 2,
-                "1.", rankColor, 1.0f);
-            TextureFont.WriteGameTime(
-                top5Rect1.X + BaseGame.XToRes(35 + 15),
-                top5Rect1.Y + blockHeight / 2 - TextureFont.Height / 2,
-                top5LapTimes[0], rankColor);
+            Rectangle top5Rect1 = BaseGame.CalcRectangle1600(
+               10, 4, Best5GfxRect.Width, Best5GfxRect.Height);
+            top5Rect1.X = trackNameRect.X;
+            int top5Distance = top5Rect1.Y;
+            top5Rect1.Y += trackNameRect.Bottom;
+           
+            Rectangle top5Rect2 = new Rectangle(top5Rect1.X,
+                top5Rect1.Bottom + top5Distance, top5Rect1.Width, top5Rect1.Height);
+          
+            Rectangle top5Rect3 = new Rectangle(top5Rect1.X,
+                top5Rect2.Bottom + top5Distance, top5Rect1.Width, top5Rect1.Height);
+          
+            Rectangle top5Rect4 = new Rectangle(top5Rect1.X,
+                top5Rect3.Bottom + top5Distance, top5Rect1.Width, top5Rect1.Height);
+          
+            Rectangle top5Rect5 = new Rectangle(top5Rect1.X,
+                top5Rect4.Bottom + top5Distance, top5Rect1.Width, top5Rect1.Height);
+           
 
-            rankColor =
-                bestLapTime == top5LapTimes[1] ?
-                highlightColor : Color.White;
-            TextureFont.WriteTextCentered(
-                top5Rect2.X + BaseGame.XToRes(32) / 2,
-                top5Rect2.Y + blockHeight / 2,
-                "2.", rankColor, 1.0f);
-            TextureFont.WriteGameTime(
-                top5Rect2.X + BaseGame.XToRes(35 + 15),
-                top5Rect2.Y + blockHeight / 2 - TextureFont.Height / 2,
-                top5LapTimes[1], rankColor);
+            int index = 0;
+            RankEntry[] ents = new RankEntry[players.Count + 1];
+            foreach(var e in players)
+            {
+                ents[index].Progress = e.Value.CompletionProgress;
+                ents[index].ID = e.Value.ID;
+                ents[index++].Name = e.Value.Name;                
+            }
+            ents[index].Progress = RacingGameManager.Player.GetCompletionProgress();
+            ents[index].ID = RacingGameManager.LocalUID;
+            ents[index].Name = RacingGameManager.LocalPlayerName;    
+            Array.Sort(ents, RankComparision);
 
-            rankColor =
-                bestLapTime == top5LapTimes[2] ?
-                highlightColor : Color.White;
-            TextureFont.WriteTextCentered(
-                top5Rect3.X + BaseGame.XToRes(32) / 2,
-                top5Rect3.Y + blockHeight / 2,
-                "3.", rankColor, 1.0f);
-            TextureFont.WriteGameTime(
-                top5Rect3.X + BaseGame.XToRes(35 + 15),
-                top5Rect3.Y + blockHeight / 2 - TextureFont.Height / 2,
-                top5LapTimes[2], rankColor);
+            if (ents.Length > 0)
+            {
+                // Top 5
 
-            rankColor =
-                bestLapTime == top5LapTimes[3] ?
-                highlightColor : Color.White;
-            TextureFont.WriteTextCentered(
-                top5Rect4.X + BaseGame.XToRes(32) / 2,
-                top5Rect4.Y + blockHeight / 2,
-                "4.", rankColor, 1.0f);
-            TextureFont.WriteGameTime(
-                top5Rect4.X + BaseGame.XToRes(35 + 15),
-                top5Rect4.Y + blockHeight / 2 - TextureFont.Height / 2,
-                top5LapTimes[3], rankColor);
+                ingame.RenderOnScreen(top5Rect1, Best5GfxRect, baseUIColor);
+                Color rankColor =
+                    ents[0].ID == RacingGameManager.LocalUID ?
+                    highlightColor : Color.White;
+                TextureFont.WriteTextCentered(
+                    top5Rect1.X + BaseGame.XToRes(32) / 2,
+                    top5Rect1.Y + blockHeight / 2,
+                    "1.", rankColor, 1.0f);
+                TextureFont.WriteText(
+                    top5Rect1.X + BaseGame.XToRes(35 + 15),
+                    top5Rect1.Y + blockHeight / 2 - TextureFont.Height / 2,
+                    ents[0].Name, rankColor);
 
-            rankColor =
-                bestLapTime == top5LapTimes[4] ?
-                highlightColor : Color.White;
-            TextureFont.WriteTextCentered(
-                top5Rect5.X + BaseGame.XToRes(32) / 2,
-                top5Rect5.Y + blockHeight / 2,
-                "5.", rankColor, 1.0f);
-            TextureFont.WriteGameTime(
-                top5Rect5.X + BaseGame.XToRes(35 + 15),
-                top5Rect5.Y + blockHeight / 2 - TextureFont.Height / 2,
-                top5LapTimes[4], rankColor);
+                if (ents.Length > 1)
+                {
+                    rankColor =
+                        ents[1].ID == RacingGameManager.LocalUID ?
+                        highlightColor : Color.White;
+                    TextureFont.WriteTextCentered(
+                        top5Rect2.X + BaseGame.XToRes(32) / 2,
+                        top5Rect2.Y + blockHeight / 2,
+                        "2.", rankColor, 1.0f);
+                    TextureFont.WriteText(
+                        top5Rect2.X + BaseGame.XToRes(35 + 15),
+                        top5Rect2.Y + blockHeight / 2 - TextureFont.Height / 2,
+                        ents[1].Name, rankColor);
+                    ingame.RenderOnScreen(top5Rect2, Best5GfxRect, baseUIColor);
 
+                    if (ents.Length > 2)
+                    {
+                        rankColor =
+                            ents[2].ID == RacingGameManager.LocalUID ?
+                            highlightColor : Color.White;
+                        TextureFont.WriteTextCentered(
+                            top5Rect3.X + BaseGame.XToRes(32) / 2,
+                            top5Rect3.Y + blockHeight / 2,
+                            "3.", rankColor, 1.0f);
+                        TextureFont.WriteText(
+                            top5Rect3.X + BaseGame.XToRes(35 + 15),
+                            top5Rect3.Y + blockHeight / 2 - TextureFont.Height / 2,
+                            ents[2].Name, rankColor);
+                        ingame.RenderOnScreen(top5Rect3, Best5GfxRect, baseUIColor);
+
+                        if (ents.Length > 3)
+                        {
+                            rankColor =
+                                ents[3].ID == RacingGameManager.LocalUID ?
+                                highlightColor : Color.White;
+                            TextureFont.WriteTextCentered(
+                                top5Rect4.X + BaseGame.XToRes(32) / 2,
+                                top5Rect4.Y + blockHeight / 2,
+                                "4.", rankColor, 1.0f);
+                            TextureFont.WriteText(
+                                top5Rect4.X + BaseGame.XToRes(35 + 15),
+                                top5Rect4.Y + blockHeight / 2 - TextureFont.Height / 2,
+                                ents[3].Name, rankColor);
+                            ingame.RenderOnScreen(top5Rect4, Best5GfxRect, baseUIColor);
+
+                            if (ents.Length > 4)
+                            {
+                                rankColor =
+                                    ents[4].ID == RacingGameManager.LocalUID ?
+                                    highlightColor : Color.White;
+                                TextureFont.WriteTextCentered(
+                                    top5Rect5.X + BaseGame.XToRes(32) / 2,
+                                    top5Rect5.Y + blockHeight / 2,
+                                    "5.", rankColor, 1.0f);
+                                TextureFont.WriteText(
+                                    top5Rect5.X + BaseGame.XToRes(35 + 15),
+                                    top5Rect5.Y + blockHeight / 2 - TextureFont.Height / 2,
+                                    ents[4].Name, rankColor);
+                                ingame.RenderOnScreen(top5Rect5, Best5GfxRect, baseUIColor);
+                            }
+                        }
+                    }
+                }
+            }
             //// Acceleration
             //Point tachoPoint = new Point(
             //    tachoRect.X +
@@ -904,14 +948,14 @@ namespace RacingGame.Graphics
         /// </summary>
         public void RenderTextsAndMouseCursor()
         {
-#if DEBUG
-            // Show fps
-            if (Input.KeyboardF1JustPressed ||
-                // Also allow toggeling with gamepad
-                (Input.GamePad.Buttons.LeftShoulder == ButtonState.Pressed &&
-                Input.GamePadYJustPressed))
-                showFps = !showFps;
-#endif
+//#if DEBUG
+//            // Show fps
+//            if (Input.KeyboardF1JustPressed ||
+//                // Also allow toggeling with gamepad
+//                (Input.GamePad.Buttons.LeftShoulder == ButtonState.Pressed &&
+//                Input.GamePadYJustPressed))
+//                showFps = !showFps;
+//#endif
             if (showFps)
                 TextureFont.WriteText(
                     BaseGame.XToRes(200), BaseGame.YToRes(26),
@@ -922,23 +966,23 @@ namespace RacingGame.Graphics
             RenderTimeFadeupEffects();
             font.WriteAll();
 
-            // Render mouse
-            // For the xbox, there is no mouse support, don't show cursor!
-            if (Input.MouseDetected &&
-                // Also don't show cursor in game!
-                RacingGameManager.ShowMouseCursor)
-            {
-                Texture.alphaSprite.Begin(SpriteBlendMode.Additive);
-                Texture.additiveSprite.Begin(SpriteBlendMode.AlphaBlend);
+            //// Render mouse
+            //// For the xbox, there is no mouse support, don't show cursor!
+            //if (Input.MouseDetected &&
+            //    // Also don't show cursor in game!
+            //    RacingGameManager.ShowMouseCursor)
+            //{
+            //    Texture.alphaSprite.Begin(SpriteBlendMode.Additive);
+            //    Texture.additiveSprite.Begin(SpriteBlendMode.AlphaBlend);
 
-                // Use our SpriteHelper logic to render the mouse cursor now!
-                mouseCursor.RenderOnScreen(Input.MousePos);
+            //    // Use our SpriteHelper logic to render the mouse cursor now!
+            //    mouseCursor.RenderOnScreen(Input.MousePos);
 
-                Texture.additiveSprite.End();
-                Texture.alphaSprite.End();
+            //    Texture.additiveSprite.End();
+            //    Texture.alphaSprite.End();
 
-                //SpriteHelper.DrawAllSprites();
-            }
+            //    //SpriteHelper.DrawAllSprites();
+            //}
         }
         #endregion
     }

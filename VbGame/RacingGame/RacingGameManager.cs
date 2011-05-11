@@ -39,6 +39,9 @@ namespace RacingGame
     /// </summary>
     public class RacingGameManager : BaseGame
     {
+        const float SendStateTime = 0.5f;
+        static float SendStateCD;
+
         #region Variables
         /// <summary>
         /// Game screens stack. We can easily add and remove game screens
@@ -54,35 +57,16 @@ namespace RacingGame
         /// of many derived classes. Player, car and camera position is set
         /// when the game starts depending on the selected level.
         /// </summary>
-        private static Player player = new Player(new Vector3(0, 0, 0));
-
+        private static Player player;
+        
 
         /// <summary>
         /// Car model and selection plate for the car selection screen.
         /// </summary>
         private static Cyclist carModel = null;
+        static Cyclist[] remoteModels;
 
-        /// <summary>
-        /// Car textures we exchange for our car model.
-        /// </summary>
-        private static Texture[] carTextures = null;
 
-        /// <summary>
-        /// The player can select between the 3 cars: 0 (white), 1 (red) and
-        /// 2 (yellow).
-        /// </summary>
-        public static int currentCarNumber = 2;
-
-        /// <summary>
-        /// The player can also select a car color, which will be used to
-        /// recolor the car. Looks best for the first car (white).
-        /// </summary>
-        public static int currentCarColor = 1;// Color carColor = Color.White;
-
-        /// <summary>
-        /// Helper texture for color selection
-        /// </summary>
-        public static Texture colorSelectionTexture = null;
 
         /// <summary>
         /// Material for brake tracks on the road.
@@ -215,40 +199,37 @@ namespace RacingGame
                 return carModel;
             }
         }
+        /// <summary>
+        /// Car model
+        /// </summary>
+        /// <returns>Model</returns>
+        public static Cyclist[] RemoteCarModel
+        {
+            get
+            {
+                return remoteModels;
+            }
+        }
 
         /// <summary>
         /// Car color
         /// </summary>
         /// <returns>Color</returns>
-        public static Color CarColor
+        public static Color LocalPlayerCarColor
+        {
+            get;
+            private set;
+        }
+        public static string LocalUID
+        {
+            get { return localUID; }
+        }
+        public static string LocalPlayerName
         {
             get;
             private set;
         }
 
-
-
-        /// <summary>
-        /// Number of car texture types
-        /// </summary>
-        /// <returns>Int</returns>
-        public static int NumberOfCarTextureTypes
-        {
-            get
-            {
-                return carTextures.Length;
-            }
-        }
-
-        /// <summary>
-        /// Car texture
-        /// </summary>
-        /// <param name="carNumber">Car number</param>
-        /// <returns>Texture</returns>
-        public static Texture CarTexture(int carNumber)
-        {
-            return carTextures[carNumber % carTextures.Length];
-        }
 
         /// <summary>
         /// Brake track material
@@ -262,17 +243,10 @@ namespace RacingGame
             }
         }
 
-        ///// <summary>
-        ///// Car selection plate
-        ///// </summary>
-        ///// <returns>Model</returns>
-        //public static Model CarSelectionPlate
-        //{
-        //    get
-        //    {
-        //        return carSelectionPlate;
-        //    }
-        //}
+        public static IInputInterface InputInterface
+        {
+            get { return inputInterface; }
+        }
 
         /// <summary>
         /// Landscape we are currently using, used for several things (menu
@@ -286,6 +260,7 @@ namespace RacingGame
                 return landscape;
             }
         }
+       
         #endregion
 
         static StartUpParameters startUpParam;
@@ -293,6 +268,13 @@ namespace RacingGame
         static INetInterface netClient;
         static Dictionary<string, RemotePlayer> remotePlayers = new Dictionary<string, RemotePlayer>();
         static bool canBeginGame = true;
+        static IInputInterface inputInterface;
+
+
+        public static Dictionary<string, RemotePlayer> RemotePlayers
+        {
+            get { return remotePlayers; }
+        }
 
         #region Constructor
         /// <summary>
@@ -301,6 +283,9 @@ namespace RacingGame
         public RacingGameManager(INetInterface netCl, string uid, StartUpParameters sup)
             : base("Virutal Bicycle")
         {
+            inputInterface = InterfaceFactory.Instance.GetInput();
+            player = new Player(new Vector3(0, 0, 0));
+
             // Start playing the menu music
             //Sound.Play(Sound.Sounds.MenuMusic);
             localUID = uid;
@@ -317,22 +302,11 @@ namespace RacingGame
                 }
                 else
                 {
-                    CarColor = sup.Players[i].CarColor;
+                    LocalPlayerCarColor = sup.Players[i].CarColor;
+                    LocalPlayerName = sup.Players[i].Name;
                 }
             }
 
-            // Create main menu at our main entry point
-            
-            netClient.TellReady();
-            while (!netClient.CanStartGame())
-            {
-                Thread.Sleep(10);
-            }
-
-
-            //// But start with splash screen, if user clicks or presses Start,
-            //// we are back in the main menu.
-            //gameScreens.Push(new SplashScreen());
         }
 
         /// <summary>
@@ -353,25 +327,23 @@ namespace RacingGame
 
             // Load models
             carModel = new Cyclist();
-            //carSelectionPlate = new Model("CarSelectionPlate");
+
+            remoteModels = new Cyclist[remotePlayers.Count];
+            for (int i = 0; i < remotePlayers.Count; i++)
+            {
+                remoteModels[i] = new Cyclist();
+            }
 
             // Load landscape
             landscape = new Landscape(Level.Beginner);
 
-            // Load textures, first one is grabbed from the imported one through
-            // the car.x model, the other two are loaded seperately.
-            carTextures = new Texture[3];
-            carTextures[0] = new Texture("RacerCar");
-            carTextures[1] = new Texture("RacerCar2");
-            carTextures[2] = new Texture("RacerCar3");
-            colorSelectionTexture = new Texture("ColorSelection");
             brakeTrackMaterial = new Material("track");
 
             gameScreens.Push(new GameScreen((Level)Enum.Parse(typeof(Level), startUpParam.MapName)));
 
 
-            //netClient.BeginGame += netClient_BeginGame;
-            //netClient.BeginMyGame();
+            netClient.TellReady();
+
             while (!canBeginGame) 
             {
                 Thread.Sleep(10);
@@ -401,6 +373,26 @@ namespace RacingGame
         #endregion
 
         #region Update
+
+
+        void UpdateNet(GameTime gameTime)
+        {
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            SendStateCD -= dt;
+            if (SendStateCD < 0)
+            {
+                BikeState state;
+                state.ID = localUID;
+                state.CompletionProgress = player.GetCompletionProgress();
+                state.Transform = player.CarRenderMatrix;
+                state.Velocity = player.CarDirection * player.Speed;
+
+                SendStateCD = SendStateTime;
+
+                netClient.SendBikeState(new BikeState[] { state });
+            }
+        }
+
         /// <summary>
         /// Update
         /// </summary>
@@ -409,14 +401,18 @@ namespace RacingGame
             // Update game engine
             base.Update(gameTime);
 
+            inputInterface.Update(gameTime);
+
             // Update player and game logic
             player.Update();
+            carModel.Update(gameTime);
+
 
             foreach (var e in remotePlayers) 
             {
                 e.Value.Update(gameTime);
             }
-            carModel.Update(gameTime);
+            UpdateNet(gameTime);
         }
         #endregion
 
@@ -441,15 +437,14 @@ namespace RacingGame
             // Handle current screen
             if (gameScreens.Peek().Render())
             {
-                // If this was the options screen and the resolution has changed,
-                // apply the changes
-                if (gameScreens.Peek().GetType() == typeof(Options) &&
-                    (BaseGame.Width != GameSettings.Default.ResolutionWidth ||
-                    BaseGame.Height != GameSettings.Default.ResolutionHeight ||
-                    BaseGame.Fullscreen != GameSettings.Default.Fullscreen))
-                {
-                    BaseGame.ApplyResolutionChange();
-                }
+                //// If this was the options screen and the resolution has changed,
+                //// apply the changes
+                //if ((BaseGame.Width != GameSettings.Default.ResolutionWidth ||
+                //    BaseGame.Height != GameSettings.Default.ResolutionHeight ||
+                //    BaseGame.Fullscreen != GameSettings.Default.Fullscreen))
+                //{
+                //    BaseGame.ApplyResolutionChange();
+                //}
 
                 // Play sound for screen back
                 Sound.Play(Sound.Sounds.ScreenBack);

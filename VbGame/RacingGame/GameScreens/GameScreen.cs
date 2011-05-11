@@ -29,6 +29,7 @@ namespace RacingGame.GameScreens
     class GameScreen : IGameScreen
     {
         #region Variables
+        bool isExiting;
         #endregion
 
         #region Constructor
@@ -52,6 +53,13 @@ namespace RacingGame.GameScreens
 
             // Play game music
             Sound.Play(Sound.Sounds.GameMusic);
+
+            RacingGameManager.InputInterface.Escape += InputInterface_Escape;
+        }
+
+        void InputInterface_Escape(object sender, EventArgs e)
+        {
+            isExiting = true;
         }
         #endregion
 
@@ -76,27 +84,37 @@ namespace RacingGame.GameScreens
 
             // Render car with matrix we got from CarPhysics
             RacingGameManager.CarModel.RenderCar(
-                RacingGameManager.currentCarNumber,
-                RacingGameManager.CarColor,
+                !RacingGameManager.Player.ShowCyclist,
+                RacingGameManager.LocalPlayerCarColor,
                 RacingGameManager.Player.CarRenderMatrix);
 
 
-            
+            int index = 0;
+            Dictionary<string, RemotePlayer> remotePlayers = RacingGameManager.RemotePlayers;
+            foreach (var e in remotePlayers) 
+            {
+                // Render car with matrix we got from CarPhysics
+                RacingGameManager.RemoteCarModel[index++].RenderCar(
+                    true,
+                    e.Value.CarColor,
+                    e.Value.Transform);
+    
+            }
 
 
 
             // And flush all models to be rendered
             BaseGame.MeshRenderManager.Render();
 
-            // Use data from best replay for the shadow car
-            Matrix bestReplayCarMatrix =
-                RacingGameManager.Landscape.BestReplay.GetCarMatrixAtTime(
-                RacingGameManager.Player.GameTimeMilliseconds / 1000.0f);
-            // For rendering rotate car to stay correctly on the road
-            bestReplayCarMatrix =
-                Matrix.CreateRotationX(MathHelper.Pi / 2.0f) *
-                Matrix.CreateRotationZ(MathHelper.Pi) *
-                bestReplayCarMatrix;
+            //// Use data from best replay for the shadow car
+            //Matrix bestReplayCarMatrix =
+            //    RacingGameManager.Landscape.BestReplay.GetCarMatrixAtTime(
+            //    RacingGameManager.Player.GameTimeMilliseconds / 1000.0f);
+            //// For rendering rotate car to stay correctly on the road
+            //bestReplayCarMatrix =
+            //    Matrix.CreateRotationX(MathHelper.Pi / 2.0f) *
+            //    Matrix.CreateRotationZ(MathHelper.Pi) *
+            //    bestReplayCarMatrix;
 
             //// Also render the shadow car (if the game has started)!
             //if (RacingGameManager.Player.GameTimeMilliseconds > 0)
@@ -132,25 +150,11 @@ namespace RacingGame.GameScreens
                 CarPhysics.MaxPossibleSpeed +
                 // This could be improved
                 0.5f * RacingGameManager.Player.Acceleration,
-                RacingGameManager.Landscape.CurrentTrackName,
-                Highscores.GetTop5LapTimes(TrackSelection.SelectedTrackNumber));
+                RacingGameManager.Landscape.CurrentTrackName, RacingGameManager.RemotePlayers);
 
-            if (Input.KeyboardEscapeJustPressed ||
-                Input.GamePadBackJustPressed ||
-                (RacingGameManager.Player.GameOver &&
-                (Input.KeyboardSpaceJustPressed ||
-                Input.GamePadAJustPressed ||
-                Input.GamePadBJustPressed ||
-                Input.GamePadXJustPressed ||
-                Input.GamePadXJustPressed ||
-                Input.MouseLeftButtonJustPressed)))
+            if (isExiting)
             {
-                // Stop motor sound
-                Sound.StopGearSound();
-
-                // Play menu music again
-                Sound.Play(Sound.Sounds.MenuMusic);
-
+                RacingGameManager.InputInterface.Escape -= InputInterface_Escape;
                 // Return to menu
                 return true;
             }

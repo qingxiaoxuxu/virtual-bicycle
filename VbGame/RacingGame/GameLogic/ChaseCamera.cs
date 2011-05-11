@@ -50,6 +50,10 @@ namespace RacingGame.GameLogic
         /// </summary>
         private Vector3 cameraLookVector;
 
+
+        bool isFirstPerson;
+        float viewLerp;
+
         /// <summary>
         /// Camera modes
         /// </summary>
@@ -120,6 +124,9 @@ namespace RacingGame.GameLogic
         #endregion
 
         #region Properties
+
+        public bool ShowCyclist { get { return viewLerp > 0.5f; } }
+
         /// <summary>
         /// Camera position
         /// </summary>
@@ -215,6 +222,13 @@ namespace RacingGame.GameLogic
         {
             // Set camera position and calculate rotation from look pos
             SetCameraPosition(setCameraPos);
+
+            RacingGameManager.InputInterface.ViewChanged += new EventHandler(InputInterface_ViewChanged);
+        }
+
+        void InputInterface_ViewChanged(object sender, EventArgs e)
+        {
+            isFirstPerson = !isFirstPerson;
         }
 
         /// <summary>
@@ -228,6 +242,7 @@ namespace RacingGame.GameLogic
         {
             // Set camera position and calculate rotation from look pos
             SetCameraPosition(setCameraPos);
+            RacingGameManager.InputInterface.ViewChanged += new EventHandler(InputInterface_ViewChanged);
         }
 
         /// <summary>
@@ -242,6 +257,7 @@ namespace RacingGame.GameLogic
             SetCameraPosition(
                 //setCarPosition - new Vector3(0, 0.5f, 1.0f) * carDir);
                 setCarPosition + new Vector3(0, 10.0f, 25.0f));
+            RacingGameManager.InputInterface.ViewChanged += new EventHandler(InputInterface_ViewChanged);
         }
         #endregion
 
@@ -315,36 +331,36 @@ namespace RacingGame.GameLogic
                 wannaHaveCameraRotation = freeCameraRot;
             Vector3 rot = wannaHaveCameraRotation;
 
-            float addRotX =
-                // Allow mouse input
-                -Input.MouseXMovement * rotationFactor +
-                // And gamepad input
-                Input.GamePad.ThumbSticks.Left.X * gamePadRotFactor;
-            // Also allow gamepad and keyboard cursors
-            if (addRotX == 0)
-            {
-                if (Input.GamePadLeftPressed ||
-                    Input.KeyboardLeftPressed)
-                    addRotX = -gamePadRotFactor;
-                if (Input.GamePadRightPressed ||
-                    Input.KeyboardRightPressed)
-                    addRotX = +gamePadRotFactor;
-            }
-            float addRotY =
-                // Allow mouse input
-                -Input.MouseYMovement * rotationFactor +
-                // And gamepad input
-                Input.GamePad.ThumbSticks.Left.Y * gamePadRotFactor;
-            // Also allow gamepad and keyboard cursors
-            if (addRotY == 0)
-            {
-                if (Input.GamePadUpPressed ||
-                    Input.KeyboardUpPressed)
-                    addRotY = -gamePadRotFactor;
-                if (Input.GamePadDownPressed ||
-                    Input.KeyboardDownPressed)
-                    addRotY = +gamePadRotFactor;
-            }
+            float addRotX = 0;
+            //    // Allow mouse input
+            //    -Input.MouseXMovement * rotationFactor +
+            //    // And gamepad input
+            //    Input.GamePad.ThumbSticks.Left.X * gamePadRotFactor;
+            //// Also allow gamepad and keyboard cursors
+            //if (addRotX == 0)
+            //{
+            //    if (Input.GamePadLeftPressed ||
+            //        Input.KeyboardLeftPressed)
+            //        addRotX = -gamePadRotFactor;
+            //    if (Input.GamePadRightPressed ||
+            //        Input.KeyboardRightPressed)
+            //        addRotX = +gamePadRotFactor;
+            //}
+            float addRotY = 0;
+            //    // Allow mouse input
+            //    -Input.MouseYMovement * rotationFactor +
+            //    // And gamepad input
+            //    Input.GamePad.ThumbSticks.Left.Y * gamePadRotFactor;
+            //// Also allow gamepad and keyboard cursors
+            //if (addRotY == 0)
+            //{
+            //    if (Input.GamePadUpPressed ||
+            //        Input.KeyboardUpPressed)
+            //        addRotY = -gamePadRotFactor;
+            //    if (Input.GamePadDownPressed ||
+            //        Input.KeyboardDownPressed)
+            //        addRotY = +gamePadRotFactor;
+            //}
 
             wannaHaveCameraRotation = new Vector3(
                 rot.X,
@@ -377,53 +393,53 @@ namespace RacingGame.GameLogic
                 Matrix.CreateRotationY(freeCameraRot.Y) *
                 Matrix.CreateRotationZ(freeCameraRot.Z));
 
-            float moveFactor =
-                (Input.Keyboard.IsKeyDown(Keys.LeftShift) ? 20.0f : 40.0f) *
-                BaseGame.MoveFactorPerSecond;
-            float smallMoveFactor = moveFactor / 4.0f;
+            //float moveFactor =
+            //    (Input.Keyboard.IsKeyDown(Keys.LeftShift) ? 20.0f : 40.0f) *
+            //    BaseGame.MoveFactorPerSecond;
+            //float smallMoveFactor = moveFactor / 4.0f;
 
-            float lookDistanceChange = 0.0f;
-            // Page up/down or Home/End to zoom in and out.
-            if (Input.Keyboard.IsKeyDown(Keys.PageUp))
-                lookDistanceChange += moveFactor * 0.05f;
-            if (Input.Keyboard.IsKeyDown(Keys.PageDown))
-                lookDistanceChange -= moveFactor * 0.05f;
-            if (Input.Keyboard.IsKeyDown(Keys.Home))
-                lookDistanceChange += smallMoveFactor * 0.05f;
-            if (Input.Keyboard.IsKeyDown(Keys.End))
-                lookDistanceChange -= smallMoveFactor * 0.05f;
+            //float lookDistanceChange = 0.0f;
+            //// Page up/down or Home/End to zoom in and out.
+            //if (Input.Keyboard.IsKeyDown(Keys.PageUp))
+            //    lookDistanceChange += moveFactor * 0.05f;
+            //if (Input.Keyboard.IsKeyDown(Keys.PageDown))
+            //    lookDistanceChange -= moveFactor * 0.05f;
+            //if (Input.Keyboard.IsKeyDown(Keys.Home))
+            //    lookDistanceChange += smallMoveFactor * 0.05f;
+            //if (Input.Keyboard.IsKeyDown(Keys.End))
+            //    lookDistanceChange -= smallMoveFactor * 0.05f;
 
-            // Also allow mouse wheel to zoom
-            if (Input.MouseWheelDelta != 0)
-            {
-                lookDistanceChange =
-                    Input.MouseWheelDelta * BaseGame.MoveFactorPerSecond / 16.0f;
-            }
+            //// Also allow mouse wheel to zoom
+            //if (Input.MouseWheelDelta != 0)
+            //{
+            //    lookDistanceChange =
+            //        Input.MouseWheelDelta * BaseGame.MoveFactorPerSecond / 16.0f;
+            //}
 
-            // Also allow gamepad to zoom
-            if (Input.GamePad.ThumbSticks.Right.Y != 0)
-            {
-                lookDistanceChange =
-                    Input.GamePad.ThumbSticks.Right.Y * BaseGame.MoveFactorPerSecond;
-            }
+            //// Also allow gamepad to zoom
+            //if (Input.GamePad.ThumbSticks.Right.Y != 0)
+            //{
+            //    lookDistanceChange =
+            //        Input.GamePad.ThumbSticks.Right.Y * BaseGame.MoveFactorPerSecond;
+            //}
 
-            if (lookDistanceChange != 0)
-            {
-                // Half zoom effect if shift is pressed
-                if (Input.Keyboard.IsKeyDown(Keys.LeftShift))
-                    lookDistanceChange /= 2.0f;
+            //if (lookDistanceChange != 0)
+            //{
+            //    // Half zoom effect if shift is pressed
+            //    if (Input.Keyboard.IsKeyDown(Keys.LeftShift))
+            //        lookDistanceChange /= 2.0f;
 
-                cameraDistance *= 1.0f - lookDistanceChange;
-                if (cameraDistance < 1.0f)
-                    cameraDistance = 1.0f;
+            //    cameraDistance *= 1.0f - lookDistanceChange;
+            //    if (cameraDistance < 1.0f)
+            //        cameraDistance = 1.0f;
 
-                // Calculate cameraPos like in HandleLookPosCamera()
-                cameraLookVector = Vector3.TransformNormal(
-                    new Vector3(0, 0, cameraDistance),
-                    Matrix.CreateRotationX(freeCameraRot.X) *
-                    Matrix.CreateRotationY(freeCameraRot.Y) *
-                    Matrix.CreateRotationZ(freeCameraRot.Z));
-            }
+            //    // Calculate cameraPos like in HandleLookPosCamera()
+            //    cameraLookVector = Vector3.TransformNormal(
+            //        new Vector3(0, 0, cameraDistance),
+            //        Matrix.CreateRotationX(freeCameraRot.X) *
+            //        Matrix.CreateRotationY(freeCameraRot.Y) *
+            //        Matrix.CreateRotationZ(freeCameraRot.Z));
+            //}
 
             // Make sure we use these new values and don't interpolate them back.
             wannaCameraDistance = cameraDistance;
@@ -449,8 +465,27 @@ namespace RacingGame.GameLogic
             // Update camera pos based on the current lookPos and cameraDistance
             cameraPos = LookAtPos + cameraLookVector;
 
+
+            if (isFirstPerson)
+            {
+                viewLerp += BaseGame.MoveFactorPerSecond;
+                if (viewLerp > 1) viewLerp = 1;
+            }
+            else 
+            {
+                viewLerp -= BaseGame.MoveFactorPerSecond;
+                if (viewLerp < 0) viewLerp = 0;
+            }
+
+            Matrix rota = Matrix.CreateLookAt(cameraPos, LookAtPos, CarUpVector);
+            Matrix rotb = Matrix.CreateLookAt(LookAtPos + CarDirection, LookAtPos + 2 * CarDirection, CarUpVector);
+
+            rotMatrix = Matrix.Lerp(rota, rotb, viewLerp);
+
             // Build look at matrix
-            rotMatrix = Matrix.CreateLookAt(cameraPos, LookAtPos, CarUpVector);
+            //rotMatrix = Matrix.CreateLookAt(cameraPos, LookAtPos, CarUpVector);
+            //rotMatrix = Matrix.CreateLookAt(LookAtPos + CarDirection, LookAtPos + 2 * CarDirection, CarUpVector);
+
 
             // Is camera wobbeling?
             if (cameraWobbelTimeoutMs > 0)

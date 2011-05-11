@@ -591,8 +591,8 @@ namespace RacingGame.Landscapes
         /// And a new replay which is recorded in case we archive a better
         /// time this time when we drive :)
         /// </summary>
-        Replay bestReplay = null,
-            newReplay = null;
+        //Replay bestReplay = null,
+            //newReplay = null;
 
         /// <summary>
         /// Compare checkpoint time to the bestReplay times.
@@ -602,17 +602,18 @@ namespace RacingGame.Landscapes
         public int CompareCheckpointTime(int checkpointNum)
         {
             // Invalid data?
-            if (bestReplay == null ||
-                checkpointNum >= bestReplay.CheckpointTimes.Count)
+            //if (bestReplay == null ||
+                //checkpointNum >= bestReplay.CheckpointTimes.Count)
                 // Then we can't return anything
                 return 0;
 
             // Else just return difference
-            float differenceMs =
-                RacingGameManager.Player.GameTimeMilliseconds -
-                bestReplay.CheckpointTimes[checkpointNum] * 1000.0f;
+            //float differenceMs =
+                //RacingGameManager.Player.GameTimeMilliseconds -
+                //bestReplay.CheckpointTimes[checkpointNum] * 1000.0f;
 
-            return (int)differenceMs;
+            //return (int)differenceMs;
+                //return 0;
         }
 
         /// <summary>
@@ -626,52 +627,52 @@ namespace RacingGame.Landscapes
 
             // Upload new highscore (as we currently are in game,
             // no bonus or anything will be added, this score is low!)
-            Highscores.SubmitHighscore((int)level,
-                (int)RacingGameManager.Player.GameTimeMilliseconds);
+            //Highscores.SubmitHighscore((int)level,
+                //(int)RacingGameManager.Player.GameTimeMilliseconds);
 
             RacingGameManager.Player.AddLapTime(thisLapTime);
 
-            if (thisLapTime < bestReplay.LapTime)
-            {
+            //if (thisLapTime < bestReplay.LapTime)
+            //{
                 // Add final checkpoint
-                RacingGameManager.Landscape.NewReplay.CheckpointTimes.Add(
-                    thisLapTime);
+                //RacingGameManager.Landscape.NewReplay.CheckpointTimes.Add(
+                    //thisLapTime);
 
                 // Record lap time
-                newReplay.LapTime = thisLapTime;
+                //newReplay.LapTime = thisLapTime;
 
-                // Save this replay to load it everytime in the future
-                // Do this on a worker thread to prevent the game from skipping frames
-                ThreadPool.QueueUserWorkItem(new WaitCallback(SaveReplay),
-                                            (Replay)newReplay.Clone());
+                //// Save this replay to load it everytime in the future
+                //// Do this on a worker thread to prevent the game from skipping frames
+                //ThreadPool.QueueUserWorkItem(new WaitCallback(SaveReplay),
+                                            //(Replay)newReplay.Clone());
 
                 // Set it as the current best replay
-                bestReplay = newReplay;
-            }
+                //bestReplay = newReplay;
+            //}
 
-            // And start a new replay for this round
-            newReplay = new Replay((int)level, true, track);
+            //// And start a new replay for this round
+            //newReplay = new Replay((int)level, true, track);
         }
 
-        /// <summary>
-        /// Callback used for saving a replay from a worker thread
-        /// </summary>
-        /// <param name="replay">Replay to be saved</param>
-        private void SaveReplay(object replay)
-        {
-            ((Replay)replay).Save();
-        }
+        ///// <summary>
+        ///// Callback used for saving a replay from a worker thread
+        ///// </summary>
+        ///// <param name="replay">Replay to be saved</param>
+        //private void SaveReplay(object replay)
+        //{
+        //    ((Replay)replay).Save();
+        //}
 
-        /// <summary>
-        /// New replay
-        /// </summary>
-        public Replay NewReplay
-        {
-            get
-            {
-                return newReplay;
-            }
-        }
+        ///// <summary>
+        ///// New replay
+        ///// </summary>
+        //public Replay NewReplay
+        //{
+        //    get
+        //    {
+        //        return newReplay;
+        //    }
+        //}
 
         /// <summary>
         /// Remember a list of brack tracks, which will be generated if we brake.
@@ -720,16 +721,16 @@ namespace RacingGame.Landscapes
             }
         }
 
-        /// <summary>
-        /// Best replay for the best lap time showing the player driving.
-        /// </summary>
-        public Replay BestReplay
-        {
-            get
-            {
-                return bestReplay;
-            }
-        }
+        ///// <summary>
+        ///// Best replay for the best lap time showing the player driving.
+        ///// </summary>
+        //public Replay BestReplay
+        //{
+        //    get
+        //    {
+        //        return bestReplay;
+        //    }
+        //}
         #endregion
 
         #region Get map height
@@ -1015,8 +1016,8 @@ namespace RacingGame.Landscapes
                 track.Reload("Track" + level.ToString(), this);
 
             // Load replay for this track to show best player
-            bestReplay = new Replay((int)level, false, track);
-            newReplay = new Replay((int)level, true, track);
+            //bestReplay = new Replay((int)level, false, track);
+            //newReplay = new Replay((int)level, true, track);
 
             // Kill brake tracks
             brakeTracksVertices.Clear();

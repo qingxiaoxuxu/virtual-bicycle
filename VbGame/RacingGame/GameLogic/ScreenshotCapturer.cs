@@ -175,8 +175,8 @@ namespace RacingGame.GameLogic
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            if (Input.KeyboardKeyJustPressed(Keys.PrintScreen))
-                MakeScreenshot();
+            //if (Input.KeyboardKeyJustPressed(Keys.PrintScreen))
+                //MakeScreenshot();
 
             base.Update(gameTime);
         }

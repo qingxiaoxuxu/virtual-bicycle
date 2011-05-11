@@ -93,6 +93,43 @@ namespace RacingGame.GameLogic
         }
         #endregion
 
+
+        int RankComparision(RankEntry a, RankEntry b)
+        {
+            return a.Progress.CompareTo(b.Progress);
+        }
+        struct RankEntry
+        {
+            public float Progress;
+            public string Name;
+            public string ID;
+        }
+        int GetRank() 
+        {
+            Dictionary<string, RemotePlayer> players = RacingGameManager.RemotePlayers;
+            int index = 0;
+            RankEntry[] ents = new RankEntry[players.Count + 1];
+            foreach (var e in players)
+            {
+                ents[index].Progress = e.Value.CompletionProgress;
+                ents[index].ID = e.Value.ID;
+                ents[index++].Name = e.Value.Name;
+            }
+            ents[index].Progress = RacingGameManager.Player.GetCompletionProgress();
+            ents[index].ID = RacingGameManager.LocalUID;
+            ents[index].Name = RacingGameManager.LocalPlayerName;
+            Array.Sort(ents, RankComparision);
+
+            for (int i = 0; i < ents.Length; i++)
+            {
+                if (ents[i].ID == RacingGameManager.LocalUID)
+                {
+                    return i;
+                }
+            }
+            return 0;
+        }
+
         #region Handle game logic
         /// <summary>
         /// Update game logic, called every frame.
@@ -103,6 +140,8 @@ namespace RacingGame.GameLogic
             if (RacingGameManager.InGame &&
                 ZoomInTime <= 0)
             {
+                int rank = GetRank();
+
                 // Game over? Then show end screen!
                 if (isGameOver)
                 {
@@ -112,8 +151,10 @@ namespace RacingGame.GameLogic
                         Matrix.CreateRotationZ(BaseGame.TotalTimeMilliseconds / 2593.0f));
                     BaseGame.ViewMatrix = Matrix.CreateLookAt(
                         cameraPos, CarPosition, CarUpVector);
-                    int rank = Highscores.GetRankFromCurrentTime(
-                        this.levelNum, (int)this.BestTimeMilliseconds);
+
+                   
+                    //int rank = Highscores.GetRankFromCurrentTime(
+                        //this.levelNum, (int)this.BestTimeMilliseconds);
                     this.currentGameTimeMilliseconds = this.BestTimeMilliseconds;
 
                     if (victory)
@@ -129,19 +170,19 @@ namespace RacingGame.GameLogic
                         // Display game over message
                         TextureFont.WriteTextCentered(
                             BaseGame.Width / 2, BaseGame.Height / 7,
-                            "Game Over! You lost.",
+                            "Game Over! You lose.",
                             Color.Red, 1.25f);
                     }
 
-                    for (int num = 0; num < lapTimes.Count; num++)
-                        TextureFont.WriteTextCentered(
-                            BaseGame.Width / 2,
-                            BaseGame.Height / 7 + BaseGame.YToRes(35) * (1 + num),
-                            "Lap " + (num + 1) + " Time: " +
-                            (((int)lapTimes[num]) / 60).ToString("00") + ":" +
-                            (((int)lapTimes[num]) % 60).ToString("00") + "." +
-                            (((int)(lapTimes[num] * 100)) % 100).ToString("00"),
-                            Color.White, 1.25f);
+                    //for (int num = 0; num < lapTimes.Count; num++)
+                    //    TextureFont.WriteTextCentered(
+                    //        BaseGame.Width / 2,
+                    //        BaseGame.Height / 7 + BaseGame.YToRes(35) * (1 + num),
+                    //        "Lap " + (num + 1) + " Time: " +
+                    //        (((int)lapTimes[num]) / 60).ToString("00") + ":" +
+                    //        (((int)lapTimes[num]) % 60).ToString("00") + "." +
+                    //        (((int)(lapTimes[num] * 100)) % 100).ToString("00"),
+                    //        Color.White, 1.25f);
                     TextureFont.WriteTextCentered(
                         BaseGame.Width / 2,
                         BaseGame.Height / 7 + BaseGame.YToRes(35) * (1 + lapTimes.Count),
@@ -190,7 +231,7 @@ namespace RacingGame.GameLogic
 
                     // Then game is over and we won!
                     isGameOver = true;
-                    victory = true;
+                    victory = rank == 0;
                     Sound.Play(Sound.Sounds.Victory);
 
                     // Also stop engine sound
@@ -201,5 +242,10 @@ namespace RacingGame.GameLogic
             base.Update();
         }
         #endregion
+
+        public float GetCompletionProgress() 
+        {
+            return (LapCount - lap) * 10000 + TrackSegment;
+        }
     }
 }

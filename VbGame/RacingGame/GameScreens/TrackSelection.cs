@@ -122,8 +122,8 @@ namespace RacingGame.GameScreens
 
             // If the user manipulated the mouse, stop ignoring the mouse
             // This allows the mouse to override the game pad or keyboard selection
-            if (Input.HasMouseMoved || Input.MouseLeftButtonJustPressed)
-                ignoreMouse = false;
+            //if (Input.HasMouseMoved || Input.MouseLeftButtonJustPressed)
+                //ignoreMouse = false;
 
             // Show buttons
             // Part 1: Calculate global variables for our buttons
