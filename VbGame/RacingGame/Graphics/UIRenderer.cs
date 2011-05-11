@@ -82,7 +82,7 @@ namespace RacingGame.Graphics
             LapsGfxRect = new Rectangle(381, 132, 222, 160),
             TachoGfxRect = new Rectangle(0, 0, 343, 341),
             TachoArrowGfxRect = new Rectangle(347, 0, 28, 186),
-            TachoMphGfxRect = new Rectangle(184, 256, 148, 72),
+            TachoMphGfxRect = new Rectangle(155, 220, 148, 72),
             TachoGearGfxRect = new Rectangle(286, 149, 52, 72),
             CurrentAndBestGfxRect = new Rectangle(381, 2, 342, 128),
             CurrentTimePosGfxRect = new Rectangle(540, 8, 170, 52),
@@ -820,29 +820,29 @@ namespace RacingGame.Graphics
                 top5Rect5.Y + blockHeight / 2 - TextureFont.Height / 2,
                 top5LapTimes[4], rankColor);
 
-            // Acceleration
-            Point tachoPoint = new Point(
-                tachoRect.X +
-                BaseGame.XToRes1600(194),
-                tachoRect.Y +
-                BaseGame.YToRes1200(194));
+            //// Acceleration
+            //Point tachoPoint = new Point(
+            //    tachoRect.X +
+            //    BaseGame.XToRes1600(194),
+            //    tachoRect.Y +
+            //    BaseGame.YToRes1200(194));
+            ////ingame.RenderOnScreenWithRotation(
+            ////    tachoPoint, TachoArrowGfxRect, -acceleration*2);
+            //if (acceleration < 0)
+            //    acceleration = 0;
+            //if (acceleration > 1)
+            //    acceleration = 1;
+            //float rotation = -2.33f + acceleration * 2.5f;
+            //int tachoArrowWidth = BaseGame.XToRes1600(TachoArrowGfxRect.Width);
+            //int tachoArrowHeight = BaseGame.YToRes1200(TachoArrowGfxRect.Height);
+            //Vector2 rotationPoint = new Vector2(
+            //    TachoArrowGfxRect.Width / 2,
+            //    TachoArrowGfxRect.Height - 13);
             //ingame.RenderOnScreenWithRotation(
-            //    tachoPoint, TachoArrowGfxRect, -acceleration*2);
-            if (acceleration < 0)
-                acceleration = 0;
-            if (acceleration > 1)
-                acceleration = 1;
-            float rotation = -2.33f + acceleration * 2.5f;
-            int tachoArrowWidth = BaseGame.XToRes1600(TachoArrowGfxRect.Width);
-            int tachoArrowHeight = BaseGame.YToRes1200(TachoArrowGfxRect.Height);
-            Vector2 rotationPoint = new Vector2(
-                TachoArrowGfxRect.Width / 2,
-                TachoArrowGfxRect.Height - 13);
-            ingame.RenderOnScreenWithRotation(
-                new Rectangle(tachoPoint.X, tachoPoint.Y,
-                tachoArrowWidth, tachoArrowHeight),
-                TachoArrowGfxRect,
-                rotation, rotationPoint);
+            //    new Rectangle(tachoPoint.X, tachoPoint.Y,
+            //    tachoArrowWidth, tachoArrowHeight),
+            //    TachoArrowGfxRect,
+            //    rotation, rotationPoint);
 
             // Speed in mph
             TextureFontBigNumbers.WriteNumber(
@@ -851,12 +851,12 @@ namespace RacingGame.Graphics
                 TachoMphGfxRect.Height,
                 (int)Math.Round(speed));
 
-            // Gear
-            TextureFontBigNumbers.WriteNumber(
-                tachoRect.X + BaseGame.XToRes1600(TachoGearGfxRect.X),
-                tachoRect.Y + BaseGame.YToRes1200(TachoGearGfxRect.Y),
-                TachoGearGfxRect.Height,
-                Math.Min(5, gear));
+            //// Gear
+            //TextureFontBigNumbers.WriteNumber(
+            //    tachoRect.X + BaseGame.XToRes1600(TachoGearGfxRect.X),
+            //    tachoRect.Y + BaseGame.YToRes1200(TachoGearGfxRect.Y),
+            //    TachoGearGfxRect.Height,
+            //    Math.Min(5, gear));
         }
         #endregion
 

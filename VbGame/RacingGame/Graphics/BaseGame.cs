@@ -1015,7 +1015,6 @@ namespace RacingGame.Graphics
             graphicsManager.MinimumVertexShaderProfile = ShaderProfile.VS_2_0;
 
             ApplyResolutionChange();
-
             graphicsManager.PreparingDeviceSettings +=
                 new EventHandler<PreparingDeviceSettingsEventArgs>(
                     graphics_PrepareDevice);

@@ -80,8 +80,8 @@ namespace RacingGame
             isRoomInfoAcquired = true;
         }
 
-        public static ClientGEvt netClient;
-        public static string Uid;
+        static ClientGEvt netClient;
+        static string Uid;
 
         #region StartGame
         /// <summary>
@@ -94,16 +94,23 @@ namespace RacingGame
         {
             Uid = uid;
 
-            netClient = new ClientGEvt("localhost");
+            startUpParams.MapName = "Beginner";
+            startUpParams.TeamName = "Test Team";
+            startUpParams.Players = new StartUpParameters.PlayerInfo[1];
+            startUpParams.Players[0].CarID = "0";
+            startUpParams.Players[0].ID = uid;
+            startUpParams.Players[0].Name = "Test Player";
 
-            netClient.Client.ConnectedServer += new EventHandler(Client_ConnectedServer);
+            //netClient = new ClientGEvt("localhost");
+
+            //netClient.Client.ConnectedServer += new EventHandler(Client_ConnectedServer);
             
 
-            while (!isRoomInfoAcquired)
-            {
-                Thread.Sleep(10);
-            }
-            netClient.RoomDetail -= netClient_RoomDetail;
+            //while (!isRoomInfoAcquired)
+            //{
+                //Thread.Sleep(10);
+            //}
+            //netClient.RoomDetail -= netClient_RoomDetail;
 #if !XBOX360
             try
             {
