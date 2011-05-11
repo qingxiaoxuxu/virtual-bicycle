@@ -154,18 +154,18 @@ namespace RacingGame.GameLogic
             }
         }
 
-        /// <summary>
-        /// Level num, set when starting game!
-        /// </summary>
-        protected int levelNum;
+        ///// <summary>
+        ///// Level num, set when starting game!
+        ///// </summary>
+        //protected int levelNum;
 
-        public int LevelNum
-        {
-            get
-            {
-                return levelNum;
-            }
-        }
+        //public int LevelNum
+        //{
+        //    get
+        //    {
+        //        return levelNum;
+        //    }
+        //}
 
         /// <summary>
         /// Game over?
@@ -213,8 +213,8 @@ namespace RacingGame.GameLogic
             if (alreadyUploadedHighscore == false)
             {
                 alreadyUploadedHighscore = true;
-                Highscores.SubmitHighscore(levelNum,
-                    (int)currentGameTimeMilliseconds);
+                //Highscores.SubmitHighscore(levelNum,
+                    //(int)currentGameTimeMilliseconds);
             }
         }
 
@@ -244,7 +244,7 @@ namespace RacingGame.GameLogic
         /// </summary>
         public virtual void Reset()
         {
-            levelNum = TrackSelection.SelectedTrackNumber;
+            //levelNum = 0;
             isGameOver = false;
             alreadyUploadedHighscore = false;
             currentGameTimeMilliseconds = 0;

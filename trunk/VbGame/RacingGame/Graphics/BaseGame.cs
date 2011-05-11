@@ -1092,7 +1092,7 @@ namespace RacingGame.Graphics
                 GameSettings.Default.MusicVolume);
 
             //Init the static screens
-            Highscores.Initialize();
+            //Highscores.Initialize();
 
             // Replaces static Constructors with simple inits.
             Log.Initialize();
@@ -1327,7 +1327,7 @@ namespace RacingGame.Graphics
             base.Update(gameTime);
 
             // Update all input states
-            Input.Update();
+            //Input.Update();
 
             lastFrameTotalTimeMs = totalTimeMs;
             elapsedTimeThisFrameInMs =
@@ -1457,9 +1457,10 @@ namespace RacingGame.Graphics
                 {
                     Texture.alphaSprite.Begin(SpriteBlendMode.AlphaBlend);
 
-                    int rank = GameScreens.Highscores.GetRankFromCurrentTime(
-                        RacingGameManager.Player.LevelNum,
-                        (int)RacingGameManager.Player.BestTimeMilliseconds);
+                    int rank = 1;
+                    //GameScreens.Highscores.GetRankFromCurrentTime(
+                      //   RacingGameManager.Player.LevelNum,
+                        // (int)RacingGameManager.Player.BestTimeMilliseconds);
 
                     // Show one of the trophies
                     BaseGame.UI.GetTrophyTexture(

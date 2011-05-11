@@ -6,6 +6,7 @@ using Apoc3D.Graphics.Animation;
 using XnaModel = Microsoft.Xna.Framework.Graphics.Model;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RacingGame.Shaders;
 
 namespace RacingGame.Graphics
 {
@@ -28,8 +29,8 @@ namespace RacingGame.Graphics
         ModelAnimationClip rigidRootClip;
         RigidAnimationPlayer rigidPlayer;
         ModelAnimationClip rigidClip;
-        
 
+        public float TimeScale { get; set; }
 
         Matrix objectMatrix;
 
@@ -40,7 +41,7 @@ namespace RacingGame.Graphics
         public Cyclist()
         {
             //string test = typeof(AnimationDataReader).AssemblyQualifiedName;
-
+            TimeScale = 1;
             skinnedModel = BaseGame.Content.Load<XnaModel>("Content\\Models\\bike_boy");
             objectMatrix = Matrix.CreateScale(0.5f);// Matrix.Identity;
             
@@ -60,6 +61,11 @@ namespace RacingGame.Graphics
                     skinnedClip = animData.ModelAnimationClips["Take 001"];
 
                     skinnedPlayer = new SkinnedAnimationPlayer(animData.BindPose, animData.InverseBindPose, animData.SkeletonHierarchy);
+
+                    skinnedPlayer.StartClip(skinnedClip, 1, TimeSpan.Zero);
+                    skinnedPlayer.CurrentTimeValue = skinnedClip.Duration;
+                    skinnedPlayer.CurrentTimeValue = TimeSpan.Zero;
+
                     skinnedPlayer.Completed += new EventHandler(skinnedPlayer_Completed);
                 }
             }
@@ -82,16 +88,25 @@ namespace RacingGame.Graphics
                 {
                     rigidClip = animData2.ModelAnimationClips["Take 001"];
 
+                    
+
                     rigidPlayer = new RigidAnimationPlayer(rigidModel.Bones.Count);
-                    rigidPlayer.Completed += new EventHandler(skinnedPlayer_Completed);
                     rigidPlayer.StartClip(rigidClip, 1, TimeSpan.Zero);
+
+
+                    rigidPlayer.CurrentTimeValue = rigidClip.Duration;
+                    rigidPlayer.CurrentTimeValue = TimeSpan.Zero;
+                  
+                    rigidPlayer.Completed += new EventHandler(skinnedPlayer_Completed);
+                    
                 }
             }
 
-
+            
             skinned = BaseGame.Content.Load<Effect>("Content\\Shaders\\skinned");
             skinned.CurrentTechnique = skinned.Techniques[0];
 
+            Update(null);
         }
 
         void skinnedPlayer_Completed(object sender, EventArgs e)
@@ -101,36 +116,40 @@ namespace RacingGame.Graphics
 
         public void Update(GameTime time)
         {
-            GameTime gameTime = new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(0.0167), TimeSpan.Zero, TimeSpan.FromSeconds(0.0167));
-
-            if (!playingSkinned)
+            float ts = TimeScale * 6 * 0.0167f;
+            if (ts > 0)
             {
-                skinnedPlayer.StartClip(skinnedClip, 1, TimeSpan.Zero);
+                GameTime gameTime = new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(ts), TimeSpan.Zero, TimeSpan.FromSeconds(ts));
 
-                rigidPlayer.StartClip(rigidClip, 1, TimeSpan.Zero);
-
-                playingSkinned = true;
-
-                if (skinnedRootPlayer != null && skinnedRootClip != null)
+                if (!playingSkinned)
                 {
-                    skinnedRootPlayer.StartClip(skinnedRootClip, 1, TimeSpan.Zero);
+                    skinnedPlayer.StartClip(skinnedClip, 1, TimeSpan.Zero);
+
+                    rigidPlayer.StartClip(rigidClip, 1, TimeSpan.Zero);
+
+                    playingSkinned = true;
+
+                    if (skinnedRootPlayer != null && skinnedRootClip != null)
+                    {
+                        skinnedRootPlayer.StartClip(skinnedRootClip, 1, TimeSpan.Zero);
+                    }
+                    if (rigidRootPlayer != null && rigidRootClip != null)
+                    {
+                        rigidRootPlayer.StartClip(rigidRootClip, 1, TimeSpan.Zero);
+                    }
                 }
-                if (rigidRootPlayer != null && rigidRootClip != null)
+
+                // If we are playing skinned animations, update the players
+                if (playingSkinned)
                 {
-                    rigidRootPlayer.StartClip(rigidRootClip, 1, TimeSpan.Zero);
+                    if (skinnedRootPlayer != null)
+                        skinnedRootPlayer.Update(gameTime);
+                    if (rigidRootPlayer != null)
+                        rigidRootPlayer.Update(gameTime);
+
+                    skinnedPlayer.Update(gameTime);
+                    rigidPlayer.Update(gameTime);
                 }
-            }
-
-            // If we are playing skinned animations, update the players
-            if (playingSkinned)
-            {
-                if (skinnedRootPlayer != null)
-                    skinnedRootPlayer.Update(gameTime);
-                if (rigidRootPlayer != null)
-                    rigidRootPlayer.Update(gameTime);
-
-                skinnedPlayer.Update(gameTime);
-                rigidPlayer.Update(gameTime);
             }
 
         }
@@ -150,7 +169,7 @@ namespace RacingGame.Graphics
         /// shader, that is very transparent. Used for the shadow car when
         /// playing that shows how we drove the last time.</param>
         /// <param name="renderMatrix">Render matrix for the car</param>
-        public void RenderCar(int carNumber, Color carColor,
+        public void RenderCar(bool renderCyclist, Color carColor,
             Matrix renderMatrix)
         {
             //renderMatrix = Matrix.CreateTranslation(renderMatrix.Translation + Vector3.UnitZ * 5);
@@ -167,36 +186,38 @@ namespace RacingGame.Graphics
             if (skinnedRootPlayer != null)
                 rootTransform = skinnedRootPlayer.GetCurrentTransform();
 
-            
 
-            foreach (ModelMesh mesh in skinnedModel.Meshes)
+            if (renderCyclist)
             {
-                //mesh.MeshParts[0].
-                //skinned.Parameters["diffuseTexture"].SetValue();
-                
-                
-                foreach (Effect effect in mesh.Effects)
+
+                foreach (ModelMesh mesh in skinnedModel.Meshes)
                 {
-                    
-                    //effect.Parameters["diffuseTexture"].SetValue(effect);
-                    effect.Parameters["viewProj"].SetValue(BaseGame.ViewProjectionMatrix);
-                    effect.Parameters["world"].SetValue(rootTransform * renderMatrix);
-                    effect.Parameters["Bones"].SetValue(boneTransforms);
-                    effect.CommitChanges();
+                    //mesh.MeshParts[0].
+                    //skinned.Parameters["diffuseTexture"].SetValue();
 
-                    //effect.EnableDefaultLighting();
-                    //effect.Projection = BaseGame.ProjectionMatrix;
-                    //effect.View = BaseGame.ViewMatrix;
-                    //if (boneTransforms != null)
+
+                    foreach (Effect effect in mesh.Effects)
+                    {
+
+                        //effect.Parameters["diffuseTexture"].SetValue(effect);
+                        effect.Parameters["viewProj"].SetValue(BaseGame.ViewProjectionMatrix);
+                        effect.Parameters["world"].SetValue(rootTransform * renderMatrix);
+                        effect.Parameters["Bones"].SetValue(boneTransforms);
+                        effect.CommitChanges();
+
+                        //effect.EnableDefaultLighting();
+                        //effect.Projection = BaseGame.ProjectionMatrix;
+                        //effect.View = BaseGame.ViewMatrix;
+                        //if (boneTransforms != null)
                         //effect.SetBoneTransforms(boneTransforms);
-                    //effect.World = rootTransform * renderMatrix;
-                    //effect.SpecularColor = Vector3.Zero;
+                        //effect.World = rootTransform * renderMatrix;
+                        //effect.SpecularColor = Vector3.Zero;
+                    }
+
+                    mesh.Draw();
                 }
-
-                mesh.Draw();
             }
-
-
+           
             boneTransforms = null;
             if (rigidPlayer != null)
                 boneTransforms = rigidPlayer.GetBoneTransforms();
@@ -222,137 +243,152 @@ namespace RacingGame.Graphics
                 mesh.Draw();
             }
 
-
-            //// Usually use default color values
-            //Color ambientColor = Material.DefaultAmbientColor;
-            //Color diffuseColor = Material.DefaultDiffuseColor;
-
-
-            //EffectTechnique remCurrentTechnique = null;
-            //for (int alphaPass = 0; alphaPass < 2; alphaPass++)
-            //{
-            //    int wheelNumber = 0;
-
-            //    int effectParameterIndex = 0;
-            //    int effectTechniqueIndex = 0;
-
-            //    for (int meshNum = 0; meshNum < xnaModel.Meshes.Count; meshNum++)
-            //    {
-            //        ModelMesh mesh = xnaModel.Meshes[meshNum];
-            //        bool dontRender = false;
-
-            //        for (int effectNum = 0; effectNum < mesh.Effects.Count; effectNum++)
-            //        {
-            //            Effect effect = mesh.Effects[effectNum];
-            //            if (effectNum == 0)
-            //                remCurrentTechnique = effect.CurrentTechnique;
-
-            //            // Find out if this is ReflectionSimpleGlass.fx,
-            //            // NormalMapping.fx will also use reflection, but the techniques
-            //            // are named in another way (SpecularWithReflection, etc.)
-            //            if (cachedIsReflectionSpecularTechnique[effectTechniqueIndex++])
-            //            {
-            //                if (alphaPass == 0)
-            //                {
-            //                    dontRender = true;
-            //                    effectParameterIndex += 7;
-            //                    break;
-            //                }
-
-            //                // Skip the first 3 effect parameters
-            //                effectParameterIndex += 3;
-            //            }
-            //            else
-            //            {
-            //                if (alphaPass == 1)
-            //                {
-            //                    dontRender = true;
-            //                    effectParameterIndex += 7;
-            //                    break;
-            //                }
-
-            //                // To improve performance we only have to set this when it
-            //                // changes! Doesn't do much, because this eats only 10%
-            //                // performance, 5-10% are the matrices below and most of the
-            //                // performance is just rendering the car with Draw!
-
-            //                // Overwrite car diffuse textures depending on the car number
-            //                // we want to render.
-            //                cachedEffectParameters[effectParameterIndex++].SetValue(
-            //                    RacingGameManager.CarTexture(carNumber).XnaTexture);
-
-            //                // Also set color
-            //                cachedEffectParameters[effectParameterIndex++].SetValue(
-            //                    ambientColor.ToVector4());
-            //                cachedEffectParameters[effectParameterIndex++].SetValue(
-            //                    diffuseColor.ToVector4());
-
-            //                // Change shader to
-            //                // VertexOutput_SpecularWithReflectionForCar20
-            //                // if we changed the color.
-            //                if (RacingGameManager.currentCarColor != 0 &&
-            //                    effectNum == 0)
-            //                {
-            //                    effect.CurrentTechnique =
-            //                        effect.Techniques["SpecularWithReflectionForCar20"];
-            //                    // And set carHueColorChange
-            //                    effect.Parameters["carHueColor"].SetValue(
-            //                        carColor.ToVector3());
-            //                }
-            //            }
-
-            //            Matrix meshMatrix = transforms[mesh.ParentBone.Index];
-
-            //            // Only the wheels have 2 mesh parts (gummi and chrome)
-            //            if (mesh.MeshParts.Count == 2)
-            //            {
-            //                wheelNumber++;
-            //                meshMatrix =
-            //                    Matrix.CreateRotationX(
-            //                    // Rotate left 2 wheels forward, the other 2 backward!
-            //                    (wheelNumber == 2 || wheelNumber == 4 ? 1 : -1) *
-            //                    RacingGameManager.Player.CarWheelPos) *
-            //                    meshMatrix;
-            //            }
-
-            //            // Assign world matrix
-            //            BaseGame.WorldMatrix =
-            //                meshMatrix *
-            //                renderMatrix;
-
-            //            // Set matrices
-            //            cachedEffectParameters[effectParameterIndex++].SetValue(
-            //                BaseGame.WorldMatrix);
-
-            //            // These values should only be set once every frame (see above)!
-            //            // to improve performance again, also we should access them
-            //            // with EffectParameter and not via name!
-            //            // But since we got only 1 car it doesn't matter so much ..
-            //            cachedEffectParameters[effectParameterIndex++].SetValue(
-            //                BaseGame.ViewProjectionMatrix);
-            //            cachedEffectParameters[effectParameterIndex++].SetValue(
-            //                BaseGame.InverseViewMatrix);
-            //            // Set light direction
-            //            cachedEffectParameters[effectParameterIndex++].SetValue(
-            //                BaseGame.LightDirection);
-            //        }
-
-            //        // Render
-            //        if (dontRender == false)
-            //            mesh.Draw();
-
-            //        // Change shader back to default render technique.
-            //        // We only have to do this if the color was changed
-            //        if (RacingGameManager.currentCarColor != 0 &&
-            //            remCurrentTechnique != null)
-            //        {
-            //            mesh.Effects[0].CurrentTechnique = remCurrentTechnique;
-            //        }
-            //    }
-            //}
         }
         #endregion
 
-    
+
+        #region Generate shadow
+        /// <summary>
+        /// Generate shadow for this model in the generate shadow pass
+        /// of our shadow mapping shader. All objects rendered here will
+        /// cast shadows to our scene (if they are in range of the light)
+        /// </summary>
+        /// <param name="renderMatrix">Render matrix</param>
+        public void GenerateShadow(Matrix renderMatrix)
+        {
+            // Find out how far the object is away from the shadow,
+            // we can ignore it if it is outside of the shadow generation range.
+            // Everything smaller than 0.5 meter can be ignored. 
+            float maxDistance =
+                //nice, but not good for shadow mapping, have to use fixed value!
+                5 / 2.5f + 1.015f * ShaderEffect.shadowMapping.ShadowDistance;
+            if (Vector3.DistanceSquared(
+                ShaderEffect.shadowMapping.ShadowLightPos, renderMatrix.Translation) >
+                maxDistance * maxDistance)
+                // Don't render, too far away!
+                return;
+
+
+
+
+
+            Matrix[] boneTransforms = null;
+            if (rigidPlayer != null)
+                boneTransforms = rigidPlayer.GetBoneTransforms();
+
+            Matrix rootTransform = Matrix.Identity;
+            if (rigidRootPlayer != null)
+                rootTransform = rigidRootPlayer.GetCurrentTransform();
+
+
+            // Multiply object matrix by render matrix.
+            renderMatrix = objectMatrix * renderMatrix;
+
+            for (int meshNum = 0; meshNum < rigidModel.Meshes.Count; meshNum++)
+            {
+                ModelMesh mesh = rigidModel.Meshes[meshNum];
+
+                Matrix worldTrans;
+                if (boneTransforms != null)
+                    worldTrans = boneTransforms[mesh.ParentBone.Index] * rootTransform * renderMatrix;
+                else
+                    worldTrans = rootTransform * renderMatrix;
+
+                // Use the ShadowMapShader helper method to set the world matrices
+                ShaderEffect.shadowMapping.UpdateGenerateShadowWorldMatrix(
+                    worldTrans);
+
+
+                for (int partNum = 0; partNum < mesh.MeshParts.Count; partNum++)
+                {
+                    ModelMeshPart part = mesh.MeshParts[partNum];
+                    // Render just the vertices, do not use the shaders of our model.
+                    // This is the same code as ModelMeshPart.Draw() uses, but
+                    // this method is internal and can't be used by us :(
+                    BaseGame.Device.VertexDeclaration = part.VertexDeclaration;
+                    BaseGame.Device.Vertices[0].SetSource(
+                        mesh.VertexBuffer, part.StreamOffset, part.VertexStride);
+                    BaseGame.Device.Indices = mesh.IndexBuffer;
+                    BaseGame.Device.DrawIndexedPrimitives(
+                        PrimitiveType.TriangleList,
+                        part.BaseVertex, 0,
+                        part.NumVertices, part.StartIndex, part.PrimitiveCount);
+                }
+            }
+        }
+        #endregion
+
+        #region Use shadow
+        /// <summary>
+        /// Use shadow for our scene. We render all objects that should receive
+        /// shadows here. Called from the ShadowMappingShader.UseShadow method.
+        /// </summary>
+        /// <param name="renderMatrix">Render matrix</param>
+        public void UseShadow(Matrix renderMatrix)
+        {
+            // Find out how far the object is away from the shadow,
+            // we can ignore it if it is outside of the shadow generation range.
+            // Everything smaller than 0.25 meter can be ignored.
+            // Note: For receiving we usually use more objects than for generating
+            // shadows.
+            float maxDistance =
+                //nice, but not good for shadow mapping, have to use fixed value!
+                1.015f * ShaderEffect.shadowMapping.ShadowDistance;
+            if (Vector3.DistanceSquared(
+                ShaderEffect.shadowMapping.ShadowLightPos, renderMatrix.Translation) >
+                maxDistance * maxDistance)
+                // Don't render, too far away!
+                return;
+
+
+
+
+            Matrix[] boneTransforms = null;
+            if (rigidPlayer != null)
+                boneTransforms = rigidPlayer.GetBoneTransforms();
+
+            Matrix rootTransform = Matrix.Identity;
+            if (rigidRootPlayer != null)
+                rootTransform = rigidRootPlayer.GetCurrentTransform();
+
+
+
+
+            // Multiply object matrix by render matrix.
+            renderMatrix = objectMatrix * renderMatrix;
+
+            for (int meshNum = 0; meshNum < rigidModel.Meshes.Count; meshNum++)
+            {
+                ModelMesh mesh = rigidModel.Meshes[meshNum];
+
+                Matrix worldTrans;
+                if (boneTransforms != null)
+                    worldTrans = boneTransforms[mesh.ParentBone.Index] * rootTransform * renderMatrix;
+                else
+                    worldTrans = rootTransform * renderMatrix;
+
+                
+                // Use the ShadowMapShader helper method to set the world matrices
+                ShaderEffect.shadowMapping.UpdateCalcShadowWorldMatrix(
+                    worldTrans);
+
+                for (int partNum = 0; partNum < mesh.MeshParts.Count; partNum++)
+                {
+                    ModelMeshPart part = mesh.MeshParts[partNum];
+                    // Render just the vertices, do not use the shaders of our model.
+                    // This is the same code as ModelMeshPart.Draw() uses, but
+                    // this method is internal and can't be used by us :(
+                    BaseGame.Device.VertexDeclaration = part.VertexDeclaration;
+                    BaseGame.Device.Vertices[0].SetSource(
+                        mesh.VertexBuffer, part.StreamOffset, part.VertexStride);
+                    BaseGame.Device.Indices = mesh.IndexBuffer;
+                    BaseGame.Device.DrawIndexedPrimitives(
+                        PrimitiveType.TriangleList,
+                        part.BaseVertex, 0,
+                        part.NumVertices, part.StartIndex, part.PrimitiveCount);
+                }
+            }
+        }
+        #endregion
     }
 }

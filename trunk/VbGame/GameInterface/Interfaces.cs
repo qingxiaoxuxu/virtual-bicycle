@@ -77,9 +77,9 @@ namespace RacingGame
     public unsafe struct BikeState
     {
         public string ID;
-        public int Rank;
+        public float CompletionProgress;
         public Vector3 Velocity;
-        public fixed float Transform[16];
+        public Matrix Transform;
     }
 
 
@@ -144,9 +144,10 @@ namespace RacingGame
     }
     public class WheelSpeedChangedEventArgs : EventArgs
     {
-        public WheelSpeedChangedEventArgs(float speed)
+        public WheelSpeedChangedEventArgs(float speed, float change)
         {
             this.Speed = speed;
+            this.SpeedChange = change;
         }
 
         public float Speed
@@ -154,7 +155,11 @@ namespace RacingGame
             get;
             set;
         }
-
+        public float SpeedChange
+        {
+            get;
+            set;
+        }
    
     }
     public delegate void HandlebarRotatedHandler(HandlebarRotatedEventArgs e);
@@ -274,7 +279,8 @@ namespace RacingGame
         #endregion
     }
     class KeyboardInterface : IInputInterface
-    {
+    { 
+
         enum VKeys : short
         {
             VK_LBUTTON = 1,
@@ -477,19 +483,29 @@ namespace RacingGame
                 OnReset();
             }
 
+
+
             if (GetAsyncKeyState(VKeys.VK_A) || GetAsyncKeyState(VKeys.VK_LEFT))
             {
-                float na = -MathHelper.PiOver2 * 0.5f;
+                float na = 20;
                 if (handlebarAngle != na)
                 {
                     OnHandlebarRotated(na);
                     handlebarAngle = na;
                 }
             }
-
-            if (GetAsyncKeyState(VKeys.VK_D) || GetAsyncKeyState(VKeys.VK_RIGHT))
+            else if (GetAsyncKeyState(VKeys.VK_D) || GetAsyncKeyState(VKeys.VK_RIGHT))
             {
-                float na = MathHelper.PiOver2 * 0.5f;
+                float na = -20;
+                if (handlebarAngle != na)
+                {
+                    OnHandlebarRotated(na);
+                    handlebarAngle = na;
+                }
+            }
+            else 
+            {
+                float na = 0;
                 if (handlebarAngle != na)
                 {
                     OnHandlebarRotated(na);
@@ -501,23 +517,22 @@ namespace RacingGame
             {
                 float ns = wheelSpeed + dt * 45;
 
-                OnWheelSpeedChanged(ns);
+
+                OnWheelSpeedChanged(ns, 1);
                 wheelSpeed = ns;
             }
             else if (GetAsyncKeyState(VKeys.VK_S) || GetAsyncKeyState(VKeys.VK_DOWN))
             {
-                float ns = wheelSpeed - dt * 45;
+                float ns = wheelSpeed - dt * 90;
 
-                OnWheelSpeedChanged(ns);
+                OnWheelSpeedChanged(ns, -2);
                 wheelSpeed = ns;
             }
             else
             {
-                float ns = wheelSpeed - dt * 5;
-
-                OnWheelSpeedChanged(ns);
-                wheelSpeed = ns;
+                OnWheelSpeedChanged(0, 0);
             }
+
 
             if (GetAsyncKeyState((short)'T'))
             {
@@ -581,11 +596,11 @@ namespace RacingGame
             }
         }
        
-        void OnWheelSpeedChanged(float speed)
+        void OnWheelSpeedChanged(float speed, float change)
         {
             if (WheelSpeedChanged != null)
             {
-                WheelSpeedChanged(new WheelSpeedChangedEventArgs(speed));
+                WheelSpeedChanged(new WheelSpeedChangedEventArgs(speed, change));
             }
         }
 
