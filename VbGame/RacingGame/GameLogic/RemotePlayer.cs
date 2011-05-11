@@ -12,14 +12,20 @@ namespace RacingGame.GameLogic
         
         Matrix transform;
 
-        int carStyle;
+        string carStyle;
         Color carColor;
 
+        public string  ID { get { return playerId; } }
+        public string CarStyle { get { return carStyle; } }
+        public Color CarColor { get { return carColor; } }
 
-        public RemotePlayer(string id)
+        public RemotePlayer(StartUpParameters.PlayerInfo pinfo)
         {
-            this.playerId = id;
+            this.playerId = pinfo.ID;
+            carStyle = pinfo.CarID;
+            carColor = pinfo.CarColor;
 
+            transform = Matrix.Identity;
         }
 
         public void Update(GameTime time)

@@ -324,9 +324,9 @@ namespace RacingGame
             {
                 if (sup.Players[i].ID != uid)
                 {
-                    RemotePlayer plr = new RemotePlayer(sup.Players[i].ID);
+                    RemotePlayer plr = new RemotePlayer(sup.Players[i]);
 
-                    remotePlayers.Add(sup.Players[i].ID, plr);
+                    remotePlayers.Add(plr.ID, plr);
                 }
             }
 
