@@ -833,9 +833,7 @@ namespace RacingGame.GameLogic
 
             // Apply speed and calculate new car position.
             carPos += speed * carDir * moveFactor * 1.75f;
-
-            RacingGameManager.CarModel.TimeScale = speed / DefaultMaxSpeed;
-
+            
             // Handle pitch spring
             carPitchPhysics.Simulate(moveFactor);
             #endregion
@@ -933,6 +931,8 @@ namespace RacingGame.GameLogic
             // Also handle gravity.
             ApplyGravityAndCheckForCollisions();
             #endregion
+          
+            RacingGameManager.CarModel.TimeScale = speed / DefaultMaxSpeed;
         }
         #endregion
 

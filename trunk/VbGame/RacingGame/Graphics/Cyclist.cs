@@ -116,7 +116,7 @@ namespace RacingGame.Graphics
 
         public void Update(GameTime time)
         {
-            float ts = TimeScale * 6 * 0.0167f;
+            float ts = TimeScale * 6.0f * 0.0167f;
             if (ts > 0)
             {
                 GameTime gameTime = new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(ts), TimeSpan.Zero, TimeSpan.FromSeconds(ts));
