@@ -392,6 +392,18 @@ namespace RacingGame
                 netClient.SendBikeState(new BikeState[] { state });
 
 
+
+
+                BikeState[] states = netClient.DownloadBikeState();
+                if (states != null) 
+                {
+                    for (int i = 0; i < states.Length; i++)
+                    {
+                        remotePlayers[states[i].ID].NotifyNewState(states[i]);
+                    }
+                }
+
+
                 Vector3 hoz = player.CarDirection;
                 hoz.Y = 0;
                 Vector3.Normalize(ref hoz, out hoz);
@@ -486,5 +498,15 @@ namespace RacingGame
                 UI.PostScreenMenuShader.Show();
         }
         #endregion
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (disposing)
+            {
+                inputInterface.Disconnect();
+            }
+        }
     }
 }
