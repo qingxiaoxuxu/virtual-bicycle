@@ -390,6 +390,19 @@ namespace RacingGame
                 SendStateCD = SendStateTime;
 
                 netClient.SendBikeState(new BikeState[] { state });
+
+
+                Vector3 hoz = player.CarDirection;
+                hoz.Y = 0;
+                Vector3.Normalize(ref hoz, out hoz);
+
+                float f = -Vector3.Dot(hoz, player.CarUpVector);
+
+                f *= 5;
+                if (f > 1) f = 1;
+                if (f < -1) f = -1;
+
+                inputInterface.ForceFeedBack(f);
             }
         }
 

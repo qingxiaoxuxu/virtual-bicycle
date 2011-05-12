@@ -892,7 +892,7 @@ namespace RacingGame.Graphics
                 tachoRect.X + BaseGame.XToRes1600(TachoMphGfxRect.X),
                 tachoRect.Y + BaseGame.YToRes1200(TachoMphGfxRect.Y),
                 TachoMphGfxRect.Height,
-                (int)Math.Round(speed));
+                (int)Math.Round(speed * 0.8f));
 
             //// Gear
             //TextureFontBigNumbers.WriteNumber(

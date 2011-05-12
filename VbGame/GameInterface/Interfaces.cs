@@ -1,8 +1,9 @@
 ﻿
 using System;
-using Microsoft.Xna.Framework;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 namespace RacingGame
 {
     /// <summary>
@@ -60,25 +61,67 @@ namespace RacingGame
         public IInputInterface GetInput() { return currentInputInterface; }
     }
 
+    /// <summary>
+    ///  游戏开始前所需要的必要信息
+    /// </summary>
     public struct StartUpParameters
     {
+        /// <summary>
+        ///  定义玩家信息
+        /// </summary>
         public struct PlayerInfo
         {
+            /// <summary>
+            ///  玩家的ID
+            /// </summary>
             public string ID;
+
+            /// <summary>
+            ///  玩家的名字
+            /// </summary>
             public string Name;
+            /// <summary>
+            ///  玩家车子车子类型的标识ID，用于区分不同类型车子
+            /// </summary>
             public string CarID;
+            /// <summary>
+            ///  玩家车子的颜色
+            /// </summary>
             public Color CarColor;
 
         }
+
         public string TeamName;
+        /// <summary>
+        ///  地图名字
+        /// </summary>
         public string MapName;
+        /// <summary>
+        ///  此次游戏所有玩家的信息
+        /// </summary>
         public PlayerInfo[] Players;
     }
+
+    /// <summary>
+    ///  联网游戏发送的车子状态
+    /// </summary>
     public unsafe struct BikeState
     {
+        /// <summary>
+        ///  控制车子的玩家的ID
+        /// </summary>
         public string ID;
+        /// <summary>
+        ///  玩家的游戏完成度
+        /// </summary>
         public float CompletionProgress;
+        /// <summary>
+        ///  玩家车子的速度
+        /// </summary>
         public Vector3 Velocity;
+        /// <summary>
+        ///  玩家车子的世界空间变换矩阵
+        /// </summary>
         public Matrix Transform;
     }
 
@@ -129,8 +172,17 @@ namespace RacingGame
     }
 
     #region 输入事件
+
+    /// <summary>
+    ///  定义车把转向发生变化时的事件的参数
+    /// </summary>
     public class HandlebarRotatedEventArgs : EventArgs
     {
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <param name="angle">新的车把转向程度，0为中心，
+        /// 根据手感调整输入参数的大小，不是角度</param>
         public HandlebarRotatedEventArgs(float angle)
         {
             this.Angle = angle;
@@ -142,8 +194,16 @@ namespace RacingGame
         }
 
     }
+    /// <summary>
+    ///  定义轮子速度发生变化时的事件的参数
+    /// </summary>
     public class WheelSpeedChangedEventArgs : EventArgs
     {
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <param name="speed">当前速度[暂时未使用]</param>
+        /// <param name="change">速度变化量</param>
         public WheelSpeedChangedEventArgs(float speed, float change)
         {
             this.Speed = speed;
@@ -183,9 +243,9 @@ namespace RacingGame
         void Disconnect();
 
         /// <summary>
-        ///  设置力反馈大小
+        ///  游戏调用，设置力反馈大小
         /// </summary>
-        /// <param name="f"></param>
+        /// <param name="f">范围-1到1，-1为最小，1为最大</param>
         void ForceFeedBack(float f);
 
         /// <summary>
