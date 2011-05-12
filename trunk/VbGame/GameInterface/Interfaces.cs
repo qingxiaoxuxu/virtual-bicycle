@@ -301,7 +301,7 @@ namespace RacingGame
         public StartUpParameters DownloadStartUpParameters()
         {
             StartUpParameters startUpParams;
-            startUpParams.MapName = "Beginner";
+            startUpParams.MapName = "Expert";
             startUpParams.TeamName = "Test Team";
             startUpParams.Players = new StartUpParameters.PlayerInfo[1];
             startUpParams.Players[0].CarID = "0";

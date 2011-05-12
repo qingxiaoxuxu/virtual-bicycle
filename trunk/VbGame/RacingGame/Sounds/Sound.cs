@@ -268,7 +268,7 @@ namespace RacingGame.Sounds
         /// <summary>
         /// Number of gears we got in this game.
         /// </summary>
-        const int NumberOfGears = 5;
+        const int NumberOfGears = 1;
 
         /// <summary>
         /// All gear change sounds are 1200 ms long.
@@ -284,7 +284,7 @@ namespace RacingGame.Sounds
         /// adjusted the gear volumes in Xact already.
         /// </summary>
         static readonly float[] vol =
-            new float[NumberOfGears] { 1, 1, 1, 1, 1 };
+            new float[NumberOfGears] { 1 };//, 1, 1, 1, 1 };
         /// <summary>
         /// Minimum pitch for each gear, this is the sound pitch you will hear
         /// when the gear is at the very start. It goes up to maxPitch and
@@ -294,7 +294,7 @@ namespace RacingGame.Sounds
             //very heavy:
             //new float[NumberOfGears] { -0.75f, -0.75f, -0.69f, -0.50f, -0.41f };
             //not so strong:
-            new float[NumberOfGears] { -0.375f, -0.375f, -0.345f, -0.25f, -0.205f };
+            new float[NumberOfGears] { 0 };// -0.375f, -0.345f, -0.25f, -0.205f };
 
         /// <summary>
         /// Max pitch for each gear.
@@ -305,7 +305,7 @@ namespace RacingGame.Sounds
             //not so strong:
             //new float[NumberOfGears] { 0.34f, 0.27f, 0.27f, 0.245f, 0.10f };
             //even weaker, sounds better:
-            new float[NumberOfGears] { 0.24f, 0.17f, 0.17f, 0.145f, 0.10f };
+            new float[NumberOfGears] { 2.74f };// 0.17f, 0.17f, 0.145f, 0.10f };
         #endregion
 
         #region Gear Variables
@@ -371,31 +371,31 @@ namespace RacingGame.Sounds
             if (audioEngine == null)
                 return;
 
-            // Gear changing in progress?
-            if (gearChangeSoundInitiatedMs > 0)
-            {
-                gearChangeSoundInitiatedMs -=
-                    BaseGame.ElapsedTimeThisFrameInMilliseconds;
-                // If gear change sound ends in this frame (max time - frameMs),
-                // then start gear sound!
-                if (gearChangeSoundInitiatedMs <= 0)
-                {
-                    gearChangeSoundInitiatedMs = 0;
-                    PlayGearSound(gearSound);
-                    volume = lastGearVolume = 1.0f;
-                    pitch = lastGearPitch = -0.3f;
-                }
-            }
+            //// Gear changing in progress?
+            //if (gearChangeSoundInitiatedMs > 0)
+            //{
+            //    gearChangeSoundInitiatedMs -=
+            //        BaseGame.ElapsedTimeThisFrameInMilliseconds;
+            //    // If gear change sound ends in this frame (max time - frameMs),
+            //    // then start gear sound!
+            //    if (gearChangeSoundInitiatedMs <= 0)
+            //    {
+            //        gearChangeSoundInitiatedMs = 0;
+            //        PlayGearSound(gearSound);
+            //        volume = lastGearVolume = 1.0f;
+            //        pitch = lastGearPitch = -0.3f;
+            //    }
+            //}
 
             // Set the global volume for this category
-            gearsCategory.SetVolume(MathHelper.Clamp(volume, 0, 1) *
+            gearsCategory.SetVolume(MathHelper.Clamp(volume, 0, 1) * 1.2f*
                 GameSettings.Default.SoundVolume);
 
             // Set pitch only if this is a gear sound
             if (currentGearCue != null)
             {
                 currentGearCue.SetVariable("Pitch",
-                    55 * MathHelper.Clamp(pitch, -1, 1));
+                    8 * pitch);
             }
         }
         #endregion
@@ -440,44 +440,43 @@ namespace RacingGame.Sounds
         public static void UpdateGearSound(float speed, float acceleration)
         {
             // Calculate new gear depending on the current speed
-            int newGear = (int)(NumberOfGears * speed / Player.MaxPossibleSpeed);
+            int newGear = 0;// (int)(NumberOfGears * speed / Player.MaxPossibleSpeed);
 
-            // Make sure newGear is between 0 and NumberOfGears
-            if (newGear < 0)
-                newGear = 0;
-            if (newGear >= NumberOfGears)
-                newGear = NumberOfGears - 1;
+            //// Make sure newGear is between 0 and NumberOfGears
+            //if (newGear < 0)
+            //    newGear = 0;
+            //if (newGear >= NumberOfGears)
+            //    newGear = NumberOfGears - 1;
 
             // We can only change gear if no other gear change sound is in progress
             if (gearChangeSoundInitiatedMs <= 0)
             {
-                if (newGear > currentGear)
-                {
-                    // Next gear
-                    Sound.PlayGearSound(
-                        "Gear" + (newGear) + "ToGear" + (newGear + 1));
-                    lastGearVolume = 1.0f;
-                    lastGearPitch = 0.0f;
-                }
-                else if (newGear < currentGear)
-                {
-                    // Previous gear, change immediately
-                    //Sound.PlayGearSound(
-                    //    "Gear" + (newGear + 2) + "ToGear" + (newGear + 1));
-                    Sound.PlayGearSound("Gear" + (newGear + 1));
-                    lastGearVolume = 1.0f;
-                    lastGearPitch = maxPitch[newGear];
-                }
+                //if (newGear > currentGear)
+                //{
+                //    // Next gear
+                //    Sound.PlayGearSound(
+                //        "Gear" + (newGear) + "ToGear" + (newGear + 1));
+                //    lastGearVolume = 1.0f;
+                //    lastGearPitch = 0.0f;
+                //}
+                //else if (newGear < currentGear)
+                //{
+                //    // Previous gear, change immediately
+                //    //Sound.PlayGearSound(
+                //    //    "Gear" + (newGear + 2) + "ToGear" + (newGear + 1));
+                //    Sound.PlayGearSound("Gear" + (newGear + 1));
+                //    lastGearVolume = 1.0f;
+                //    lastGearPitch = maxPitch[newGear];
+                //}
                 currentGear = newGear;
             }
 
-            // If negative, play gear1 sound and make sure we stay in gear1
-            if (speed < 0)
-                speed = MathHelper.Clamp(
-                    Math.Abs(speed), 0, Player.MaxPossibleSpeed / 5);
-            float gearPercentage = (float)
-                ((int)((speed / Player.MaxPossibleSpeed) * 499) %
-                (int)(500 / NumberOfGears)) / 100.0f;
+            //// If negative, play gear1 sound and make sure we stay in gear1
+            //if (speed < 0)
+            //    speed = MathHelper.Clamp(
+            //        Math.Abs(speed), 0, Player.MaxPossibleSpeed / 5);
+            float gearPercentage = 
+                (speed / Player.MaxPossibleSpeed * 2);
 
             gearPercentage = MathHelper.Clamp(gearPercentage, 0, 1);
 
@@ -487,36 +486,36 @@ namespace RacingGame.Sounds
             float pitch = MathHelper.Lerp(
                 minPitch[currentGear], maxPitch[currentGear], gearPercentage);
 
-            // If gear change sound is in progress, make sure pitch is untouched
-            if (gearChangeSoundInitiatedMs > 0)
-            {
-                pitch = 0;
-            }
+            //// If gear change sound is in progress, make sure pitch is untouched
+            //if (gearChangeSoundInitiatedMs > 0)
+            //{
+            //    pitch = 0;
+            //}
 
-            // If accelerating use loud sounds.
-            if (acceleration > 0.25f)
-            {
-                volume = 1.0f;
-            }
-            else
-            {
-                // If staying around or not accelerating, make a little quieter
-                volume /= 1.75f;
-                // If slowing down do not go above 0 for the pitch, sounds wrong!
-                pitch = Math.Min(-0.025f, pitch / 1.25f);
-                if (lastGearPitch > pitch)
-                    lastGearPitch = lastGearPitch * 0.9f + pitch * 0.1f;
-            }
+            //// If accelerating use loud sounds.
+            //if (acceleration > 0.25f)
+            //{
+            //    volume = 1.0f;
+            //}
+            //else
+            //{
+            //    // If staying around or not accelerating, make a little quieter
+            //    volume /= 1.75f;
+            //    // If slowing down do not go above 0 for the pitch, sounds wrong!
+            //    pitch = Math.Min(-0.025f, pitch / 1.25f);
+            //    if (lastGearPitch > pitch)
+            //        lastGearPitch = lastGearPitch * 0.9f + pitch * 0.1f;
+            //}
 
-            // Slowly interpolate volume and pitch, abrupt changes don't sound cool.
-            // Always start with min/max pitch if we are in a new gear (see above).
-            // Changes between gears and if accelerating or not should also be smooth.
-            lastGearVolume = MathHelper.Lerp(lastGearVolume, volume,
-                5.0f * BaseGame.MoveFactorPerSecond);
-            lastGearPitch = MathHelper.Lerp(lastGearPitch, pitch,
-                5.0f * BaseGame.MoveFactorPerSecond);
+            //// Slowly interpolate volume and pitch, abrupt changes don't sound cool.
+            //// Always start with min/max pitch if we are in a new gear (see above).
+            //// Changes between gears and if accelerating or not should also be smooth.
+            //lastGearVolume = MathHelper.Lerp(lastGearVolume, volume,
+            //    5.0f * BaseGame.MoveFactorPerSecond);
+            //lastGearPitch = MathHelper.Lerp(lastGearPitch, pitch,
+            //    5.0f * BaseGame.MoveFactorPerSecond);
             Sound.UpdateGearVolumeAndPitch(
-                "Gear" + (currentGear + 1), lastGearVolume, lastGearPitch);
+                "Gear" + (currentGear + 1), volume, pitch);
 
         }
         #endregion
