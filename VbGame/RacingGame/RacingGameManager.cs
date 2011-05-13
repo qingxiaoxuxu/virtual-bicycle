@@ -267,7 +267,7 @@ namespace RacingGame
         static string localUID;
         static INetInterface netClient;
         static Dictionary<string, RemotePlayer> remotePlayers = new Dictionary<string, RemotePlayer>();
-        static bool canBeginGame = true;
+        
         static IInputInterface inputInterface;
 
 
@@ -344,16 +344,12 @@ namespace RacingGame
 
             netClient.TellReady();
 
-            while (!canBeginGame) 
+            while (!netClient.CanStartGame()) 
             {
                 Thread.Sleep(10);
             }
         }
 
-        void netClient_BeginGame()
-        {
-            canBeginGame = true;
-        }
 
         #endregion
 
