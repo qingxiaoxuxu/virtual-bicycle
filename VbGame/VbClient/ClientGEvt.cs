@@ -30,7 +30,7 @@ namespace VbClient.Net
         /// </summary>
         /// <param name="userId">用户Id</param>
         /// <param name="states">12个用户状态参数</param>
-        public delegate void BikeState(string userId, float[] states);
+        public delegate void BikeState(string userId, List<float> states);
         public event BikeState GetBikeState;
 
         public ClientGEvt(string serverIp)
@@ -59,12 +59,12 @@ namespace VbClient.Net
         /// 发送车子状态
         /// </summary>
         /// <param name="userId">用户ID</param>
-        /// <param name="states">12个浮点参数</param>
-        public void SendBikeState(string userId,float[] states )
+        /// <param name="states">20个浮点参数</param>
+        public void SendBikeState(string userId,List<float> states )
         {
             string gen = "";
             gen ="vb$"+ userId ;
-            for (int i = 0; i < states.Length; i++)
+            for (int i = 0; i < states.Count; i++)
             {
                 gen += "$" + states[i].ToString();
             }
@@ -83,12 +83,13 @@ namespace VbClient.Net
                     }
                 case "vb":
                     {
-                        float[] para = new float[12];
-                        for (int i = 2; i < 14; i++)
+                        List<float> para = new List<float>();
+                        for (int i = 2; i < 22; i++)
                         {
-                            para[i - 2] = Convert.ToSingle(msgs[i]);
+                            para.Add( Convert.ToSingle(msgs[i]));
                         }
-                        GetBikeState(msgs[1], para);
+                        if(GetBikeState!=null)
+                            GetBikeState(msgs[1], para);
                         break;
                     }
                 case "obj":
@@ -108,7 +109,8 @@ namespace VbClient.Net
                             userName.Add(msgs[pointer++]);
                             carId.Add(msgs[pointer++]);
                         }
-                        RoomDetail(msgs[1], msgs[2], userId, userName, carId);
+                        if(RoomDetail!=null)
+                            RoomDetail(msgs[1], msgs[2], userId, userName, carId);
                         break;
                     }
                 
