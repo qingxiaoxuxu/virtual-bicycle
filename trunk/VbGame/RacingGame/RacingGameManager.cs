@@ -28,6 +28,7 @@ using RacingGame.Properties;
 using RacingGame.Shaders;
 using VbClient.Net;
 using System.Threading;
+using System.Windows.Forms;
 #endregion
 
 namespace RacingGame
@@ -334,20 +335,33 @@ namespace RacingGame
                 remoteModels[i] = new Cyclist();
             }
 
+            Level lvl;
+            try
+            {
+                lvl = (Level)Enum.Parse(typeof(Level), startUpParam.MapName);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Unsupported Map: " + startUpParam.MapName, "Error",  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Exit();
+                return;
+            }
+
             // Load landscape
-            landscape = new Landscape(Level.Beginner);
+            landscape = new Landscape(lvl);
 
             brakeTrackMaterial = new Material("track");
 
-            gameScreens.Push(new GameScreen((Level)Enum.Parse(typeof(Level), startUpParam.MapName)));
+            gameScreens.Push(new GameScreen(lvl));
 
 
             netClient.TellReady();
 
-            while (!netClient.CanStartGame()) 
+            while (!netClient.CanStartGame())
             {
                 Thread.Sleep(10);
             }
+
         }
 
 
