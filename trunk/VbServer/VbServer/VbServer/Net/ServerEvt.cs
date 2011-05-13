@@ -300,7 +300,7 @@ namespace VbServer.Net
                         string allInfo = "info$";
                         Team t = FindTeamByUser(teamList, FindUserByClient(User.allLoginUser, client));
                         allInfo+=t.teamName+"$"+t.mapName+"$"+t.playerList.Count.ToString();
-                        foreach(User u in t.playerList)
+                        foreach(User u in t.userList)
                         {
                             allInfo += "$" + u.userId + "$" + u.userName+"$"+u.carId;
                         }
