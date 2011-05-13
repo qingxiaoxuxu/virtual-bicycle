@@ -134,7 +134,7 @@ namespace RacingGame
         /// <summary>
         ///  连接服务器
         /// </summary>
-        void Connect();
+        void Connect(string uid);
 
         /// <summary>
         ///  从服务器获得当前进行游戏的信息。
@@ -294,7 +294,7 @@ namespace RacingGame
         bool isReady;
         #region INetInterface 成员
 
-        public void Connect()
+        public void Connect(string uid)
         {
         }
 

@@ -63,7 +63,7 @@ namespace RacingGame
         {
             INetInterface netClient = InterfaceFactory.Instance.GetNetwork();
 
-            netClient.Connect();
+            netClient.Connect(uid);
 
             StartUpParameters sup = netClient.DownloadStartUpParameters();
             
