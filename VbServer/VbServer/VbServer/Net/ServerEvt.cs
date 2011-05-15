@@ -24,7 +24,6 @@ namespace VbServer.Net
             t.userList.Add(new User("pl","2",null));
             t.userList.Add(new User("xt","3",null));
             t.userList[0].isAdmin = true;       //
-            t.mapName = "HUST街道赛";           //
             User.allLoginUser.AddRange(t.userList);
 #endif
         }
