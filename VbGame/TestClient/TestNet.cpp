@@ -27,14 +27,9 @@ void MarshalString ( System::String ^ s, String& os ) {
 }
 bool CompareString(System::String ^ a, System::String ^ b)
 {
-	int al = a->Length;
-	int bl = b->Length;
-
-	System::Char c1 = a[al-1];
-	System::Char c2 = b[bl-1];
 
 	//int len = System::Math::Min(a->Length, b->Length);
-	if (al!=bl)
+	if (a->Length!=b->Length)
 		return false;
 
 	for (int i=0;i<a->Length;i++)
@@ -49,6 +44,7 @@ namespace TestClient
 	{
 		m_connected = false;
 		m_canStartGame = false;
+		m_aborting = false;
 
 		m_recvQueue = gcnew System::Collections::Generic::List<array<System::String^>^>();
 		m_syncHelper = gcnew System::Object();
@@ -63,7 +59,7 @@ namespace TestClient
 
 	void TestNet::RecviceLoop(System::Object^ state)
 	{
-		while(true)
+		while(!m_aborting)
 		{
 			String str = Client::ReceiveLine();
 
@@ -77,11 +73,11 @@ namespace TestClient
 				DecodeString(args[i]);
 				margs[i] = gcnew System::String(args[i].c_str());
 			}
-			
+
 			if (CompareString(margs[0], "TELLID"))
 			{
 				String toSend = L"ID ";
-											
+
 				String id;
 				MarshalString(m_uid, id);
 				EncodeString(id);
@@ -108,14 +104,13 @@ namespace TestClient
 					System::Threading::Monitor::Exit(m_syncHelper);
 				}
 			}
-
-
+			Sleep(1);
 		}
 	}
 
 
 
-	void TestNet::Connect(System::String^ uid)
+	bool TestNet::Connect(System::String^ uid)
 	{
 		m_uid = uid;
 
@@ -124,12 +119,19 @@ namespace TestClient
 
 		m_recvThread->Start();
 
-
+		int timeOut = 150;
 		while (!m_connected)
 		{
 			System::Threading::Thread::Sleep(10);
+			timeOut--;
+			if (timeOut<0)
+			{
+				Client::Finalize();
+				m_aborting = true;
+				return false;
+			}
 		}
-
+		return true;
 	}
 
 
@@ -304,7 +306,7 @@ namespace TestClient
 	void TestNet::Disconnect()
 	{
 		m_recvThread->Abort();
-
+		m_aborting = true;
 		Client::Finalize();
 	}
 

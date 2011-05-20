@@ -9,6 +9,8 @@ namespace TestClient
 	class Client
 	{
 	private:
+		static bool m_aborting;
+
 		static char s_serverAdd[];
 
 		static SOCKET m_socket;

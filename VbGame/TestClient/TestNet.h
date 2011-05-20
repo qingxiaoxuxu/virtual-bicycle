@@ -12,6 +12,7 @@ namespace TestClient
 		System::String^ m_uid;
 		bool m_canStartGame;
 		bool m_connected;
+		bool m_aborting;
 
 		System::Threading::Thread^ m_recvThread;
 		System::Object^ m_syncHelper;
@@ -23,7 +24,7 @@ namespace TestClient
 	public:
 		TestNet(void);
 
-		virtual void Connect(System::String^ uid);
+		virtual bool Connect(System::String^ uid);
 		virtual void Disconnect();
 
 		virtual StartUpParameters DownloadStartUpParameters();

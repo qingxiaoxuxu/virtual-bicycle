@@ -83,12 +83,13 @@ namespace VbClient
 
         #region INetInterface ≥…‘±
 
-        public void Connect(string uid)
+        public bool Connect(string uid)
         {
             while (!IsConnected) 
                 Thread.Sleep(10);
             client.ConnectToServer(uid);
             this.uid = uid;
+            return true;
         }
 
         public StartUpParameters DownloadStartUpParameters()

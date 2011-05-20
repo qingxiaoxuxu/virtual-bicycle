@@ -1092,8 +1092,29 @@ namespace RacingGame.Landscapes
         /// </summary>
         public void SetCarToStartPosition()
         {
-            RacingGameManager.Player.SetCarPosition(
-                track.StartPosition, track.StartDirection, track.StartUpVector);
+            if (RacingGameManager.Landscape != null)
+            {
+                float roadWidth, nextRoadWidth;
+                Matrix trackMatrix =
+                    RacingGameManager.Landscape.GetTrackPositionMatrix(
+                    RacingGameManager.Player.TrackSegment, 0,
+                    out roadWidth, out nextRoadWidth);
+
+
+                Vector3 startRight = Vector3.Cross(track.StartDirection, track.StartUpVector);
+
+
+
+                RacingGameManager.Player.SetCarPosition(
+                    track.StartPosition + startRight * (roadWidth * (RacingGameManager.CarOffset - 0.5f) * 0.8f) + track.StartDirection, track.StartDirection, track.StartUpVector);
+            }
+            else 
+            {
+                RacingGameManager.Player.SetCarPosition(
+                    track.StartPosition, track.StartDirection, track.StartUpVector);
+            }
+
+           
             // Camera is set in zooming in method of the Player class.
         }
         #endregion

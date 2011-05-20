@@ -26,7 +26,6 @@ using Model = RacingGame.Graphics.Model;
 using Texture = RacingGame.Graphics.Texture;
 using RacingGame.Properties;
 using RacingGame.Shaders;
-using VbClient.Net;
 using System.Threading;
 using System.Windows.Forms;
 #endregion
@@ -261,9 +260,14 @@ namespace RacingGame
                 return landscape;
             }
         }
-       
+
+        public static float CarOffset
+        {
+            get { return carOffset; }
+        }
         #endregion
 
+        static float carOffset;
         static StartUpParameters startUpParam;
         static string localUID;
         static INetInterface netClient;
@@ -295,16 +299,11 @@ namespace RacingGame
             netClient = netCl;
             for (int i = 0; i < sup.Players.Length; i++)
             {
-                if (sup.Players[i].ID != uid)
-                {
-                    RemotePlayer plr = new RemotePlayer(sup.Players[i]);
-
-                    remotePlayers.Add(plr.ID, plr);
-                }
-                else
+                if (sup.Players[i].ID == uid)
                 {
                     LocalPlayerCarColor = sup.Players[i].CarColor;
                     LocalPlayerName = sup.Players[i].Name;
+                    break;
                 }
             }
 
@@ -313,7 +312,7 @@ namespace RacingGame
         /// <summary>
         /// Create Racing game for unit tests, not used for anything else.
         /// </summary>
-        public RacingGameManager(string unitTestName, ClientGEvt netCl)
+        public RacingGameManager(string unitTestName)
             : base(unitTestName)
         {
             // Don't add game screens here
@@ -329,11 +328,6 @@ namespace RacingGame
             // Load models
             carModel = new Cyclist();
 
-            remoteModels = new Cyclist[remotePlayers.Count];
-            for (int i = 0; i < remotePlayers.Count; i++)
-            {
-                remoteModels[i] = new Cyclist();
-            }
 
             Level lvl;
             try
@@ -361,7 +355,28 @@ namespace RacingGame
             {
                 Thread.Sleep(10);
             }
+            startUpParam = netClient.DownloadStartUpParameters();
+            for (int i = 0; i < startUpParam.Players.Length; i++)
+            {
+                if (startUpParam.Players[i].ID != localUID)
+                {
+                    RemotePlayer plr = new RemotePlayer(startUpParam.Players[i]);
 
+                    remotePlayers.Add(plr.ID, plr);
+                }
+                else 
+                {
+                    carOffset = i / (float)startUpParam.Players.Length;
+                    landscape.SetCarToStartPosition();
+                }
+            }
+
+
+            remoteModels = new Cyclist[remotePlayers.Count];
+            for (int i = 0; i < remotePlayers.Count; i++)
+            {
+                remoteModels[i] = new Cyclist();
+            }
         }
 
 
