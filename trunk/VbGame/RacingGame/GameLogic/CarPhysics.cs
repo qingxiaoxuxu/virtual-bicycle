@@ -269,7 +269,7 @@ namespace RacingGame.GameLogic
         /// </summary>
         protected bool isCarOnGround = false;
 
-        protected float TrackSegment { get { return trackSegmentNumber; } }
+        public int TrackSegment { get { return trackSegmentNumber; } }
 
         /// <summary>
         /// Helper variables to keep track of our car position on the current

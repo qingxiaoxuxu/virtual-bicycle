@@ -199,6 +199,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\InterfacePlugin.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\StringUtils.cpp"
 				>
 			</File>

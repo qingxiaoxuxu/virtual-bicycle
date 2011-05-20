@@ -15,10 +15,8 @@ using Microsoft.Xna.Framework;
 #if !XBOX360
 using System.Windows.Forms;
 using Microsoft.Xna.Framework.Graphics;
-using VbClient.Net;
 using System.Threading;
 using System.Collections.Generic;
-using VbClient;
 #endif
 #endregion
 
@@ -63,8 +61,17 @@ namespace RacingGame
         {
             INetInterface netClient = InterfaceFactory.Instance.GetNetwork();
 
-            netClient.Connect(uid);
+            bool result = netClient.Connect(uid);
 
+            if (!result)
+            {
+                MessageBox.Show("Cannot connect to server.",
+                         "RacingGame",
+                         MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            Thread.Sleep(100);
             StartUpParameters sup = netClient.DownloadStartUpParameters();
             
 #if !XBOX360
