@@ -409,7 +409,12 @@ namespace RacingGame
                 {
                     for (int i = 0; i < states.Length; i++)
                     {
-                        remotePlayers[states[i].ID].NotifyNewState(states[i]);
+                        RemotePlayer rp;
+
+                        if (remotePlayers.TryGetValue(states[i].ID, out rp))
+                        {
+                            rp.NotifyNewState(states[i]);
+                        }
                     }
                 }
 
