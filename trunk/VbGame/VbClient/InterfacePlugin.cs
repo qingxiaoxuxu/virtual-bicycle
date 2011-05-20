@@ -174,9 +174,11 @@ namespace VbClient
                         listbs[i++] = bs;
                 }
                 myEvent.Set();
+                if (listbs.Length == 0) return null;
                 return listbs;
             }
-            return new BikeState[0];
+            
+            return null;
         }
 
         public void TellReady()
