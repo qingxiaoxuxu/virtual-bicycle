@@ -22,7 +22,7 @@ namespace VbServer.Net
             teamList.Add(t);
             t.userList.Add(new User("lkq","1",null));
             t.userList.Add(new User("pl","2",null));
-            t.userList.Add(new User("xt","3",null));
+            //t.userList.Add(new User("xt","3",null));
             t.userList[0].isAdmin = true;       //
             User.allLoginUser.AddRange(t.userList);
 #endif
