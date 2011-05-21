@@ -68,11 +68,13 @@
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml">
       <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientIEvt.cs" />
     <Compile Include="InterfacePlugin.cs" />
     <Compile Include="ClientConfig.cs" />
     <Compile Include="ClientEvt.cs" />
