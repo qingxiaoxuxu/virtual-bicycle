@@ -32,6 +32,10 @@ namespace VbServer
                         {
                             Console.WriteLine("\t" + u.userName);
                         }
+                        foreach (User u in t.playerList)
+                        {
+                            Console.WriteLine("\t" + "\t" + u.userName);
+                        }
                     }
                 }
                 else if (cmd == "user")

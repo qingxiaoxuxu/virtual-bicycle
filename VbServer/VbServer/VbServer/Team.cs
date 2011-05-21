@@ -65,6 +65,7 @@ namespace VbServer
         public void DelUser(User u)
         {
             userList.Remove(u);
+            playerList.Remove(u);
         }
 
         public Team(string name)
