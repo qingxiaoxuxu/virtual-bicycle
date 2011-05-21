@@ -15,10 +15,13 @@ using System.Threading;
 
 namespace VbClient
 {
-    public class InterfacePlugin:INetInterface
+    public class InterfacePlugin:INetInterface,IInputInterface
     {
         static InterfacePlugin netInterface=new InterfacePlugin();
+        
         public ClientGEvt client;
+        public ClientIEvt inputClient;
+
         string uid="";
         Dictionary<string, BikeState> playersState=new Dictionary<string,BikeState>();
         public static void Load() 
@@ -29,7 +32,23 @@ namespace VbClient
             netInterface.client.GetBikeState += new ClientGEvt.BikeState(client_GetBikeState);
             netInterface.client.RoomDetail += new ClientGEvt.RoomInfo(client_RoomDetail);
             InterfaceFactory.Instance.RegisterNewNetwork(netInterface);
+
+            netInterface.inputClient = new ClientIEvt("127.0.0.1");
+            netInterface.inputClient.Enter += new Action(inputClient_Enter);
+            netInterface.inputClient.Escape += new Action(inputClient_Escape);
+            netInterface.inputClient.HandlebarRotated += new HandlebarRotatedHandler(inputClient_HandlebarRotated);
+            netInterface.inputClient.Reset += new Action(inputClient_Reset);
+            netInterface.inputClient.ViewChanged += new Action(inputClient_ViewChanged);
+            netInterface.inputClient.WheelSpeedChanged += new WheelSpeedChangedHandler(inputClient_WheelSpeedChanged);
+
+            //netInterface.client.Client.ConnectedServer += new EventHandler(Client_ConnectedServer);
+            //netInterface.client.BeginGame += new Action(client_BeginGame);
+            //netInterface.client.GetBikeState += new ClientGEvt.BikeState(client_GetBikeState);
+            //netInterface.client.RoomDetail += new ClientGEvt.RoomInfo(client_RoomDetail);
+            InterfaceFactory.Instance.RegisterNewInput(netInterface);
         }
+
+        
         static bool IsGetRoomInfo = false;
         StartUpParameters startUpPara = new StartUpParameters();
         static void client_RoomDetail(string teamName, string mapName, List<string> userId, List<string> userName, List<string> carId)
@@ -198,5 +217,74 @@ namespace VbClient
         }
 
         #endregion
+
+        #region IInputInterface ≥…‘±
+
+        public void Connect()
+        {
+            
+        }
+
+        public void ForceFeedBack(float f)
+        {
+            inputClient.ForceFeedBack(f);
+        }
+
+        public event EventHandler Reset;
+
+        public event EventHandler ViewChanged;
+
+        public event EventHandler Enter;
+
+        public event EventHandler Escape;
+
+        public event HandlebarRotatedHandler HandlebarRotated;
+
+        public event WheelSpeedChangedHandler WheelSpeedChanged;
+
+        public event EventHandler HeartPulse;
+
+        public void Update(GameTime time)
+        {
+            //throw new NotImplementedException();
+        }
+
+        #endregion
+
+        static void inputClient_WheelSpeedChanged(WheelSpeedChangedEventArgs e)
+        {
+            if(netInterface.WheelSpeedChanged!=null)
+                netInterface.WheelSpeedChanged(e);
+        }
+
+        static void inputClient_ViewChanged()
+        {
+            if(netInterface.ViewChanged!=null)
+                netInterface.ViewChanged(null, null);
+        }
+
+        static void inputClient_Reset()
+        {
+            if(netInterface.Reset!=null)
+                netInterface.Reset(null, null);
+        }
+
+        static void inputClient_HandlebarRotated(HandlebarRotatedEventArgs e)
+        {
+            if(netInterface.HandlebarRotated!=null)
+                netInterface.HandlebarRotated(e);
+        }
+
+        static void inputClient_Escape()
+        {
+            if(netInterface.Escape!=null)
+                netInterface.Escape(null, null);
+        }
+
+        static void inputClient_Enter()
+        {
+            if(netInterface.Enter!=null)
+                netInterface.Enter(null, null);
+        }
     }
 }
