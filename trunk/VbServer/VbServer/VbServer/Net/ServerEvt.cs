@@ -331,7 +331,7 @@ namespace VbServer.Net
                         foreach (User u in t.playerList)
                         {
                             if(u.client!=client)
-                                u.client.SendTxt("vb$"+current.userId+"$"+msg);
+                                u.client.SendTxt("vb$"+msg);
                         }
                         break;
                     }
