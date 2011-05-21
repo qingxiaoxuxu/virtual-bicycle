@@ -17,6 +17,7 @@ using System.Windows.Forms;
 using Microsoft.Xna.Framework.Graphics;
 using System.Threading;
 using System.Collections.Generic;
+using VbClient;
 #endif
 #endregion
 
