@@ -462,9 +462,12 @@ namespace RacingGame
             // Update player and game logic
             player.Update();
             carModel.Update(gameTime);
+            for (int i = 0; i < remoteModels.Length; i++)
+            {
+                remoteModels[i].Update(gameTime);
+            }
 
-
-            foreach (var e in remotePlayers) 
+            foreach (var e in remotePlayers)
             {
                 e.Value.Update(gameTime);
             }
