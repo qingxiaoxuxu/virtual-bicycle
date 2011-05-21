@@ -11,7 +11,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	while (true)
 	{
-		Sleep(10);
+		Sleep(1);
 		UpdateServer();
 	}
 
