@@ -173,6 +173,20 @@ namespace RacingGame
 
     #region 输入事件
 
+    public class HeartPulseChangedEventArgs : EventArgs
+    {
+
+        public HeartPulseChangedEventArgs(int value)
+        {
+            this.Value = value;
+        }
+        public float Value
+        {
+            get;
+            private set;
+        }
+
+    }
     /// <summary>
     ///  定义车把转向发生变化时的事件的参数
     /// </summary>
@@ -224,6 +238,7 @@ namespace RacingGame
     }
     public delegate void HandlebarRotatedHandler(HandlebarRotatedEventArgs e);
     public delegate void WheelSpeedChangedHandler(WheelSpeedChangedEventArgs e);
+    public delegate void HeartPulseChangedHandler(HeartPulseChangedEventArgs e);
     #endregion
 
 
@@ -277,9 +292,9 @@ namespace RacingGame
         event WheelSpeedChangedHandler WheelSpeedChanged;
 
         /// <summary>
-        ///  当心率脉冲到达时引发
+        ///  当心率发生变化时引发
         /// </summary>
-        event EventHandler HeartPulse;
+        event HeartPulseChangedHandler HeartPulse;
 
         /// <summary>
         ///  游戏每一帧会调用
@@ -503,7 +518,7 @@ namespace RacingGame
         bool isEscPressed;
         bool isEnterPressed;
 
-        bool isTPressed;
+        //bool isTPressed;
 
         float handlebarAngle;
         float wheelSpeed;
@@ -534,7 +549,7 @@ namespace RacingGame
 
         public event WheelSpeedChangedHandler WheelSpeedChanged;
 
-        public event EventHandler HeartPulse;
+        public event HeartPulseChangedHandler HeartPulse;
 
         public  void Update(GameTime time)
         {
@@ -595,18 +610,18 @@ namespace RacingGame
             }
 
 
-            if (GetAsyncKeyState((short)'T'))
-            {
-                if (!isTPressed)
-                {
-                    OnHeartPulse();
-                    isTPressed = true;
-                }
-            }
-            else 
-            {
-                isTPressed = false;
-            }
+            //if (GetAsyncKeyState((short)'T'))
+            //{
+            //    if (!isTPressed)
+            //    {
+            //        OnHeartPulse();
+            //        isTPressed = true;
+            //    }
+            //}
+            //else 
+            //{
+            //    isTPressed = false;
+            //}
 
             if (GetAsyncKeyState(VKeys.VK_ESCAPE))
             {
@@ -693,11 +708,11 @@ namespace RacingGame
                 HandlebarRotated(new HandlebarRotatedEventArgs(angle));
             }
         }
-        void OnHeartPulse()
+        void OnHeartPulse(int value)
         {
             if (HeartPulse != null)
             {
-                HeartPulse(this, EventArgs.Empty);
+                HeartPulse(new HeartPulseChangedEventArgs(value));
             }
         }
      
