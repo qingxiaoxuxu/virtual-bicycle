@@ -241,7 +241,7 @@ namespace VbClient
 
         public event WheelSpeedChangedHandler WheelSpeedChanged;
 
-        public event EventHandler HeartPulse;
+        public event HeartPulseChangedHandler HeartPulse;
 
         public void Update(GameTime time)
         {
