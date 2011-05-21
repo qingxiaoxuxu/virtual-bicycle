@@ -68,10 +68,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
-    <Reference Include="TestClient, Version=1.0.4158.10838, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Debug\TestClient.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameLogic\BasePlayer.cs" />
@@ -187,6 +183,10 @@
     <ProjectReference Include="..\GameInterface\GameInterface.csproj">
       <Project>{A3BAE9AC-0CD3-47C4-A19A-05E8059B52B8}</Project>
       <Name>GameInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VbClient\VbClient.csproj">
+      <Project>{EDF4816D-B5D0-45BC-BEDA-12115F6CA332}</Project>
+      <Name>VbClient</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -45,7 +45,7 @@ namespace VbClient
             //netInterface.client.BeginGame += new Action(client_BeginGame);
             //netInterface.client.GetBikeState += new ClientGEvt.BikeState(client_GetBikeState);
             //netInterface.client.RoomDetail += new ClientGEvt.RoomInfo(client_RoomDetail);
-            InterfaceFactory.Instance.RegisterNewInput(netInterface);
+            //InterfaceFactory.Instance.RegisterNewInput(netInterface);
         }
 
         
@@ -75,7 +75,7 @@ namespace VbClient
             {
                 myEvent.Reset();
                 BikeState bikeState = new BikeState();
-                CoMatrix(bikeState.Transform, states);
+                CoMatrix(ref bikeState.Transform, states);
                 bikeState.CompletionProgress = states[16];
 
                 bikeState.Velocity.X = states[17];
@@ -138,7 +138,7 @@ namespace VbClient
             client.SendBikeState(uid, para);
         }
 
-        public static void CoMatrix(Matrix ma, List<float> list)
+        public static void CoMatrix(ref Matrix ma, List<float> list)
         {
             ma.M11 = list[0];
             ma.M12 = list[1];
@@ -186,15 +186,14 @@ namespace VbClient
             if (myEvent.WaitOne())
             {
                 myEvent.Reset();
-                BikeState[] listbs = new BikeState[playersState.Count - 1];
+                BikeState[] listbs = new BikeState[playersState.Count];
                 int i = 0;
                 foreach (BikeState bs in playersState.Values)
                 {
-                    if (bs.ID != uid)
-                        listbs[i++] = bs;
+                    listbs[i++] = bs;
                 }
                 myEvent.Set();
-                if (listbs.Length == 0) return null;
+                if (listbs.Length <= 0) return null;
                 return listbs;
             }
             
