@@ -39,8 +39,8 @@ namespace RacingGame
     /// </summary>
     public class RacingGameManager : BaseGame
     {
-        const float SendStateTime = 0.5f;
-        static float SendStateCD;
+        const int SendStateCount = 6;
+        static int SendStateCD;
 
         #region Variables
         /// <summary>
@@ -403,7 +403,8 @@ namespace RacingGame
         void UpdateNet(GameTime gameTime)
         {
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            SendStateCD -= dt;
+            SendStateCD--;
+
             if (SendStateCD < 0)
             {
                 BikeState state;
@@ -412,7 +413,7 @@ namespace RacingGame
                 state.Transform = player.CarRenderMatrix;
                 state.Velocity = player.CarDirection * player.Speed;
 
-                SendStateCD = SendStateTime;
+                SendStateCD = SendStateCount;
 
                 netClient.SendBikeState(new BikeState[] { state });
 

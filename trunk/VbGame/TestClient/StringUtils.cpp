@@ -112,7 +112,7 @@ String StringUtils::ToString(float val,
 	stream.width(width);
 	stream.fill(fill);
 	if (flags)
-		stream.setf(flags);
+		stream.setf(flags |  ios::fixed);
 	stream << val;
 	return stream.str();
 }

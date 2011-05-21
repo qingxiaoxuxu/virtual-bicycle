@@ -93,6 +93,7 @@ namespace RacingGame.GameScreens
             Dictionary<string, RemotePlayer> remotePlayers = RacingGameManager.RemotePlayers;
             foreach (var e in remotePlayers) 
             {
+                RacingGameManager.RemoteCarModel[index].TimeScale = e.Value.Speed / CarPhysics.DefaultMaxSpeed;
                 // Render car with matrix we got from CarPhysics
                 RacingGameManager.RemoteCarModel[index++].RenderCar(
                     true,
