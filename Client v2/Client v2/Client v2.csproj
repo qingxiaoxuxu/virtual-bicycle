@@ -43,6 +43,9 @@
     <Reference Include="ChartFX.WPF, Version=8.0.3581.26941, Culture=neutral, PublicKeyToken=a1878e2052c08dce" />
     <Reference Include="ChartFX.WPF.Data, Version=8.0.3581.26941, Culture=neutral, PublicKeyToken=a1878e2052c08dce, processorArchitecture=MSIL" />
     <Reference Include="ChartFX.WPF.Motifs, Version=8.0.3581.26941, Culture=neutral, PublicKeyToken=a1878e2052c08dce" />
+    <Reference Include="MySQLDriverCS">
+      <HintPath>D:\Program Files\MySQLDriverCS\dll\MySQLDriverCS.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework.Luna" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
