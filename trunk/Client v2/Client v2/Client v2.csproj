@@ -68,6 +68,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CsvHelper\CsvHelper.cs" />
+    <Compile Include="DAO\MySqlConnector.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="InfoControl.cs" />
     <Compile Include="Model\ChartInfo.cs" />
     <Compile Include="Net\Client.cs" />
@@ -150,9 +153,7 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DAO\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
