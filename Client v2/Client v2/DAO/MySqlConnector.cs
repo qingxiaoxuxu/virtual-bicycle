@@ -53,13 +53,33 @@ namespace Client_v2.DAO
         /// <param name="procedureName">存储过程名称</param>
         /// <param name="dp">存储过程参数</param>
         /// <returns>查询结果数据集合</returns>
-        private DataSet ExecuteReader(string procedureName, MySQLParameter[] dp)
+        private DataSet ExecuteQuery(string procedureName, MySQLParameter[] dp)
         {
+            Connect();
+            MySQLCommand cmd = CreateProcedureCommand(procedureName, dp);
+            //MySQLDataReader mdr = cmd.ExecuteReaderEx();
             MySQLDataAdapter mda = new MySQLDataAdapter();
-            mda.SelectCommand = CreateProcedureCommand(procedureName, dp);
+            mda.SelectCommand = cmd;
             try { mda.Fill(ds); }
             catch (Exception ex) { throw ex; }
+            finally { Terminate(); }
             return ds;
+        }
+
+        /// <summary>
+        /// MySql更改数据调用
+        /// </summary>
+        /// <param name="procedureName">存储过程名称</param>
+        /// <param name="dp">存储过程参数</param>
+        private void ExecuteUpdate(string procedureName, MySQLParameter[] dp)
+        {
+            Connect();
+            MySQLCommand cmd = CreateProcedureCommand(procedureName, dp);
+            //MySQLDataAdapter mda = new MySQLDataAdapter();
+            //mda.SelectCommand = cmd;
+            try { cmd.ExecuteNonQuery(); }
+            catch (Exception ex) { throw ex; }
+            finally { Terminate(); }
         }
     }
 }
