@@ -40,13 +40,15 @@ namespace VbClient
             netInterface.inputClient.Reset += new Action(inputClient_Reset);
             netInterface.inputClient.ViewChanged += new Action(inputClient_ViewChanged);
             netInterface.inputClient.WheelSpeedChanged += new WheelSpeedChangedHandler(inputClient_WheelSpeedChanged);
-
+            netInterface.inputClient.HeartPulse += new HeartPulseChangedHandler(inputClient_HeartPulse);
             //netInterface.client.Client.ConnectedServer += new EventHandler(Client_ConnectedServer);
             //netInterface.client.BeginGame += new Action(client_BeginGame);
             //netInterface.client.GetBikeState += new ClientGEvt.BikeState(client_GetBikeState);
             //netInterface.client.RoomDetail += new ClientGEvt.RoomInfo(client_RoomDetail);
-            //InterfaceFactory.Instance.RegisterNewInput(netInterface);
+            InterfaceFactory.Instance.RegisterNewInput(netInterface);
         }
+
+        
 
         
         static bool IsGetRoomInfo = false;
@@ -252,38 +254,43 @@ namespace VbClient
 
         static void inputClient_WheelSpeedChanged(WheelSpeedChangedEventArgs e)
         {
-            if(netInterface.WheelSpeedChanged!=null)
+            if (netInterface.WheelSpeedChanged != null)
                 netInterface.WheelSpeedChanged(e);
         }
 
         static void inputClient_ViewChanged()
         {
-            if(netInterface.ViewChanged!=null)
+            if (netInterface.ViewChanged != null)
                 netInterface.ViewChanged(null, null);
         }
 
         static void inputClient_Reset()
         {
-            if(netInterface.Reset!=null)
+            if (netInterface.Reset != null)
                 netInterface.Reset(null, null);
         }
 
         static void inputClient_HandlebarRotated(HandlebarRotatedEventArgs e)
         {
-            if(netInterface.HandlebarRotated!=null)
+            if (netInterface.HandlebarRotated != null)
                 netInterface.HandlebarRotated(e);
         }
 
         static void inputClient_Escape()
         {
-            if(netInterface.Escape!=null)
+            if (netInterface.Escape != null)
                 netInterface.Escape(null, null);
         }
 
         static void inputClient_Enter()
         {
-            if(netInterface.Enter!=null)
+            if (netInterface.Enter != null)
                 netInterface.Enter(null, null);
+        }
+        static void inputClient_HeartPulse(HeartPulseChangedEventArgs e)
+        {
+            if (netInterface.HeartPulse != null)
+                netInterface.HeartPulse(e);
         }
     }
 }
