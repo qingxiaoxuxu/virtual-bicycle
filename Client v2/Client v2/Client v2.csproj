@@ -68,6 +68,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CsvHelper\CsvHelper.cs" />
+    <Compile Include="DAO\DataTransfer.cs" />
     <Compile Include="DAO\MySqlConnector.cs">
       <SubType>Code</SubType>
     </Compile>
