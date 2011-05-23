@@ -30,6 +30,7 @@ namespace Client_v2
         List<ChartInfo> bufData;                //缓冲区里的数据
         int totalInfo;                          //当前获得的数据计数器
         bool isProcessing;                      //是否正在将内存中的数据转移到文件中
+        EventWaitHandle myEvent = new EventWaitHandle(true, EventResetMode.ManualReset);
         #region 常量
         public const string FILE_NAME = "history.csv";  //数据暂存文件名，放在exe目录下
         public const int MAX_POINT = 50;              //屏幕上最多显示的数据个数
@@ -104,7 +105,7 @@ namespace Client_v2
                 bufData.Add(data[0]);
                 data.RemoveAt(0);
             }
-            if (bufData.Count % MAX_BUFFER == 0)
+            if (bufData.Count >= MAX_BUFFER)
             {
                 //isProcessing = true;
                 Thread t = new Thread(new ThreadStart(transferDataToFile));
@@ -147,17 +148,21 @@ namespace Client_v2
         /// </summary>
         void transferDataToFile()
         {
-            List<List<Object>> saveData = new List<List<object>>();
-            for (int i = 0; i < MAX_BUFFER; i++ )
+            if (myEvent.WaitOne())
             {
-                ChartInfo info = bufData[0];
-                List<Object> convert = csv.getOriginData
-                    (info.CurrentTime, info.Speed, info.HeartBeat, info.Distance, info.Energy);
-                saveData.Add(convert);
-                bufData.RemoveAt(0);
+                myEvent.Reset();
+                List<List<Object>> saveData = new List<List<object>>();
+                for (int i = 0; i < MAX_BUFFER; i++)
+                {
+                    ChartInfo info = bufData[0];
+                    List<Object> convert = csv.getOriginData
+                        (info.CurrentTime, info.Speed, info.HeartBeat, info.Distance, info.Energy);
+                    saveData.Add(convert);
+                    bufData.RemoveAt(0);
+                }
+                csv.writeManyDataInCsv(saveData, FILE_NAME);
+                myEvent.Set();
             }
-            csv.writeManyDataInCsv(saveData, FILE_NAME);
-            //isProcessing = false;           //数据转移完毕
         }
 
         //点击设置按钮
