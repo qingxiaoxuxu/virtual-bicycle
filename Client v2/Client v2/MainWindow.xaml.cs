@@ -145,7 +145,6 @@ namespace Client_v2
             //Console.WriteLine(gameControl.X);
             //Console.WriteLine(gameControl.Y);
             #endregion
-
         }
 
         void tm_Tick(object sender, EventArgs e)
@@ -161,7 +160,7 @@ namespace Client_v2
             data.Add(new ChartInfo(
                 totalInfo,
                 Convert.ToInt32(time.TotalSeconds),
-                sportStatus.Speed,
+                sportStatus.Speed / 6.0 * 5.0,
                 sportStatus.HeartRate,
                 sportStatus.distance,
                 sportStatus.distance * sportStatus.load
