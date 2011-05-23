@@ -15,6 +15,7 @@ using BuzzWin;
 using System.Windows.Threading;
 using System.Threading;
 using Client_v2.Model;
+using System.IO;
 
 namespace Client_v2
 {
@@ -28,10 +29,11 @@ namespace Client_v2
         List<ChartInfo> data;                   //当前要在屏幕上显示的数据
         List<ChartInfo> bufData;                //缓冲区里的数据
         int totalInfo;                          //当前获得的数据计数器
+        bool isProcessing;                      //是否正在将内存中的数据转移到文件中
         #region 常量
         public const string FILE_NAME = "history.csv";  //数据暂存文件名，放在exe目录下
-        public const int MAX_POINT = 100;              //屏幕上最多显示的数据个数
-        public const int MAX_BUFFER = 10000;           //缓冲区中最多存放数据个数
+        public const int MAX_POINT = 50;              //屏幕上最多显示的数据个数
+        public const int MAX_BUFFER = 100;           //缓冲区中最多存放数据个数
         #endregion
         Random rd = new Random(DateTime.Now.Millisecond);
         VbCsvHelper.CsvHelper csv = new VbCsvHelper.CsvHelper();
@@ -50,9 +52,6 @@ namespace Client_v2
             device.GetGameControl += new DeviceDataManager.F8(device_GetGameControl);
             data = new List<ChartInfo>();
             bufData = new List<ChartInfo>();
-            tm.Interval = TimeSpan.FromSeconds(1);
-            tm.Tick += new EventHandler(tm_Tick);
-            tm.Start();
             totalInfo = 0;
 
             #region 登陆信息
@@ -61,8 +60,8 @@ namespace Client_v2
             InfoControl.LoginTime = DateTime.Now;
             #endregion
             #region 测试数据
-            for (totalInfo = 0; totalInfo < 10; totalInfo++)
-                data.Add(new ChartInfo(0, totalInfo + 1, 300 + 0.5 * rd.Next(100), 150, 150, 5000));
+            //for (totalInfo = 0; totalInfo < 10; totalInfo++)
+            //    data.Add(new ChartInfo(0, totalInfo + 1, 300 + 0.5 * rd.Next(100), 150, 150, 5000));
             #endregion
             #region 添加界面
             canvas3.Children.Add(usrLogin);
@@ -74,11 +73,43 @@ namespace Client_v2
                 canvas3.Children[i].Visibility =
                     (i == 0 ? Visibility.Visible : Visibility.Hidden);
             #endregion
-            
+
+            initExerciseFile();
+            isProcessing = false;
+            tm.Interval = TimeSpan.FromSeconds(1);
+            tm.Tick += new EventHandler(tm_Tick);
+            tm.Start();
+        }
+
+        void initExerciseFile()
+        {
+            File.Create(FILE_NAME);
         }
 
         void device_GetGameControl(DeviceDataManager.GameControl gameControl)
         {
+            Console.WriteLine(totalInfo + " " + gameControl.Y);
+            totalInfo++;
+            TimeSpan time = DateTime.Now - InfoControl.LoginTime;
+            data.Add(new ChartInfo(
+                totalInfo,
+                Convert.ToInt32(time.TotalSeconds),
+                Convert.ToDouble(128 - gameControl.Y),
+                0,
+                0,
+                0
+                ));
+            if (data.Count > MAX_POINT)         //将以前的数据移出
+            {
+                bufData.Add(data[0]);
+                data.RemoveAt(0);
+            }
+            if (bufData.Count % MAX_BUFFER == 0)
+            {
+                //isProcessing = true;
+                Thread t = new Thread(new ThreadStart(transferDataToFile));
+                t.Start();
+            }
         }
 
         void tm_Tick(object sender, EventArgs e)
@@ -89,26 +120,26 @@ namespace Client_v2
         void device_GetSportStatus(DeviceDataManager.SportStatus sportStatus)
         {
             //Console.WriteLine(sportStatus.Speed);
-            totalInfo++;
-            TimeSpan time = DateTime.Now - InfoControl.LoginTime;
-            data.Add(new ChartInfo(
-                totalInfo, 
-                Convert.ToInt32(time.TotalSeconds),
-                sportStatus.Speed, 
-                sportStatus.HeartRate, 
-                sportStatus.distance, 
-                sportStatus.distance * sportStatus.load
-                ));
-            if (data.Count > MAX_POINT)         //将以前的数据移出
-            {
-                bufData.Add(data[0]);
-                data.RemoveAt(0);
-            }
-            if (bufData.Count >= MAX_BUFFER)
-            {
-                Thread t = new Thread(new ThreadStart(transferDataToFile));
-                t.Start();
-            }
+            //totalInfo++;
+            //TimeSpan time = DateTime.Now - InfoControl.LoginTime;
+            //data.Add(new ChartInfo(
+            //    totalInfo, 
+            //    Convert.ToInt32(time.TotalSeconds),
+            //    sportStatus.Speed, 
+            //    sportStatus.HeartRate, 
+            //    sportStatus.distance, 
+            //    sportStatus.distance * sportStatus.load
+            //    ));
+            //if (data.Count > MAX_POINT)         //将以前的数据移出
+            //{
+            //    bufData.Add(data[0]);
+            //    data.RemoveAt(0);
+            //}
+            //if (bufData.Count >= MAX_BUFFER)
+            //{
+            //    Thread t = new Thread(new ThreadStart(transferDataToFile));
+            //    t.Start();
+            //}
         }
 
         /// <summary>
@@ -117,14 +148,16 @@ namespace Client_v2
         void transferDataToFile()
         {
             List<List<Object>> saveData = new List<List<object>>();
-            foreach (ChartInfo info in bufData)
+            for (int i = 0; i < MAX_BUFFER; i++ )
             {
+                ChartInfo info = bufData[0];
                 List<Object> convert = csv.getOriginData
                     (info.CurrentTime, info.Speed, info.HeartBeat, info.Distance, info.Energy);
                 saveData.Add(convert);
+                bufData.RemoveAt(0);
             }
             csv.writeManyDataInCsv(saveData, FILE_NAME);
-            bufData.Clear();                //清空缓存信息
+            //isProcessing = false;           //数据转移完毕
         }
 
         //点击设置按钮
