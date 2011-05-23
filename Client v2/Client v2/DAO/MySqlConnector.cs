@@ -32,7 +32,7 @@ namespace Client_v2.DAO
             catch (Exception ex) { throw ex; }
         }
 
-        public MySQLCommand CreateProcedureCommand(string procedureName, MySQLParameter[] dp)
+        private MySQLCommand CreateProcedureCommand(string procedureName, MySQLParameter[] dp)
         {
             MySQLCommand cmd = new MySQLCommand();
             cmd.Connection = conn;
@@ -53,7 +53,7 @@ namespace Client_v2.DAO
         /// <param name="procedureName">存储过程名称</param>
         /// <param name="dp">存储过程参数</param>
         /// <returns>查询结果数据集合</returns>
-        private DataSet ExecuteQuery(string procedureName, MySQLParameter[] dp)
+        public DataSet ExecuteQuery(string procedureName, MySQLParameter[] dp)
         {
             Connect();
             MySQLCommand cmd = CreateProcedureCommand(procedureName, dp);
@@ -71,7 +71,7 @@ namespace Client_v2.DAO
         /// </summary>
         /// <param name="procedureName">存储过程名称</param>
         /// <param name="dp">存储过程参数</param>
-        private void ExecuteUpdate(string procedureName, MySQLParameter[] dp)
+        public void ExecuteUpdate(string procedureName, MySQLParameter[] dp)
         {
             Connect();
             MySQLCommand cmd = CreateProcedureCommand(procedureName, dp);
