@@ -58,13 +58,13 @@ namespace VbClient.Net
                     }
                 case "rotate":
                     {
-                        HandlebarRotatedEventArgs arg = new HandlebarRotatedEventArgs(Int32.Parse(msgs[1]));
+                        HandlebarRotatedEventArgs arg = new HandlebarRotatedEventArgs(Single.Parse(msgs[1]));
                         HandlebarRotated(arg);
                         break;
                     }
                 case "speed":
                     {
-                        WheelSpeedChangedEventArgs arg = new WheelSpeedChangedEventArgs(Int32.Parse(msgs[1]), Int32.Parse(msgs[2]));
+                        WheelSpeedChangedEventArgs arg = new WheelSpeedChangedEventArgs(Single.Parse(msgs[1]), Single.Parse(msgs[2]));
                         WheelSpeedChanged(arg);
                         break;
                     }
