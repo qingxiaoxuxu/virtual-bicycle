@@ -45,6 +45,10 @@ namespace Client_v2
         UserControl3_set usrSet = new UserControl3_set();
         #endregion
 
+        #region 网络
+        VbServer.Net.ServerEvt server = new VbServer.Net.ServerEvt();
+        #endregion
+
         public MainWindow()
         {
             InitializeComponent();
@@ -54,6 +58,9 @@ namespace Client_v2
             data = new List<ChartInfo>();
             bufData = new List<ChartInfo>();
             totalInfo = 0;
+
+            server.Server.StartServer();
+            server.ForceBack += new VbServer.Net.ServerEvt.ForceBackHandler(server_ForceBack);
 
             #region 登陆信息
             InfoControl.User = "黄婷";
@@ -82,35 +89,66 @@ namespace Client_v2
             tm.Start();
         }
 
+        static int preDamp = 0;
+        void server_ForceBack(float f)
+        {
+            if (Math.Abs(f * 255 - preDamp) > 30)
+            {
+                DeviceDataManager.Damp d = new DeviceDataManager.Damp();
+                d.value = (int)(-f * 127 + 128);
+                device.SetDamp(d);
+            }
+            preDamp = (int)(f * 255);
+        }
+
         void initExerciseFile()
         {
             File.Create(FILE_NAME);
         }
-
+        static float preAngle = 0;
+        static float preSpeed = 0;
         void device_GetGameControl(DeviceDataManager.GameControl gameControl)
         {
-            Console.WriteLine(totalInfo + " " + gameControl.Y);
-            totalInfo++;
-            TimeSpan time = DateTime.Now - InfoControl.LoginTime;
-            data.Add(new ChartInfo(
-                totalInfo,
-                Convert.ToInt32(time.TotalSeconds),
-                Convert.ToDouble(128 - gameControl.Y),
-                0,
-                0,
-                0
-                ));
-            if (data.Count > MAX_POINT)         //将以前的数据移出
+            #region 网络
+            if (gameControl.Btn1)
             {
-                bufData.Add(data[0]);
-                data.RemoveAt(0);
+                server.Enter();
             }
-            if (bufData.Count >= MAX_BUFFER)
+            if (gameControl.Btn2)
             {
-                //isProcessing = true;
-                Thread t = new Thread(new ThreadStart(transferDataToFile));
-                t.Start();
+                server.Escape();
             }
+            if (gameControl.Btn3)
+            {
+                server.Reset();
+            }
+            if (gameControl.Btn4)
+            {
+                server.ViewChanged();
+            }
+
+            server.HandlebarRotated((float)((128 - gameControl.X)) / 5000);
+            //preAngle = (float)((128 - gameControl.X) * 180 / 128);
+
+            gameControl.Y = 128 - gameControl.Y;
+            if (preSpeed >= 0 && gameControl.Y >= 0 && gameControl.Y - preSpeed > -1)
+            {
+                server.WheelSpeedChanged(gameControl.Y, (float)((gameControl.Y - preSpeed) + gameControl.Y * gameControl.Y * 0.00003));
+            }
+            //else if (preSpeed <= 0 && gameControl.Y <= 0 && gameControl.Y - preSpeed < 5)
+            //{
+            //    server.WheelSpeedChanged(gameControl.Y, (float)((gameControl.Y - preSpeed)));
+            //}
+
+            preSpeed = gameControl.Y;
+            //Console.WriteLine(gameControl.Btn1);
+            //Console.WriteLine(gameControl.Btn2);
+            //Console.WriteLine(gameControl.Btn3);
+            //Console.WriteLine(gameControl.Btn4);
+            //Console.WriteLine(gameControl.X);
+            //Console.WriteLine(gameControl.Y);
+            #endregion
+
         }
 
         void tm_Tick(object sender, EventArgs e)
