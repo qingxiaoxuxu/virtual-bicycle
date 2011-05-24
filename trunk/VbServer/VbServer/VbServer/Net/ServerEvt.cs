@@ -1,4 +1,4 @@
-﻿#define DEBUG
+﻿
 using System;
 using System.Collections.Generic;
  
@@ -16,12 +16,12 @@ namespace VbServer.Net
             Server.ReceivedTxt += new ClientEventHandel(Server_ReceivedTxt);
             Server.WrittenMsg += new ClientEventHandel(Server_WrittenMsg);
             Server.AcceptedClient += new EventHandler(Server_AcceptedClient);
-#if DEBUG
+#if DE
             Team t=new Team("Team1");
             t.mapName = "Beginner";
             teamList.Add(t);
             t.userList.Add(new User("lkq","1",null));
-           // t.userList.Add(new User("pl","2",null));
+            t.userList.Add(new User("pl","2",null));
             //t.userList.Add(new User("xt","3",null));
             t.userList[0].isAdmin = true;       //
             User.allLoginUser.AddRange(t.userList);
@@ -182,18 +182,18 @@ namespace VbServer.Net
                 case "getlist":
                     {
                         string genmsg = "list";
-                        #region test
-                        teamList.Clear();
-                        for (int i = 0; i < 6; i++)
-                        {
-                            Team t = new Team("lkq" + i.ToString());
-                            t.mapName = "forest" + i.ToString();
-                            teamList.Add(t);
-                        }
-                        Team p = new Team("Hello World!");
-                        p.mapName = "看到我就对了~";
-                        teamList.Add(p);
-                        #endregion
+                        //#region test
+                        //teamList.Clear();
+                        //for (int i = 0; i < 6; i++)
+                        //{
+                        //    Team t = new Team("lkq" + i.ToString());
+                        //    t.mapName = "forest" + i.ToString();
+                        //    teamList.Add(t);
+                        //}
+                        //Team p = new Team("Hello World!");
+                        //p.mapName = "看到我就对了~";
+                        //teamList.Add(p);
+                        //#endregion
                         foreach (Team t in teamList)
                         {
                             genmsg += "$" + t.teamName + "$" + t.mapName+ "$" + t.userList.Count.ToString();
@@ -249,32 +249,39 @@ namespace VbServer.Net
                     }
                 case "begin":
                     {
-                        switch (msgs[1])
+                        Team t = FindTeamByUser(teamList, FindUserByClient(User.allLoginUser, client));
+
+                        foreach (User u in t.userList)
                         {
-                            case "0":
-                                {
-                                    Team t = FindTeamByUser(teamList, FindUserByClient(User.allLoginUser, client));
-                                    foreach (User u in t.userList)
-                                    {
-                                        u.client.SendTxt("begin$1");
-                                    }
-                                    break;
-                                }
-                            case "2":
-                                {
-                                    Team t = FindTeamByUser(teamList, FindUserByClient(User.allLoginUser, client));
-                                    t.readyCount++;
-                                    if (t.readyCount == t.userList.Count)
-                                    {
-                                        foreach (User u in t.userList)
-                                        {
-                                            u.client.SendTxt("begin$3");
-                                        }
-                                    }
-                                    break;
-                                }
+                            u.client.SendTxt("begin");
                         }
+
                         break;
+                        //switch (msgs[1])
+                        //{
+                        //    case "0":
+                        //        {
+                        //            Team t = FindTeamByUser(teamList, FindUserByClient(User.allLoginUser, client));
+                        //            foreach (User u in t.userList)
+                        //            {
+                        //                u.client.SendTxt("begin$1");
+                        //            }
+                        //            break;
+                        //        }
+                        //    case "2":
+                        //        {
+                        //            Team t = FindTeamByUser(teamList, FindUserByClient(User.allLoginUser, client));
+                        //            t.readyCount++;
+                        //            if (t.readyCount == t.userList.Count)
+                        //            {
+                        //                foreach (User u in t.userList)
+                        //                {
+                        //                    u.client.SendTxt("begin$3");
+                        //                }
+                        //            }
+                        //            break;
+                        //        }
+                        //}
                     }
                 case "logout":
                     {
