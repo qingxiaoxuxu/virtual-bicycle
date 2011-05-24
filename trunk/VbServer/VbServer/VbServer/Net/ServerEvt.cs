@@ -257,6 +257,7 @@ namespace VbServer.Net
                         }
 
                         break;
+                        #region unused
                         //switch (msgs[1])
                         //{
                         //    case "0":
@@ -282,6 +283,7 @@ namespace VbServer.Net
                         //            break;
                         //        }
                         //}
+                        #endregion
                     }
                 case "logout":
                     {
