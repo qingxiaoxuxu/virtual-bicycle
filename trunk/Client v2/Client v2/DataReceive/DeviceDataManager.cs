@@ -297,7 +297,7 @@ namespace BuzzWin
             Data[0] = 0xf5;
             WriteData(ref m_oBuzzDevice, Data);
         }
-        private void SendConfigData()
+        public void SendConfigData()
         {
             Byte[] ConfigData = new Byte[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
 
