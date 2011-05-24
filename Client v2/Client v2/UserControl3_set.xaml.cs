@@ -23,10 +23,61 @@ namespace Client_v2
         {
             InitializeComponent();
         }
+     
+        //转向灵敏度
+        private void slider1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            InfoControl.device.MyConfig.DirectionRate = (Byte)slider1.Value;
+            InfoControl.device.MyConfig.SpeedRate = (Byte)slider2.Value;
+            InfoControl.device.MyConfig.load = (Byte)slider3.Value;
 
+            InfoControl.device.SendConfigData();
+
+        }
+        //设置速度灵敏度
+        private void slider2_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            InfoControl.device.MyConfig.DirectionRate = (Byte)slider1.Value;
+            InfoControl.device.MyConfig.SpeedRate = (Byte)slider2.Value;
+            InfoControl.device.MyConfig.load = (Byte)slider3.Value;
+
+            InfoControl.device.SendConfigData();
+        }
+        //设置阻尼
+        private void slider3_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            InfoControl.device.MyConfig.DirectionRate = (Byte)slider1.Value;
+            InfoControl.device.MyConfig.SpeedRate = (Byte)slider2.Value;
+            InfoControl.device.MyConfig.load = (Byte)slider3.Value;
+
+            InfoControl.device.SendConfigData();
+        }
+        //转向灵敏度的默认值
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            InfoControl.device.MyConfig.DirectionRate = 128;
+            InfoControl.device.MyConfig.SpeedRate = (Byte)slider2.Value;
+            InfoControl.device.MyConfig.load = (Byte)slider3.Value;
 
+            InfoControl.device.SendConfigData();
+        }
+        //设置速度灵敏度的默认值
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            InfoControl.device.MyConfig.DirectionRate = (Byte)slider1.Value;
+            InfoControl.device.MyConfig.SpeedRate = 128;
+            InfoControl.device.MyConfig.load = (Byte)slider3.Value;
+
+            InfoControl.device.SendConfigData();
+        }
+        //设置阻尼大小的默认值
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            InfoControl.device.MyConfig.DirectionRate = (Byte)slider1.Value;
+            InfoControl.device.MyConfig.SpeedRate = (Byte)slider2.Value;
+            InfoControl.device.MyConfig.load = 128;
+
+            InfoControl.device.SendConfigData();
         }
     }
 }
