@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BuzzWin;
 
 namespace Client_v2
 {
     public class InfoControl
     {
         private static string user;
-
+        public static DeviceDataManager device = new DeviceDataManager();
         public static string User
         {
             get { return user; }
