@@ -56,10 +56,12 @@ namespace MyFirstWPF
         private void startGame()
         {
             gameInfo = new ProcessStartInfo();
-            gameInfo.FileName = "mspaint.exe";      //RacingGame.exe
-            gameInfo.WorkingDirectory = @"C:\WINDOWS\system32";     //Where?
+            //gameInfo.FileName = "mspaint.exe";      //RacingGame.exe
+            //gameInfo.WorkingDirectory = @"C:\WINDOWS\system32";     //Where?
+            gameInfo.FileName = "RacingGame.exe";
+            gameInfo.WorkingDirectory = @"J:\VB\VbGame\RacingGame\bin\x86\Debug\";
             gameInfo.WindowStyle = ProcessWindowStyle.Normal;
-            //gameInfo.Arguments = InfoControl.UserId;
+            gameInfo.Arguments = InfoControl.UserId;
             try
             {
                 gameProc = Process.Start(gameInfo);
