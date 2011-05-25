@@ -29,8 +29,10 @@ namespace MyFirstWPF
         public const int INDEX_MULTI_SELECT_ROOM_PAGE = 2;
         public const int INDEX_MULTI_SELECT_MAP_PAGE = 3;
         public const int INDEX_WAITING_ROOM_PAGE = 4;
-        private string user = "LKQ";
 
+        Random rd = new Random(DateTime.Now.Millisecond);
+        private string user;
+        private string userId;
         private ClientEvt client;
 
         public MainFrame()
@@ -38,23 +40,27 @@ namespace MyFirstWPF
             InitializeComponent();
             this.KeyDown +=new KeyEventHandler(MainFrame_KeyDown);
             client = InfoControl.Client;                        //获取客户端
-            client.Client.ConnectError+=new System.IO.ErrorEventHandler(Client_ConnectError);
+            client.Client.ConnectError += new System.IO.ErrorEventHandler(Client_ConnectError);
             client.LoginSuccess += new EventHandler(client_LoginSuccess);
             client.LoginFailure += new EventHandler(client_LoginFailure);
+
+            userId = rd.Next(100000).ToString();
+            user = "LKQ" + userId;
         }
 
         void Client_ConnectError(object sender, System.IO.ErrorEventArgs e)
         {
-            //MessageBox.Show("Connect Err.");
-            //this.Dispatcher.Invoke(new Action(() =>
-            //{
-            //    this.Close();                                               //匿名委托，支线程调用主线程函数
-            //}));
+            MessageBox.Show("Connect Err.");
+            this.Dispatcher.Invoke(new Action(() =>
+            {
+                this.Close();                                               //匿名委托，支线程调用主线程函数
+            }));
         }
 
         void client_LoginSuccess(object sender, EventArgs e)
         {
             InfoControl.UserName = user;
+            InfoControl.UserId = userId;
             //MessageBox.Show("Login Success!");
         }
 
@@ -97,7 +103,7 @@ namespace MyFirstWPF
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            client.Login(user, "123456");
+            client.Login(user, userId);
             #region 界面初始化
             pages[0] = InfoControl.Main_Page;
             pages[1] = InfoControl.Single_Select_Map_Page;

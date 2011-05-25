@@ -46,8 +46,14 @@
         </Canvas>
 
         <Canvas HorizontalAlignment="Left" Margin="50,0,0,20" x:Name="ReturnCanvas"
-			VerticalAlignment="Bottom" Width="150" Height="50" Background="AliceBlue"/>
+			VerticalAlignment="Bottom" Width="200" Height="60"/>
 		<Canvas HorizontalAlignment="Right" Margin="0,0,50,20" x:Name="StartCanvas"
-			VerticalAlignment="Bottom" Width="150" Height="50" Background="AliceBlue"/>
+			VerticalAlignment="Bottom" Width="200" Height="60">
+            <Canvas.Background>
+                <ImageBrush Stretch="Fill" ImageSource="Contents\Images\bgButton.png"/>
+            </Canvas.Background>
+            <TextBlock Height="50" Width="180" Margin="10, 3, 0, 0" Name="StartText"
+                       FontFamily="微软雅黑" Text="开始游戏" FontSize="28pt" TextAlignment="Center"/>
+        </Canvas>
 	</Grid>
 </UserControl>

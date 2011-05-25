@@ -13,9 +13,9 @@
 		</Grid.Background>
 		<TextBlock x:Name="PlayerText" Margin="20,10,200,10"
 			Text="YCX" FontSize="32pt" FontFamily="微软雅黑"/>
-		<Canvas x:Name="ReadyCanvas" HorizontalAlignment="Right" Margin="0,10,10,10" Width="180">
-            <TextBlock Canvas.Left="6" Canvas.Top="6" Height="48" x:Name="ReadyText" Width="168" 
-                      TextAlignment="Center" Text="已准备" FontSize="24pt"/>
+		<Canvas x:Name="ReadyCanvas" HorizontalAlignment="Right" Margin="0,5, 10, 5" Width="180">
+            <TextBlock Canvas.Left="6" Canvas.Top="6" Height="52" x:Name="ReadyText" Width="168" 
+                      TextAlignment="Center" Text="已准备" FontSize="28pt"/>
         </Canvas>
     </Grid>
 </UserControl>
