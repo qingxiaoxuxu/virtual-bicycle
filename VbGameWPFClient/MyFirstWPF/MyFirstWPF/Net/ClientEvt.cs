@@ -84,9 +84,9 @@ namespace VbClient.Net
             Client.SendTxt("leave$" + teamName);
         }
 
-        public void Begin(int i)
+        public void Begin()
         {
-            Client.SendTxt("begin$" + i.ToString());
+            Client.SendTxt("begin");
         }
 
         public void SendBikeState(string msg)
@@ -181,17 +181,20 @@ namespace VbClient.Net
                     }
                 case "begin":
                     {
-                        switch (msgs[1])
-                        {
-                            case "1":
-                                if (BeginLoadGame != null)
-                                    BeginLoadGame(this, null);
-                                break;
-                            case "3":
-                                if (BeginGame != null)
-                                    BeginGame(this, null);
-                                break;
-                        }
+                        //switch (msgs[1])
+                        //{
+                        //    case "1":
+                        //        if (BeginLoadGame != null)
+                        //            BeginLoadGame(this, null);
+                        //        break;
+                        //    case "3":
+                        //        if (BeginGame != null)
+                        //            BeginGame(this, null);
+                        //        break;
+                        //}
+                        //break;
+                        if (BeginGame != null)
+                            BeginGame(this, null);
                         break;
                     }
                 case "host":

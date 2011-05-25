@@ -15,6 +15,13 @@ namespace MyFirstWPF
             set { InfoControl.userName = value; }
         }
 
+        private static string userId = null;
+        public static string UserId
+        {
+            get { return InfoControl.userId; }
+            set { InfoControl.userId = value; }
+        }
+
         private static MainPage mainPage = null;
         public static MainPage Main_Page
         {
@@ -93,7 +100,7 @@ namespace MyFirstWPF
             get 
             {
                 if (client == null)
-                    client = new ClientEvt("192.168.137.33");
+                    client = new ClientEvt("192.168.0.206");
                 return InfoControl.client; 
             }
             set { InfoControl.client = value; }
@@ -101,14 +108,14 @@ namespace MyFirstWPF
 
         public const int MapCount = 3;                                  //地图总数
         public static String[] MapTexts = new String[MapCount]{
-            "森林小径",
-            "HUST街道赛",
-            "盘山公路"
+            "Beginner",
+            "Advanced",
+            "Expert"
         };                                                              //地图名称
         public static String[] MapPaths = new String[MapCount]{
-            @"level\scene1.png",
-            @"level\scene2.png",
-            @"level\scene3.png"
+            @"..\..\Contents\Images\scene1.png",
+            @"..\..\Contents\Images\scene2.png",
+            @"..\..\Contents\Images\scene3.png"
         };                                                              //地图路径
 
     }
