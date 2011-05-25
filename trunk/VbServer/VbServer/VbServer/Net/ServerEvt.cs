@@ -21,7 +21,7 @@ namespace VbServer.Net
             t.mapName = "Beginner";
             teamList.Add(t);
             t.userList.Add(new User("lkq","1",null));
-            t.userList.Add(new User("pl","2",null));
+            //t.userList.Add(new User("pl","2",null));
             //t.userList.Add(new User("xt","3",null));
             t.userList[0].isAdmin = true;       //
             t.mapName = "Advanced";           //
@@ -255,6 +255,7 @@ namespace VbServer.Net
                         foreach (User u in t.userList)
                         {
                             u.client.SendTxt("begin");
+                            u.isReady = false;
                         }
 
                         break;
