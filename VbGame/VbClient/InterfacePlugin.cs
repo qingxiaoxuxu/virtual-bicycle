@@ -214,7 +214,7 @@ namespace VbClient
 
         public void Disconnect()
         {
-            
+            client.Exit();
         }
 
         #endregion

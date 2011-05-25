@@ -55,6 +55,11 @@ namespace VbClient.Net
             Client.SendTxt("info");
         }
 
+        public void Exit()
+        {
+            Client.SendTxt("exit");
+        }
+
         /// <summary>
         /// 发送车子状态
         /// </summary>
