@@ -16,15 +16,15 @@ namespace VbServer.Net
             Server.ReceivedTxt += new ClientEventHandel(Server_ReceivedTxt);
             Server.WrittenMsg += new ClientEventHandel(Server_WrittenMsg);
             Server.AcceptedClient += new EventHandler(Server_AcceptedClient);
-#if DE
+#if DEBUG
             Team t=new Team("Team1");
             t.mapName = "Beginner";
             teamList.Add(t);
             t.userList.Add(new User("lkq","1",null));
-            //t.userList.Add(new User("pl","2",null));
+            t.userList.Add(new User("pl","2",null));
             //t.userList.Add(new User("xt","3",null));
             t.userList[0].isAdmin = true;       //
-            t.mapName = "Advanced";           //
+            //t.mapName = "Advanced";           //
             User.allLoginUser.AddRange(t.userList);
 #endif
         }
@@ -356,6 +356,19 @@ namespace VbServer.Net
                         {
                             if (u.client != client)
                                 u.client.SendTxt("obj$"+current.userId+"$"+msg);
+                        }
+                        break;
+                    }
+                case "exit":
+                    {
+                        Team t = FindTeamByUser(teamList, FindUserByClient(User.allLoginUser, client));
+                        User current = FindUserByClient(User.allLoginUser, client);
+                        foreach (User u in t.userList)
+                        {
+                            if (u.userId == current.userId)
+                            {
+                                u.client.SendTxt("gameend");
+                            }
                         }
                         break;
                     }
