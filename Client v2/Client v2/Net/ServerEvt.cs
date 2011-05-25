@@ -19,38 +19,38 @@ namespace VbServer.Net
         public event ForceBackHandler ForceBack;
         public void Reset()
         {
-            foreach(Client c in Server.Clients)
-                c.SendTxt("reset");
+            for (int i = 0; i < Server.Clients.Count; i++)
+                Server.Clients[i].SendTxt("reset");
         }
         public void ViewChanged()
         {
-            foreach (Client c in Server.Clients)
-                c.SendTxt("viewchange");
+            for (int i = 0; i < Server.Clients.Count; i++)
+                Server.Clients[i].SendTxt("viewchange");
         }
         public void Enter()
         {
-            foreach (Client c in Server.Clients)
-                c.SendTxt("enter");
+            for (int i = 0; i < Server.Clients.Count; i++)
+                Server.Clients[i].SendTxt("enter");
         }
         public void Escape()
         {
-            foreach (Client c in Server.Clients)
-                c.SendTxt("escape");
+            for (int i = 0; i < Server.Clients.Count; i++)
+                Server.Clients[i].SendTxt("escape");
         }
         public void HandlebarRotated(float angle)
         {
-            foreach (Client c in Server.Clients)
-                c.SendTxt("rotate$"+angle.ToString());
+            for (int i = 0; i < Server.Clients.Count; i++)
+                Server.Clients[i].SendTxt("rotate$" + angle.ToString());
         }
         public void WheelSpeedChanged(float speed, float change)
         {
-            foreach (Client c in Server.Clients)
-                c.SendTxt("speed$"+speed.ToString()+"$"+change.ToString());
+            for (int i = 0; i < Server.Clients.Count; i++)
+                Server.Clients[i].SendTxt("speed$" + speed.ToString() + "$" + change.ToString());
         }
         public void HeartPulse(int pulse)
         {
-            foreach (Client c in Server.Clients)
-                c.SendTxt("heart$"+pulse.ToString());
+            for (int i = 0; i < Server.Clients.Count; i++)
+                Server.Clients[i].SendTxt("heart$" + pulse.ToString());
         }
 
         void Server_WrittenMsg(Client client, string msg)
