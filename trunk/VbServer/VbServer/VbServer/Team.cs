@@ -64,6 +64,7 @@ namespace VbServer
         }
         public void DelUser(User u)
         {
+            u.isAdmin = u.isReady = false;
             userList.Remove(u);
             playerList.Remove(u);
         }

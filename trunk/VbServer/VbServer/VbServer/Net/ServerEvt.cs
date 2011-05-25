@@ -24,6 +24,7 @@ namespace VbServer.Net
             t.userList.Add(new User("pl","2",null));
             //t.userList.Add(new User("xt","3",null));
             t.userList[0].isAdmin = true;       //
+            t.mapName = "Advanced";           //
             User.allLoginUser.AddRange(t.userList);
 #endif
         }
@@ -226,9 +227,8 @@ namespace VbServer.Net
                         }
                         else
                         {
-                            t.userList[0].isAdmin = true;           //
-                            //if (t.userList[0].client != null)
-                            //    t.userList[0].client.SendTxt("host");
+                            t.userList[0].isAdmin = true;
+                            t.userList[0].isReady = false;
                             foreach (User u in t.userList)
                             {
                                 if (u.client != null)
@@ -243,7 +243,8 @@ namespace VbServer.Net
                         Team t = FindTeamByUser(teamList, FindUserByClient(User.allLoginUser, client));
                         foreach (User u in t.userList)
                         {
-                            u.client.SendTxt("update");
+                            if (u.client != null)
+                                u.client.SendTxt("update");
                         }
                         break;
                     }
