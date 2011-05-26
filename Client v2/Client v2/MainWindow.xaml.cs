@@ -17,6 +17,8 @@ using System.Threading;
 using Client_v2.Model;
 using System.IO;
 using Client_v2.DampingAutoLearning;
+using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace Client_v2
 {
@@ -41,15 +43,15 @@ namespace Client_v2
         Random rd = new Random(DateTime.Now.Millisecond);
         VbCsvHelper.CsvHelper csv = new VbCsvHelper.CsvHelper();
         #region 界面
-        UserControl0_login usrLogin = new UserControl0_login();
-        UserControl1_chart usrChart = new UserControl1_chart();
-        UserControl2_game usrGame = new UserControl2_game();
-        UserControl3_set usrSet = new UserControl3_set();
-        UserControl4_auto usrAuto = new UserControl4_auto();
+        UserControl0_login usrLogin;
+        UserControl1_chart usrChart;
+        UserControl2_game usrGame;
+        UserControl3_set usrSet;
+        UserControl4_auto usrAuto;
         #endregion
 
         #region 网络
-        VbServer.Net.ServerEvt server = new VbServer.Net.ServerEvt();
+        VbServer.Net.ServerEvt server;
         #endregion
 
         public MainWindow()
@@ -58,6 +60,17 @@ namespace Client_v2
             InfoControl.device.OpenDevice(ref InfoControl.device.m_oBuzzDevice,0x8888,0x0006);
             InfoControl.device.GetSportStatus += new DeviceDataManager.F2(device_GetSportStatus);
             InfoControl.device.GetGameControl += new DeviceDataManager.F8(device_GetGameControl);
+            #region 界面
+            usrLogin = new UserControl0_login();
+            usrChart = new UserControl1_chart();
+            usrGame = new UserControl2_game();
+            usrSet = new UserControl3_set();
+            usrAuto = new UserControl4_auto();
+            #endregion
+
+            #region 网络
+            server = new VbServer.Net.ServerEvt();
+            #endregion
             data = new List<ChartInfo>();
             bufData = new List<ChartInfo>();
             totalInfo = 0;
@@ -91,6 +104,8 @@ namespace Client_v2
             tm.Interval = TimeSpan.FromSeconds(1);
             tm.Tick += new EventHandler(tm_Tick);
             tm.Start();
+
+            isLogin = true;
         }
 
         static int preDamp = 0;
@@ -110,47 +125,105 @@ namespace Client_v2
         static float preSpeed = 0;
         void device_GetGameControl(DeviceDataManager.GameControl gameControl)
         {
-            #region 网络
-            if (gameControl.Btn1)
+            if (InfoControl.IsRacingGame)
             {
-                server.Enter();
-            }
-            if (gameControl.Btn2)
-            {
-                server.Escape();
-            }
-            if (gameControl.Btn3)
-            {
-                server.Reset();
-            }
-            if (gameControl.Btn4)
-            {
-                server.ViewChanged();
-            }
+                #region 网络
 
-            server.HandlebarRotated((float)((128- gameControl.X )) / 5000);
-            //preAngle = (float)((128 - gameControl.X) * 180 / 128);
+                if (gameControl.Btn1)
+                {
+                    server.Enter();
+                }
+                if (gameControl.Btn2)
+                {
+                    server.Escape();
+                }
+                if (gameControl.Btn3)
+                {
+                    server.Reset();
+                }
+                if (gameControl.Btn4)
+                {
+                    server.ViewChanged();
+                }
 
-            gameControl.Y =  gameControl.Y - 128;
+                server.HandlebarRotated((float)((128 - gameControl.X)) / 5000);
+                //preAngle = (float)((128 - gameControl.X) * 180 / 128);
 
-            server.WheelSpeedChangedRaw(gameControl.Y);
-            if (preSpeed >= 0 && gameControl.Y >= 0 && gameControl.Y - preSpeed > -1)
-            {
-                server.WheelSpeedChanged(gameControl.Y, (float)((gameControl.Y - preSpeed) + gameControl.Y * gameControl.Y * 0.00003));
+                gameControl.Y = gameControl.Y - 128;
+
+                server.WheelSpeedChangedRaw(gameControl.Y);
+                if (preSpeed >= 0 && gameControl.Y >= 0 && gameControl.Y - preSpeed > -1)
+                {
+                    server.WheelSpeedChanged(gameControl.Y, (float)((gameControl.Y - preSpeed) + gameControl.Y * gameControl.Y * 0.00003));
+                }
+                //else if (preSpeed <= 0 && gameControl.Y <= 0 && gameControl.Y - preSpeed < 5)
+                //{
+                //    server.WheelSpeedChanged(gameControl.Y, (float)((gameControl.Y - preSpeed)));
+                //}
+
+                preSpeed = gameControl.Y;
+                //Console.WriteLine(gameControl.Btn1);
+                //Console.WriteLine(gameControl.Btn2);
+                //Console.WriteLine(gameControl.Btn3);
+                //Console.WriteLine(gameControl.Btn4);
+                //Console.WriteLine(gameControl.X);
+                //Console.WriteLine(gameControl.Y);
+                #endregion
             }
-            //else if (preSpeed <= 0 && gameControl.Y <= 0 && gameControl.Y - preSpeed < 5)
-            //{
-            //    server.WheelSpeedChanged(gameControl.Y, (float)((gameControl.Y - preSpeed)));
-            //}
+            else
+            {
+                #region 键盘控制
+                if (gameControl.Btn1)
+                {
+                    Demo.Keyboard.Press(Key.Space);
+                    Demo.Keyboard.Release(Key.Space);
+                }
+                if (gameControl.Btn2)
+                {
+                    Demo.Keyboard.Press(Key.LeftCtrl);
+                    Demo.Keyboard.Release(Key.LeftCtrl);
+                }
+                if (gameControl.Btn3)
+                {
+                    Demo.Keyboard.Press(Key.LeftShift);
+                    Demo.Keyboard.Release(Key.LeftShift);
+                }
+                if (gameControl.Btn4)
+                {
+                    Demo.Keyboard.Press(Key.C);
+                    Demo.Keyboard.Release(Key.C);
+                }
 
-            preSpeed = gameControl.Y;
-            //Console.WriteLine(gameControl.Btn1);
-            //Console.WriteLine(gameControl.Btn2);
-            //Console.WriteLine(gameControl.Btn3);
-            //Console.WriteLine(gameControl.Btn4);
-            //Console.WriteLine(gameControl.X);
-            //Console.WriteLine(gameControl.Y);
-            #endregion
+                gameControl.Y = gameControl.Y - 128;
+
+                gameControl.X = gameControl.X - 128;
+                if (gameControl.X > 60)
+                {
+                    Console.WriteLine("Left");
+                    Demo.Keyboard.Press(Key.Left);
+                    Demo.Keyboard.Release(Key.Left);
+                    
+                }
+                if (gameControl.X < -60)
+                {
+                    Console.WriteLine("Right");
+                    Demo.Keyboard.Press(Key.Right);
+                    Demo.Keyboard.Release(Key.Right);
+                }
+                if (gameControl.Y > 60)
+                {
+                    Console.WriteLine("Up");
+                    Demo.Keyboard.Press(Key.Up);
+                    Demo.Keyboard.Release(Key.Up);
+                }
+                if (gameControl.Y < -60)
+                {
+                    Console.WriteLine("Down");
+                    Demo.Keyboard.Press(Key.Down);
+                    Demo.Keyboard.Release(Key.Down);
+                }
+                #endregion
+            }
         }
 
         void tm_Tick(object sender, EventArgs e)
@@ -258,6 +331,7 @@ namespace Client_v2
 
         private void transferDataToDB()
         { }
+
 
     }
 
