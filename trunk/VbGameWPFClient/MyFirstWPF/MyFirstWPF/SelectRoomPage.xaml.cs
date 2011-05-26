@@ -20,7 +20,7 @@ namespace MyFirstWPF
     /// <summary>
     /// SelectRoomPage.xaml 的交互逻辑
     /// </summary>
-    public partial class SelectRoomPage : UserControl, IKeyDown, IReload
+    public partial class SelectRoomPage : UserControl, IKeyDown, IReload, IMove
     {
 		int blockState;					//屏幕上第一个roomBlock在全部roomBlock中的顺序
 		int flickerState;				//橙色闪烁标记所处的位置
@@ -222,9 +222,9 @@ namespace MyFirstWPF
 
         #endregion
 
-        #region 移动操作
+        #region IMove 成员
         //向左移动
-        private void moveLeft()
+        public void moveLeft()
         {
             if (flickerState % 2 == 1)      //奇数，在右边
             {
@@ -234,7 +234,7 @@ namespace MyFirstWPF
         }
 
         //向右移动
-        private void moveRight()
+        public void moveRight()
         {
             if (flickerState % 2 == 0)      //偶数，在左边
             {
@@ -247,7 +247,7 @@ namespace MyFirstWPF
         }
 
         //向上移动
-        private void moveUp()
+        public void moveUp()
         {
             if (flickerState / 2 > 0)              //上面有空间，只需要移动flicker
             {
@@ -270,7 +270,7 @@ namespace MyFirstWPF
         }
 
         //向下移动
-        private void moveDown()
+        public void moveDown()
         {
             if (flickerState / 2 < 3)                                    //下面有空间，但并不确定是否有一个房间摆在那里（可能是奇数房间，下面是空的）
             {
