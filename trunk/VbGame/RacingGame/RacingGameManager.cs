@@ -540,6 +540,7 @@ namespace RacingGame
             if (disposing)
             {
                 inputInterface.Disconnect();
+                netClient.Disconnect();
             }
         }
     }
