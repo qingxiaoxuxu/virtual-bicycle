@@ -18,7 +18,7 @@ namespace MyFirstWPF
 	/// <summary>
 	/// mainPage.xaml 的交互逻辑
 	/// </summary>
-	public partial class MainPage :UserControl, IKeyDown
+	public partial class MainPage :UserControl, IKeyDown, IMove
 	{
 		int state;										//哪个按钮被选中
         const int IconCount = 2;                        //按钮数量
@@ -79,8 +79,9 @@ namespace MyFirstWPF
             flickerStory.Begin(this);
         }
 
+        #region IMove 成员
         //向左移动
-        private void moveLeft()     
+        public void moveLeft()     
         {
             if (state > 0)
             {
@@ -92,7 +93,7 @@ namespace MyFirstWPF
         }
 
         //向右移动
-        private void moveRight()
+        public void moveRight()
         {
             if (state < IconCount - 1)
             {
@@ -102,6 +103,11 @@ namespace MyFirstWPF
                 moveStory.Begin(this);
             }
         }
+
+        public void moveUp() { }
+
+        public void moveDown() { }
+        #endregion
 
         //图标位置初始化
         private void initPosition()

@@ -20,7 +20,7 @@ namespace MyFirstWPF
     /// <summary>
     /// SelectMap.xaml 的交互逻辑
     /// </summary>
-    public partial class SelectMapPage : UserControl, IKeyDown, IReload
+    public partial class SelectMapPage : UserControl, IKeyDown, IReload, IMove
     {
         public const int MODE_SINGLE = 0;
         public const int MODE_MULTI = 1;
@@ -175,9 +175,9 @@ namespace MyFirstWPF
 
         #endregion
 
-        #region 移动操作
+        #region IMove 成员
         //向上移动(仅多人游戏模式有效)
-        private void moveUp()
+        public void moveUp()
         {
             if (flickerState == 1 && mode == MODE_MULTI)
             {
@@ -193,7 +193,7 @@ namespace MyFirstWPF
         }
 
         //向下移动(仅多人模式有效)
-        private void moveDown()
+        public void moveDown()
         {
             if (flickerState == 0 && mode == MODE_MULTI)
             {
@@ -209,7 +209,7 @@ namespace MyFirstWPF
         }
 
         //向左移动
-        private void moveLeft()
+        public void moveLeft()
         {
             if (flickerState == 0 && state > 0)
             {
@@ -226,7 +226,7 @@ namespace MyFirstWPF
         }
 
         //向右移动
-        private void moveRight()
+        public void moveRight()
         {
             if (flickerState == 0 && state < mapCnt - 1)
             {
