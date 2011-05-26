@@ -25,7 +25,6 @@ namespace Client_v2
     /// </summary>
     public partial class MainWindow : Window
     {
-        public DeviceDataManager device = new DeviceDataManager();
         DispatcherTimer tm = new DispatcherTimer();
         List<ChartInfo> data;                   //当前要在屏幕上显示的数据
         List<ChartInfo> bufData;                //缓冲区里的数据
@@ -55,9 +54,9 @@ namespace Client_v2
         public MainWindow()
         {
             InitializeComponent();
-            device.OpenDevice(ref device.m_oBuzzDevice,0x8888,0x0006);
-            device.GetSportStatus += new DeviceDataManager.F2(device_GetSportStatus);
-            device.GetGameControl += new DeviceDataManager.F8(device_GetGameControl);
+            InfoControl.device.OpenDevice(ref InfoControl.device.m_oBuzzDevice,0x8888,0x0006);
+            InfoControl.device.GetSportStatus += new DeviceDataManager.F2(device_GetSportStatus);
+            InfoControl.device.GetGameControl += new DeviceDataManager.F8(device_GetGameControl);
             data = new List<ChartInfo>();
             bufData = new List<ChartInfo>();
             totalInfo = 0;
@@ -100,7 +99,7 @@ namespace Client_v2
             {
                 DeviceDataManager.Damp d = new DeviceDataManager.Damp();
                 d.value = (int)(-f * 127 + 128);
-                device.SetDamp(d);
+                InfoControl.device.SetDamp(d);
             }
             preDamp = (int)(f * 255);
         }
