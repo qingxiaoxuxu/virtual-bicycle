@@ -132,15 +132,20 @@ namespace Client_v2.DampingAutoLearning
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void btn_Start_Click(object sender, RoutedEventArgs e)
+        {
+            Init();
+        }
+
+        private void btn_Save_Click(object sender, RoutedEventArgs e)
         {
             //创建文件流
-            FileStream fStream=new FileStream("para.txt",FileMode.Create);
+            FileStream fStream = new FileStream("para.txt", FileMode.Create);
 
             //使用二进制序列化器
             BinaryFormatter binFormat = new BinaryFormatter();
             List<double> list = new List<double>();
-            for (int i = 0; i < an.LayersCount;i++)
+            for (int i = 0; i < an.LayersCount; i++)
             {
                 for (int j = 0; j < an[i].NeuronsCount; j++)
                 {
@@ -152,9 +157,9 @@ namespace Client_v2.DampingAutoLearning
             fStream.Close();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void btn_Load_Click(object sender, RoutedEventArgs e)
         {
-            LearningMode = false;   
+            LearningMode = false;
             //创建文件流
             FileStream fStream = new FileStream("para.txt", FileMode.Open);
 
@@ -162,7 +167,7 @@ namespace Client_v2.DampingAutoLearning
             BinaryFormatter binFormat = new BinaryFormatter();
             //将list序列化到文件中
             List<double> list = new List<double>();
-            list=(List<double>)binFormat.Deserialize(fStream);
+            list = (List<double>)binFormat.Deserialize(fStream);
             int p = 0;
             for (int i = 0; i < an.LayersCount; i++)
             {

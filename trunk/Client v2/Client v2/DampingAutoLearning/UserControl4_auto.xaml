@@ -7,7 +7,13 @@
              d:DesignHeight="374" d:DesignWidth="600">
     <Grid>
         <Canvas>
-            <Border BorderBrush="Black" Width="600" Height="374" Canvas.Left="0" Canvas.Top="0" CornerRadius="5,5,5,5" BorderThickness="5"></Border>
+            <Border BorderBrush="Black" Width="600" Height="374" Canvas.Left="0" Canvas.Top="0" CornerRadius="5,5,5,5" BorderThickness="5">
+                <Canvas>
+                    <Button Content="Start" Height="57" Name="btn_Start" Width="77" Canvas.Left="79" Canvas.Top="170" Click="btn_Start_Click" />
+                    <Button Content="Save" Height="57" Name="btn_Save" Width="77" Canvas.Left="242" Canvas.Top="170" Click="btn_Save_Click" />
+                    <Button Content="Load" Height="57" Name="btn_Load" Width="77" Canvas.Left="411" Canvas.Top="170" Click="btn_Load_Click" />
+                </Canvas>
+            </Border>
         </Canvas>
     </Grid>
 </UserControl>
