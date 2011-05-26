@@ -8,8 +8,10 @@ namespace Client_v2
 {
     public class InfoControl
     {
-        private static string user;
         public static DeviceDataManager device = new DeviceDataManager();
+
+        private static string user;
+        
         public static string User
         {
             get { return user; }
