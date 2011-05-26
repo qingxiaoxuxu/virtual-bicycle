@@ -311,6 +311,20 @@ namespace BuzzWin
             WriteData(ref m_oBuzzDevice, ConfigData);
 
         }
+        /// <summary>
+        /// 发送转向校准数据包
+        /// </summary>
+        public void SendSettingData(byte Point)
+        {
+            Byte[] ConfigData = new Byte[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
+
+            ConfigData[0] = 0xf6;
+            ConfigData[1] = Point;
+
+            WriteData(ref m_oBuzzDevice, ConfigData);
+
+
+        }
         public void WriteData(ref BuzzHandsetDevice oDevice, Byte[] writebuffer)
         {
             if (oDevice != null)	// did we find it?

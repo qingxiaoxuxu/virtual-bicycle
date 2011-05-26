@@ -12,17 +12,16 @@
             <TextBlock Text="转向灵敏度：" Height="14" Canvas.Top="78" Canvas.Left="57" Width="72"></TextBlock>
             <TextBlock Text="速度灵敏度：" Height="14" Canvas.Top="118" Canvas.Left="57" Width="72"></TextBlock>
             <TextBlock Text="阻力大小值：" Height="14" Canvas.Top="158" Canvas.Left="57" Width="72"></TextBlock>
-            <Slider Width="250" Canvas.Top="75" Canvas.Left="127" Height="22" Name="slider1" Minimum="0" Maximum="255" ValueChanged="slider1_ValueChanged"></Slider>
+            <Slider Width="250" Canvas.Top="75"  Canvas.Left="127" Height="22" Maximum="255" Name="slider1" ValueChanged="slider1_ValueChanged"></Slider>
             <Slider Width="250" Canvas.Top="115" Canvas.Left="127" Height="22" Maximum="255" Name="slider2" ValueChanged="slider2_ValueChanged"></Slider>
             <Slider Width="250" Canvas.Top="155" Canvas.Left="127" Height="22" Maximum="255" Name="slider3" ValueChanged="slider3_ValueChanged"></Slider>
             <Button Height="22" Canvas.Left="395" Canvas.Top="74" Width="44" Click="Button_Click">默认值</Button>
             <Button Canvas.Left="395" Canvas.Top="114" Height="22" Width="44" Click="Button_Click_1">默认值</Button>
             <Button Canvas.Left="395" Canvas.Top="154" Height="22" Width="44" Click="Button_Click_2">默认值</Button>
-            <Button Height="100" Width="150" Canvas.Left="302" Canvas.Top="241">
+            <Button Height="100" Width="150" Canvas.Left="302" Canvas.Top="241" Name="btnSetting" Click="btnSetting_Click">
                 <Button.Content>
                     <StackPanel>
-                        <TextBlock FontSize="16">--单击此处--</TextBlock>
-                        <TextBlock FontSize="16">开始校准转向</TextBlock>
+                        <TextBlock FontSize="16" Name="bt_setting"/>
                     </StackPanel>
                 </Button.Content>
             </Button>
