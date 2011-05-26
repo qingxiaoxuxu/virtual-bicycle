@@ -84,7 +84,7 @@
     <Compile Include="DampingAutoLearning\UserControl4_auto.xaml.cs">
       <DependentUpon>UserControl4_auto.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DAO\DataTransfer.cs" />
+    <Compile Include="DAO\DataManage.cs" />
     <Compile Include="DAO\MySqlConnector.cs">
       <SubType>Code</SubType>
     </Compile>
