@@ -16,6 +16,7 @@ using System.Windows.Threading;
 using System.Threading;
 using Client_v2.Model;
 using System.IO;
+using Client_v2.DampingAutoLearning;
 
 namespace Client_v2
 {
@@ -30,6 +31,7 @@ namespace Client_v2
         List<ChartInfo> bufData;                //缓冲区里的数据
         int totalInfo;                          //当前获得的数据计数器
         bool isProcessing;                      //是否正在将内存中的数据转移到文件中
+        private const int TOTAL = 5;
         //EventWaitHandle myEvent = new EventWaitHandle(true, EventResetMode.ManualReset);
         #region 常量
         public const string FILE_NAME = "history.csv";  //数据暂存文件名，放在exe目录下
@@ -43,6 +45,7 @@ namespace Client_v2
         UserControl1_chart usrChart = new UserControl1_chart();
         UserControl2_game usrGame = new UserControl2_game();
         UserControl3_set usrSet = new UserControl3_set();
+        UserControl4_auto usrAuto = new UserControl4_auto();
         #endregion
 
         #region 网络
@@ -76,8 +79,9 @@ namespace Client_v2
             canvas3.Children.Add(usrChart);
             canvas3.Children.Add(usrGame);
             canvas3.Children.Add(usrSet);
+            canvas3.Children.Add(usrAuto);
             usrChart.UpdateChartInfo(data);
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < TOTAL; i++)
                 canvas3.Children[i].Visibility =
                     (i == 0 ? Visibility.Visible : Visibility.Hidden);
             #endregion
@@ -201,7 +205,7 @@ namespace Client_v2
         //点击设置按钮
         private void btnSet_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < TOTAL; i++)
                 canvas3.Children[i].Visibility =
                     (i == 3 ? Visibility.Visible : Visibility.Hidden);
             
@@ -210,7 +214,7 @@ namespace Client_v2
         //点击用户登入按钮
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < TOTAL; i++)
                 canvas3.Children[i].Visibility = 
                     (i == 0 ? Visibility.Visible : Visibility.Hidden);
         }
@@ -218,7 +222,7 @@ namespace Client_v2
         //点击查看健身数据按钮
         private void btnChart_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < TOTAL; i++)
                 canvas3.Children[i].Visibility =
                     (i == 1 ? Visibility.Visible : Visibility.Hidden);
         }
@@ -226,21 +230,31 @@ namespace Client_v2
         //点击选择游戏按钮
         private void btnGame_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < TOTAL; i++)
                 canvas3.Children[i].Visibility =
                     (i == 2 ? Visibility.Visible : Visibility.Hidden);
+        }
+
+        //智能调节阻尼
+        private void btnAuto_Click(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i < TOTAL; i++)
+                canvas3.Children[i].Visibility =
+                    (i == 4 ? Visibility.Visible : Visibility.Hidden);
         }
 
         //用户退出
         private void btnLogout_Click(object sender, RoutedEventArgs e)
         {
-            transferDataToDB();
-            InfoControl.User = "";
-            InfoControl.UserId = -1;
+            //transferDataToDB();
+            //InfoControl.User = "";
+            //InfoControl.UserId = -1;
+            this.Close();
         }
 
         private void transferDataToDB()
         { }
+
     }
 
 }

@@ -24,7 +24,7 @@ namespace Client_v2.DampingAutoLearning
     /// </summary>
     
     
-    public partial class UserControl1 : UserControl
+    public partial class UserControl4_auto : UserControl
     {
         ActivationNetwork an = new ActivationNetwork(new SigmoidFunction(), 4, 4, 3, 1);
         BackPropagationLearning bp;
@@ -34,7 +34,7 @@ namespace Client_v2.DampingAutoLearning
         static int DataCount = 0;
         static bool LearningMode = true;
         static int TrainingCount = 20;
-        public UserControl1()
+        public UserControl4_auto()
         {
             InitializeComponent();
         }

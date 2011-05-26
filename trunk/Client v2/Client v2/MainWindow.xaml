@@ -35,12 +35,12 @@
                 <Button Focusable="False" Canvas.Left="15"  Canvas.Top="2" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White" Content="用户登录"     
                         FontSize="15" FontFamily="Arial" Height="50" Width="120" Name="btnLogin" Click="btnLogin_Click" />
                 <Button Focusable="False" Canvas.Left="495" Canvas.Top="2" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White" Content="智能调节阻尼" 
-                        FontSize="15" FontFamily="Arial" Height="50" Width="120" Name="btnAuto" Click="btnLogin_Click" />
+                        FontSize="15" FontFamily="Arial" Height="50" Width="120" Name="btnAuto" Click="btnAuto_Click"/>
             </Canvas>
             <Canvas Canvas.Left="13" Canvas.Top="57" Height="374" Name="canvas3" Width="602"></Canvas>
         </Canvas>
         <Label Content="Client  Terminal" Height="28" Margin="181,0,208,0" Name="label1" VerticalAlignment="Top" FontFamily="Times New Roman" FontWeight="Bold" FontSize="18" FontStretch="Normal" HorizontalContentAlignment="Center" />
-        <Button Content="Button" Height="23" HorizontalAlignment="Left" Margin="554,5,0,0" Name="btnLogout" VerticalAlignment="Top" Width="75" Click="btnLogout_Click" />
+        <Button Content="X" Height="23" HorizontalAlignment="Left" Margin="605,5,0,0" Name="btnLogout" VerticalAlignment="Top" Width="24" Click="btnLogout_Click" />
         <!--This is Main Chart Container-->
       
     </Grid> 
