@@ -86,6 +86,7 @@ namespace Client_v2.DAO
         public DataSet ExecuteQuery(string cmdText)
         {
             Connect();
+            ds = new DataSet();
             //MySQLCommand cmd = CreateProcedureCommand(procedureName, dp);
             //MySQLDataReader mdr = cmd.ExecuteReaderEx();
             MySQLCommand cmd = CreateTextCommand(cmdText);
