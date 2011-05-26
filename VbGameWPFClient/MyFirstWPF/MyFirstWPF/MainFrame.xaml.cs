@@ -54,7 +54,7 @@ namespace MyFirstWPF
 
         static int a = 0, b = 0, c = 0, d = 0;
 
-        const int PRESS_DELAY = 500;        //按键冷却时间
+        const int PRESS_DELAY = 1000;        //按键冷却时间
         #region 判断按钮是否被按下，以防多次触发按钮响应
         private bool isEscapePressed = false;
         private bool isChoosePressed = false;

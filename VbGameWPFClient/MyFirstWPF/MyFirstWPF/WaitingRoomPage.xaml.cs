@@ -140,8 +140,8 @@ namespace MyFirstWPF
                         #endregion
                     }
                     #endregion
-                    #region 改变Choose按钮状态
-                    if (totalReady == isReady.Count - 1 && totalReady != 0)
+                    #region 改变开始游戏按钮状态
+                    if (totalReady == isReady.Count - 1)
                         allReady = true;
                     else
                         allReady = false;
