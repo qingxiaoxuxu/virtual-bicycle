@@ -31,6 +31,7 @@ namespace Client_v2
         int totalInfo;                          //当前获得的数据计数器
         bool isProcessing;                      //是否正在将内存中的数据转移到文件中
         private const int TOTAL = 5;
+        private bool isLogin = false;
         //EventWaitHandle myEvent = new EventWaitHandle(true, EventResetMode.ManualReset);
         #region 常量
         public const string FILE_NAME = "history.csv";  //数据暂存文件名，放在exe目录下
@@ -65,9 +66,9 @@ namespace Client_v2
             server.ForceBack += new VbServer.Net.ServerEvt.ForceBackHandler(server_ForceBack);
 
             #region 登陆信息
-            InfoControl.User = "黄婷";
-            InfoControl.UserId = 0;
-            InfoControl.LoginTime = DateTime.Now;
+            //InfoControl.User = "黄婷";
+            //InfoControl.UserId = 0;
+            //InfoControl.LoginTime = DateTime.Now;
             #endregion
             #region 测试数据
             //for (totalInfo = 0; totalInfo < 10; totalInfo++)
@@ -201,16 +202,7 @@ namespace Client_v2
             isProcessing = false;
         }
 
-        //点击设置按钮
-        private void btnSet_Click(object sender, RoutedEventArgs e)
-        {
-            for (int i = 0; i < TOTAL; i++)
-                canvas3.Children[i].Visibility =
-                    (i == 3 ? Visibility.Visible : Visibility.Hidden);
-            
-        }
-        
-        //点击用户登入按钮
+        //点击用户登陆按钮
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             for (int i = 0; i < TOTAL; i++)
@@ -218,9 +210,20 @@ namespace Client_v2
                     (i == 0 ? Visibility.Visible : Visibility.Hidden);
         }
         
+        //点击设置按钮
+        private void btnSet_Click(object sender, RoutedEventArgs e)
+        {
+            if (!isLogin) return;
+            for (int i = 0; i < TOTAL; i++)
+                canvas3.Children[i].Visibility =
+                    (i == 3 ? Visibility.Visible : Visibility.Hidden);
+            
+        }
+        
         //点击查看健身数据按钮
         private void btnChart_Click(object sender, RoutedEventArgs e)
         {
+            if (!isLogin) return;
             for (int i = 0; i < TOTAL; i++)
                 canvas3.Children[i].Visibility =
                     (i == 1 ? Visibility.Visible : Visibility.Hidden);
@@ -229,6 +232,7 @@ namespace Client_v2
         //点击选择游戏按钮
         private void btnGame_Click(object sender, RoutedEventArgs e)
         {
+            if (!isLogin) return;
             for (int i = 0; i < TOTAL; i++)
                 canvas3.Children[i].Visibility =
                     (i == 2 ? Visibility.Visible : Visibility.Hidden);
@@ -237,6 +241,7 @@ namespace Client_v2
         //智能调节阻尼
         private void btnAuto_Click(object sender, RoutedEventArgs e)
         {
+            if (!isLogin) return;
             for (int i = 0; i < TOTAL; i++)
                 canvas3.Children[i].Visibility =
                     (i == 4 ? Visibility.Visible : Visibility.Hidden);
