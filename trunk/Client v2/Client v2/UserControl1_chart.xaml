@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:cfxData="clr-namespace:ChartFX.WPF.Data;assembly=ChartFX.WPF.Data"
-             xmlns:cfx="http://schemas.softwarefx.com/chartfx/wpf/80" 
+             xmlns:cfx="http://schemas.softwarefx.com/chartfx/wpf/80"
              xmlns:cfxcontrols="http://schemas.softwarefx.com/chartfx/wpf/80/controls"
              mc:Ignorable="d" d:DesignHeight="374" d:DesignWidth="600">
     <Grid>
@@ -28,7 +28,7 @@
                         <cfx:LegendBox Visibility="Hidden" />
                     </cfx:Chart.LegendBox>
                     <cfx:Chart.AxesY>
-                        <cfx:Axis Min="0" Max="30"  Step="10" MinorStep="5">
+                        <cfx:Axis Min="0" Max="30"  Step="5" MinorStep="1">
                             <cfx:Axis.Labels>
                                 <cfx:AxisLabelAttributes Format="Number" />
                             </cfx:Axis.Labels>

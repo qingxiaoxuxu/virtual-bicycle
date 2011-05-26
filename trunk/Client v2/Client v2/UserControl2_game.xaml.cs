@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
 
 namespace Client_v2
 {
@@ -24,9 +25,26 @@ namespace Client_v2
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void btnRacingGame_Click(object sender, RoutedEventArgs e)
         {
-
+            string userId, user;
+            Random rd = new Random(DateTime.Now.Millisecond);
+            userId = rd.Next(100000).ToString();
+            user = "LKQ" + userId;
+            ProcessStartInfo gameInfo = new ProcessStartInfo();
+            gameInfo.FileName = "MyFirstWPF.exe";
+            gameInfo.WorkingDirectory = @"J:\VB\MyFirstWPF\MyFirstWPF\bin\Debug";
+            gameInfo.WindowStyle = ProcessWindowStyle.Normal;
+            gameInfo.Arguments = user + " " + userId;
+            try
+            {
+                Process gameProcess = Process.Start(gameInfo);
+                System.Threading.Thread.Sleep(500);
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                MessageBox.Show("File Not Found!");
+            }
         }
     }
 }
