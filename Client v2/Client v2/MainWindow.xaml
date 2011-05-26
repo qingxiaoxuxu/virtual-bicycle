@@ -26,10 +26,16 @@
     <Grid>
         <Canvas Margin="14,32,13,14" Name="canvas1">
             <Canvas Canvas.Left="0" Canvas.Top="0" Height="55" Name="canvas2" Width="615">
-                <Button  Focusable="False" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White" FontSize="15" FontFamily="Arial"  Canvas.Left="163" Canvas.Top="2" Content="查看健身数据" Height="50" x:Name="btnChart" Width="145" Click="btnChart_Click" />
-                <Button  Focusable="False" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White" FontSize="15" FontFamily="Arial"  Width="144" Height="50" Canvas.Left="312" Canvas.Top="2" Content="选择游戏" x:Name="btnGame" Click="btnGame_Click" />
-                <Button  Canvas.Left="459" Canvas.Top="2" Content="游戏设置" Focusable="False" FontFamily="Arial" FontSize="15" Foreground="White" Height="50" Name="btnSet" Template="{DynamicResource ButtonControlTemplate1}" Width="144" Click="btnSet_Click" />
-                <Button Canvas.Left="15" Canvas.Top="3" Content="用户登入" Focusable="False" FontFamily="Arial" FontSize="15" Foreground="White" Height="50" Name="btnLogin" Template="{DynamicResource ButtonControlTemplate1}" Width="145" Click="btnLogin_Click" />
+                <Button Focusable="False" Canvas.Left="135" Canvas.Top="2" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White" Content="查看健身数据" 
+                        FontSize="15" FontFamily="Arial" Height="50" Width="120" x:Name="btnChart" Click="btnChart_Click" />
+                <Button Focusable="False" Canvas.Left="255" Canvas.Top="2" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White" Content="选择游戏"     
+                        FontSize="15" FontFamily="Arial" Height="50" Width="120" x:Name="btnGame" Click="btnGame_Click" />
+                <Button Focusable="False" Canvas.Left="375" Canvas.Top="2" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White" Content="游戏设置"     
+                        FontSize="15" FontFamily="Arial" Height="50" Width="120" Name="btnSet" Click="btnSet_Click" />
+                <Button Focusable="False" Canvas.Left="15"  Canvas.Top="2" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White" Content="用户登录"     
+                        FontSize="15" FontFamily="Arial" Height="50" Width="120" Name="btnLogin" Click="btnLogin_Click" />
+                <Button Focusable="False" Canvas.Left="495" Canvas.Top="2" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White" Content="智能调节阻尼" 
+                        FontSize="15" FontFamily="Arial" Height="50" Width="120" Name="btnAuto" Click="btnLogin_Click" />
             </Canvas>
             <Canvas Canvas.Left="13" Canvas.Top="57" Height="374" Name="canvas3" Width="602"></Canvas>
         </Canvas>

@@ -47,6 +47,11 @@ namespace VbServer.Net
             for (int i = 0; i < Server.Clients.Count; i++)
                 Server.Clients[i].SendTxt("speed$" + speed.ToString() + "$" + change.ToString());
         }
+        public void WheelSpeedChangedRaw(float speed)
+        {
+            for (int i = 0; i < Server.Clients.Count; i++)
+                Server.Clients[i].SendTxt("speedraw$" + speed.ToString() );
+        }
         public void HeartPulse(int pulse)
         {
             for (int i = 0; i < Server.Clients.Count; i++)

@@ -124,10 +124,12 @@ namespace Client_v2
                 server.ViewChanged();
             }
 
-            server.HandlebarRotated((float)((128 - gameControl.X)) / 5000);
+            server.HandlebarRotated((float)((128- gameControl.X )) / 5000);
             //preAngle = (float)((128 - gameControl.X) * 180 / 128);
 
-            gameControl.Y = 128 - gameControl.Y;
+            gameControl.Y =  gameControl.Y - 128;
+
+            server.WheelSpeedChangedRaw(gameControl.Y);
             if (preSpeed >= 0 && gameControl.Y >= 0 && gameControl.Y - preSpeed > -1)
             {
                 server.WheelSpeedChanged(gameControl.Y, (float)((gameControl.Y - preSpeed) + gameControl.Y * gameControl.Y * 0.00003));
