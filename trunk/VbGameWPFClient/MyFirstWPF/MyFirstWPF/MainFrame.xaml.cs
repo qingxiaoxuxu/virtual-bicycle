@@ -65,7 +65,7 @@ namespace MyFirstWPF
         #endregion
 
 
-        public MainFrame()
+        public MainFrame(string usr, string usrId)
         {
             InitializeComponent();
             this.KeyDown +=new KeyEventHandler(MainFrame_KeyDown);
@@ -84,8 +84,22 @@ namespace MyFirstWPF
             iClient.HandlebarRotated += new ClientIEvt.HandlebarRotatedHandler(iClient_HandlebarRotated);
             iClient.WheelSpeedChanged += new ClientIEvt.WheelSpeedChangedHandler(iClient_WheelSpeedChanged);
             #endregion
-            userId = rd.Next(100000).ToString();
-            user = "LKQ" + userId;
+            userId = usrId;
+            user = usr;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            client.Login(user, userId);
+            #region 界面初始化
+            pages[0] = InfoControl.Main_Page;
+            pages[1] = InfoControl.Single_Select_Map_Page;
+            pages[2] = InfoControl.Select_Room_Page;
+            pages[3] = InfoControl.Multi_Select_Map_Page;
+            pages[4] = InfoControl.Waiting_Room_Page;
+            this.Content = pages[0];
+            currentIndex = INDEX_MAIN_PAGE;
+            #endregion
         }
 
         #region 健身车事件
@@ -377,20 +391,5 @@ namespace MyFirstWPF
         }
         #endregion
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            client.Login(user, userId);
-            #region 界面初始化
-            pages[0] = InfoControl.Main_Page;
-            pages[1] = InfoControl.Single_Select_Map_Page;
-            pages[2] = InfoControl.Select_Room_Page;
-            pages[3] = InfoControl.Multi_Select_Map_Page;
-            pages[4] = InfoControl.Waiting_Room_Page;
-            this.Content = pages[0];
-            currentIndex = INDEX_MAIN_PAGE;
-            #endregion
-        }
-
-        
     }
 }
