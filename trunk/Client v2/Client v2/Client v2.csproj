@@ -40,17 +40,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AForge, Version=2.1.5.0, Culture=neutral, PublicKeyToken=c1db6ff4eaa06aeb, processorArchitecture=MSIL">
+    <Reference Include="AForge, Version=0.0.1.25637, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\PowerPoint\DampingAutoLearning\DampingAutoLearning\bin\x86\Debug\AForge.dll</HintPath>
+      <HintPath>bin\Debug\AForge.dll</HintPath>
     </Reference>
-    <Reference Include="AForge.Controls, Version=2.1.5.0, Culture=neutral, PublicKeyToken=a8ac264d1dc6b9d9, processorArchitecture=MSIL">
+    <Reference Include="AForge.Controls, Version=1.0.2513.25637, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\PowerPoint\DampingAutoLearning\DampingAutoLearning\bin\x86\Debug\AForge.Controls.dll</HintPath>
+      <HintPath>bin\Debug\AForge.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="AForge.Neuro, Version=2.1.1.0, Culture=neutral, PublicKeyToken=2094f4ea39731d4f, processorArchitecture=MSIL">
+    <Reference Include="AForge.Neuro, Version=0.0.1.25637, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\PowerPoint\DampingAutoLearning\DampingAutoLearning\bin\x86\Debug\AForge.Neuro.dll</HintPath>
+      <HintPath>bin\Debug\AForge.Neuro.dll</HintPath>
     </Reference>
     <Reference Include="ChartFX.WPF, Version=8.0.3581.26941, Culture=neutral, PublicKeyToken=a1878e2052c08dce" />
     <Reference Include="ChartFX.WPF.Data, Version=8.0.3581.26941, Culture=neutral, PublicKeyToken=a1878e2052c08dce, processorArchitecture=MSIL" />
@@ -80,7 +80,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CsvHelper\CsvHelper.cs" />
-    <Compile Include="DampingAutoLearning\Program.cs" />
     <Compile Include="DampingAutoLearning\SDBP.cs" />
     <Compile Include="DampingAutoLearning\UserControl4_auto.xaml.cs">
       <DependentUpon>UserControl4_auto.xaml</DependentUpon>
