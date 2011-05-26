@@ -10,6 +10,14 @@ namespace Client_v2
     {
         public static DeviceDataManager device = new DeviceDataManager();
 
+        private static MainWindow mw;
+
+        public static MainWindow Mw
+        {
+            get { return InfoControl.mw; }
+            set { InfoControl.mw = value; }
+        }
+
         private static string user;
         
         public static string User
@@ -18,9 +26,9 @@ namespace Client_v2
             set { user = value; }
         }
 
-        private static int userId;
+        private static string userId;
 
-        public static int UserId
+        public static string UserId
         {
             get { return userId; }
             set { userId = value; }

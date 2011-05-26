@@ -33,12 +33,11 @@ namespace Client_v2
         int totalInfo;                          //当前获得的数据计数器
         bool isProcessing;                      //是否正在将内存中的数据转移到文件中
         private const int TOTAL = 5;
-        private bool isLogin = false;
         //EventWaitHandle myEvent = new EventWaitHandle(true, EventResetMode.ManualReset);
         #region 常量
         public const string FILE_NAME = "history.csv";  //数据暂存文件名，放在exe目录下
-        public const int MAX_POINT = 50;              //屏幕上最多显示的数据个数
-        public const int MAX_BUFFER = 100;           //缓冲区中最多存放数据个数
+        public const int MAX_POINT = 100;              //屏幕上最多显示的数据个数
+        public const int MAX_BUFFER = 500000;           //缓冲区中最多存放数据个数
         #endregion
         Random rd = new Random(DateTime.Now.Millisecond);
         VbCsvHelper.CsvHelper csv = new VbCsvHelper.CsvHelper();
@@ -79,8 +78,9 @@ namespace Client_v2
             server.ForceBack += new VbServer.Net.ServerEvt.ForceBackHandler(server_ForceBack);
 
             #region 登陆信息
-            //InfoControl.User = "黄婷";
-            //InfoControl.UserId = 0;
+            InfoControl.Mw = this;
+            InfoControl.User = "";
+            InfoControl.UserId = "";
             //InfoControl.LoginTime = DateTime.Now;
             #endregion
             #region 测试数据
@@ -258,7 +258,7 @@ namespace Client_v2
         }
 
         /// <summary>
-        /// 将缓存区域中的健身信息放入数据库中
+        /// 将缓存区域中的健身信息放入文件中
         /// </summary>
         void transferDataToFile()
         {
@@ -278,25 +278,16 @@ namespace Client_v2
         //点击用户登陆按钮
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
+            if (InfoControl.User != "") return;
             for (int i = 0; i < TOTAL; i++)
                 canvas3.Children[i].Visibility = 
                     (i == 0 ? Visibility.Visible : Visibility.Hidden);
         }
         
-        //点击设置按钮
-        private void btnSet_Click(object sender, RoutedEventArgs e)
-        {
-            if (!isLogin) return;
-            for (int i = 0; i < TOTAL; i++)
-                canvas3.Children[i].Visibility =
-                    (i == 3 ? Visibility.Visible : Visibility.Hidden);
-            
-        }
-        
         //点击查看健身数据按钮
         private void btnChart_Click(object sender, RoutedEventArgs e)
         {
-            if (!isLogin) return;
+            if (InfoControl.User == "") return;
             for (int i = 0; i < TOTAL; i++)
                 canvas3.Children[i].Visibility =
                     (i == 1 ? Visibility.Visible : Visibility.Hidden);
@@ -305,16 +296,26 @@ namespace Client_v2
         //点击选择游戏按钮
         private void btnGame_Click(object sender, RoutedEventArgs e)
         {
-            if (!isLogin) return;
+            if (InfoControl.User == "") return;
             for (int i = 0; i < TOTAL; i++)
                 canvas3.Children[i].Visibility =
                     (i == 2 ? Visibility.Visible : Visibility.Hidden);
         }
 
+        //点击设置按钮
+        private void btnSet_Click(object sender, RoutedEventArgs e)
+        {
+            if (InfoControl.User == "") return;
+            for (int i = 0; i < TOTAL; i++)
+                canvas3.Children[i].Visibility =
+                    (i == 3 ? Visibility.Visible : Visibility.Hidden);
+            
+        }
+        
         //智能调节阻尼
         private void btnAuto_Click(object sender, RoutedEventArgs e)
         {
-            if (!isLogin) return;
+            if (InfoControl.User == "") return;
             for (int i = 0; i < TOTAL; i++)
                 canvas3.Children[i].Visibility =
                     (i == 4 ? Visibility.Visible : Visibility.Hidden);
@@ -327,6 +328,11 @@ namespace Client_v2
             //InfoControl.User = "";
             //InfoControl.UserId = -1;
             this.Close();
+        }
+
+        public void LoginAction()
+        {
+            btnChart_Click(this, null);
         }
 
         private void transferDataToDB()
