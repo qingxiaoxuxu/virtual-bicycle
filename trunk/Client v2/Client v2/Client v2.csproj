@@ -40,6 +40,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AForge, Version=2.1.5.0, Culture=neutral, PublicKeyToken=c1db6ff4eaa06aeb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PowerPoint\DampingAutoLearning\DampingAutoLearning\bin\x86\Debug\AForge.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Controls, Version=2.1.5.0, Culture=neutral, PublicKeyToken=a8ac264d1dc6b9d9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PowerPoint\DampingAutoLearning\DampingAutoLearning\bin\x86\Debug\AForge.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Neuro, Version=2.1.1.0, Culture=neutral, PublicKeyToken=2094f4ea39731d4f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PowerPoint\DampingAutoLearning\DampingAutoLearning\bin\x86\Debug\AForge.Neuro.dll</HintPath>
+    </Reference>
     <Reference Include="ChartFX.WPF, Version=8.0.3581.26941, Culture=neutral, PublicKeyToken=a1878e2052c08dce" />
     <Reference Include="ChartFX.WPF.Data, Version=8.0.3581.26941, Culture=neutral, PublicKeyToken=a1878e2052c08dce, processorArchitecture=MSIL" />
     <Reference Include="ChartFX.WPF.Motifs, Version=8.0.3581.26941, Culture=neutral, PublicKeyToken=a1878e2052c08dce" />
@@ -68,6 +80,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CsvHelper\CsvHelper.cs" />
+    <Compile Include="DampingAutoLearning\Program.cs" />
+    <Compile Include="DampingAutoLearning\SDBP.cs" />
+    <Compile Include="DampingAutoLearning\UserControl4_auto.xaml.cs">
+      <DependentUpon>UserControl4_auto.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DAO\DataTransfer.cs" />
     <Compile Include="DAO\MySqlConnector.cs">
       <SubType>Code</SubType>
@@ -91,6 +108,10 @@
     <Compile Include="UserControl2_game.xaml.cs">
       <DependentUpon>UserControl2_game.xaml</DependentUpon>
     </Compile>
+    <Page Include="DampingAutoLearning\UserControl4_auto.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
