@@ -56,7 +56,7 @@
     <Reference Include="ChartFX.WPF.Data, Version=8.0.3581.26941, Culture=neutral, PublicKeyToken=a1878e2052c08dce, processorArchitecture=MSIL" />
     <Reference Include="ChartFX.WPF.Motifs, Version=8.0.3581.26941, Culture=neutral, PublicKeyToken=a1878e2052c08dce" />
     <Reference Include="MySQLDriverCS">
-      <HintPath>..\..\..\Program files\MySQLDriverCS\dll\MySQLDriverCS.dll</HintPath>
+      <HintPath>D:\Program Files (x86)\MySQLDriverCS\dll\MySQLDriverCS.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework.Luna" />
     <Reference Include="System" />
@@ -95,6 +95,7 @@
     <Compile Include="Net\OESServer.cs" />
     <Compile Include="Net\ServerConfig.cs" />
     <Compile Include="Net\ServerEvt.cs" />
+    <Compile Include="Simulation.cs" />
     <Compile Include="UserControl0_login.xaml.cs">
       <DependentUpon>UserControl0_login.xaml</DependentUpon>
     </Compile>

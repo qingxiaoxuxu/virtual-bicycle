@@ -33,5 +33,14 @@ namespace Client_v2
             get { return loginTime; }
             set { loginTime = value; }
         }
+
+        private static bool isRacingGame=false;
+
+        public static bool IsRacingGame
+        {
+            get { return InfoControl.isRacingGame; }
+            set { InfoControl.isRacingGame = value; }
+        }
+        
     }
 }
