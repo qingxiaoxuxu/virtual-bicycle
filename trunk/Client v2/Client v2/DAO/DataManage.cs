@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MySQLDriverCS;
+using System.Data;
 
 namespace Client_v2.DAO
 {
@@ -19,6 +20,16 @@ namespace Client_v2.DAO
                 + "', '" + energy 
                 + "', '" + heartRate + "')";
             con.ExecuteUpdate(command);
+        }
+
+        public string findUser(string userName, string pw)
+        {
+            string res = null;
+            string command = "SELECT userid FROM vb_usermessage_user WHERE username = '" + userName + "' AND password = '" + pw + "'";
+            DataSet ds = con.ExecuteQuery(command);
+            if (ds.Tables[0].Rows.Count != 0)
+                res = ds.Tables[0].Rows[0][0].ToString();
+            return res;
         }
     }
 }
