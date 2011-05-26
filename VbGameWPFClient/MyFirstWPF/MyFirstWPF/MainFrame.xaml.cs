@@ -60,6 +60,8 @@ namespace MyFirstWPF
         private bool isChoosePressed = false;
         private bool isFun1Pressed = false;
         private bool isFun2Pressed = false;
+        private bool isRotated = false;
+        private bool isRiding = false;
         #endregion
 
 
@@ -88,16 +90,70 @@ namespace MyFirstWPF
 
         #region 健身车事件
         void iClient_HandlebarRotated(ClientIEvt.HandlebarRotatedEventArgs e)
-        {
-            if (e.Angle < 128)
-            { }
-            else
-            { }
+        {  
+            if (e.Angle < -0.02)
+            {
+                #region 健身车右转
+                Thread t = new Thread(new ThreadStart(() =>
+                    {
+                        if (!isRotated)
+                        {
+                            isRotated = true;
+                            MainFrame_KeyDown_Bicycle(BTN_ROTATE_RIGHT);
+                            Thread.Sleep(PRESS_DELAY);
+                            isRotated = false;
+                        }
+                    }
+                ));
+                t.Start();
+                #endregion
+            }
+            else if (e.Angle > 0.02)
+            {
+                #region 健身车左转
+                Thread t = new Thread(new ThreadStart(() =>
+                    {
+                        if (!isRotated)
+                        {
+                            isRotated = true;
+                            MainFrame_KeyDown_Bicycle(BTN_ROTATE_LEFT);
+                            Thread.Sleep(PRESS_DELAY);
+                            isRotated = false;
+                        }
+                    }
+                ));
+                t.Start();
+                #endregion
+            }
         }
 
         void iClient_WheelSpeedChanged(ClientIEvt.WheelSpeedChangedEventArgs e)
         {
-
+            //if (a % 100 == 0)
+            //    Console.WriteLine(a + " " + e.Speed + " " + e.SpeedChange);
+            //a++;
+            if (e.Speed > 64)
+            {
+                #region 向前踩
+                Thread t = new Thread(new ThreadStart(() =>
+                    {
+                        if (!isRiding)
+                        {
+                            isRiding = true;
+                            MainFrame_KeyDown_Bicycle(BTN_ROTATE_DOWN);
+                            Thread.Sleep(PRESS_DELAY);
+                            isRiding = false;
+                        }
+                    }
+                ));
+                t.Start();
+                #endregion
+            }
+            else if (e.Speed < -64)
+            {
+                #region 向后踩
+                #endregion
+            }
         }
 
         void iClient_Escape()
