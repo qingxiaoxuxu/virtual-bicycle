@@ -32,6 +32,18 @@ namespace Client_v2.DAO
             catch (Exception ex) { throw ex; }
         }
 
+        private MySQLParameter CreateParameter(string parameterName, System.Data.DbType dbType,
+            int size, object val, System.Data.ParameterDirection parameterDirection)
+        {
+            MySQLParameter res = new MySQLParameter();
+            res.ParameterName = parameterName;
+            res.DbType = dbType;
+            res.Size = size;
+            res.Value = val;
+            res.Direction = parameterDirection;
+            return res;
+        }
+
         private MySQLCommand CreateProcedureCommand(string procedureName, MySQLParameter[] dp)
         {
             MySQLCommand cmd = new MySQLCommand();
@@ -67,6 +79,25 @@ namespace Client_v2.DAO
         }
 
         /// <summary>
+        /// MySql查询调用
+        /// </summary>
+        /// <param name="cmdText">查询字符串</param>
+        /// <returns>查询数据集合</returns>
+        public DataSet ExecuteQuery(string cmdText)
+        {
+            Connect();
+            //MySQLCommand cmd = CreateProcedureCommand(procedureName, dp);
+            //MySQLDataReader mdr = cmd.ExecuteReaderEx();
+            MySQLCommand cmd = CreateTextCommand(cmdText);
+            MySQLDataAdapter mda = new MySQLDataAdapter();
+            mda.SelectCommand = cmd;
+            try { mda.Fill(ds); }
+            catch (Exception ex) { throw ex; }
+            finally { Terminate(); }
+            return ds;
+        }
+
+        /// <summary>
         /// MySql更改数据调用
         /// </summary>
         /// <param name="procedureName">存储过程名称</param>
@@ -75,6 +106,21 @@ namespace Client_v2.DAO
         {
             Connect();
             MySQLCommand cmd = CreateProcedureCommand(procedureName, dp);
+            //MySQLDataAdapter mda = new MySQLDataAdapter();
+            //mda.SelectCommand = cmd;
+            try { cmd.ExecuteNonQuery(); }
+            catch (Exception ex) { throw ex; }
+            finally { Terminate(); }
+        }
+
+        /// <summary>
+        /// MySql更改数据调用
+        /// </summary>
+        /// <param name="cmdText">查询字符串</param>
+        public void ExecuteUpdate(string cmdText)
+        {
+            Connect();
+            MySQLCommand cmd = CreateTextCommand(cmdText);
             //MySQLDataAdapter mda = new MySQLDataAdapter();
             //mda.SelectCommand = cmd;
             try { cmd.ExecuteNonQuery(); }
