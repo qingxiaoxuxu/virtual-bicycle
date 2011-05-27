@@ -1514,6 +1514,11 @@
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
+    <Compile Include="NameFont.spritefont">
+      <Name>NameFont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
     <None Include="TrackAdvanced.Track">
       <Name>TrackAdvanced</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
