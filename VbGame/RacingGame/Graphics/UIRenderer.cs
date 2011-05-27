@@ -298,6 +298,9 @@ namespace RacingGame.Graphics
             skyCube = new PreScreenSkyCubeMapping();
             lensFlare = new LensFlare(LensFlare.DefaultSunPos);
             BaseGame.LightDirection = LensFlare.DefaultLightPos;
+
+            nameBatch = new SpriteBatch(RacingGameManager.graphicsManager.GraphicsDevice);
+            nameFont = RacingGameManager.Content.Load<SpriteFont>("Content\\NameFont");
         }
         #endregion
 
@@ -630,6 +633,20 @@ namespace RacingGame.Graphics
         }
 
         #region Game UI
+
+        SpriteBatch nameBatch;
+        SpriteFont nameFont;
+        public void RenderPlayerNames()
+        {
+            Viewport vp = RacingGameManager.graphicsManager.GraphicsDevice.Viewport;
+
+            //nameBatch.Begin(SpriteBlendMode.None, SpriteSortMode.Immediate, SaveStateMode.None);
+
+            
+
+            //nameBatch.End();
+        }
+
         /// <summary>
         /// Render game user interface
         /// </summary>
@@ -863,6 +880,25 @@ namespace RacingGame.Graphics
                     }
                 }
             }
+
+            Viewport vp = RacingGameManager.graphicsManager.GraphicsDevice.Viewport;
+            var rp = RacingGameManager.RemotePlayers;
+            foreach (var e in rp)
+            {
+                Matrix trans = e.Value.Transform;
+                Vector3 pos = trans.Translation + trans.Up * 2.8f;
+
+                Vector3 screnPos = vp.Project(pos, BaseGame.ProjectionMatrix, BaseGame.ViewMatrix, Matrix.Identity);
+                if (screnPos.Z > 0 && screnPos.Z < 0.985f)
+                {
+                    Vector2 size = nameFont.MeasureString(e.Value.Name);
+                    screnPos.X -= size.X * 0.5f;
+                    screnPos.Y -= size.Y * 0.5f;
+                    TextureFont.WriteText((int)screnPos.X, (int)screnPos.Y, e.Value.Name);
+                    //nameBatch.DrawString(nameFont, e.Value.Name, new Vector2(pos.X, pos.Y), Color.White);
+                }
+            }
+
             //// Acceleration
             //Point tachoPoint = new Point(
             //    tachoRect.X +
@@ -911,6 +947,9 @@ namespace RacingGame.Graphics
  false;
 #endif
 
+
+
+
         /// <summary>
         /// Render all UI elements at the end of the frame, will also
         /// render the mouse cursor if we got a mouse attached.
@@ -948,6 +987,7 @@ namespace RacingGame.Graphics
         /// </summary>
         public void RenderTextsAndMouseCursor()
         {
+
 //#if DEBUG
 //            // Show fps
 //            if (Input.KeyboardF1JustPressed ||
@@ -983,6 +1023,8 @@ namespace RacingGame.Graphics
 
             //    //SpriteHelper.DrawAllSprites();
             //}
+
+            //RenderPlayerNames();
         }
         #endregion
     }
