@@ -5,6 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
            d:DesignHeight="374" d:DesignWidth="600">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Vista.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <Canvas>
             <Border BorderBrush="Black" Width="600" Height="374" Canvas.Left="0" Canvas.Top="0" CornerRadius="5,5,5,5" BorderThickness="5"></Border>
@@ -14,7 +21,7 @@
             <TextBox Height="23" HorizontalAlignment="Left" Margin="155,114,0,0" Name="textUser" VerticalAlignment="Top" Width="169" Canvas.Top="6" Canvas.Left="59" />
             <PasswordBox Height="23" HorizontalAlignment="Left" Margin="155,147,0,0" Name="textPw" VerticalAlignment="Top" 
                          Width="168" Canvas.Top="21" Canvas.Left="60"/>
-            <Button Height="72" Width="128" Canvas.Left="302" Canvas.Top="241" Name="btnLogin" Click="btnLogin_Click">
+            <Button Height="72" Width="128" Canvas.Left="302" Canvas.Top="241" Name="btnLogin" Click="btnLogin_Click" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White">
 
                 <Button.Content>
                     <StackPanel>
