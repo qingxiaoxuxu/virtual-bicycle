@@ -37,31 +37,41 @@ namespace Client_v2
                 {
                     string gameName = sr.ReadLine();
                     string gamePath = sr.ReadLine();
-                    Button btn = new Button();
-                    btn.Tag = count;
-                    btn.Content = gameName.ToString();
-                    btn.Height=140;
-                    btn.Width=140;
-                    btn.Margin = new Thickness(20);
+                    string gamePic = sr.ReadLine();
+                    Image img = new Image();
+                    img.Tag = count;
+                    img.ToolTip = gameName.ToString();
+                    img.Height=140;
+                    img.Width=140;
+                    img.Margin = new Thickness(20);
                     if (count == 0) 
-                        btn.Click += new RoutedEventHandler(btnRacingGame_Click);
+                        img.MouseDown +=new MouseButtonEventHandler(btnRacingGame_Click); 
                     else
-                        btn.Click += new RoutedEventHandler(btn_Click);
+                        img.MouseDown+=new MouseButtonEventHandler(img_MouseDown);
                     //if (gameName != "" && gamePath != "")
                     {
-                        gameList.Add(new Game(gameName, gamePath, ""));
+                        gameList.Add(new Game(gameName, gamePath, gamePic));
+                        // 创建一个源
+                        BitmapImage myBitmapImage = new BitmapImage();
+                        // BitmapImage.UriSource必须使用BeginInit/EndInit块
+                        myBitmapImage.BeginInit();
+                        myBitmapImage.UriSource = new Uri(gamePic, UriKind.Absolute);
+                        myBitmapImage.EndInit();
+                        //把源赋给Image控件
+                        img.Source = myBitmapImage;
+
                     }
                     count++;
-                    wrapPanel.Children.Add(btn);
+                    wrapPanel.Children.Add(img);
                 }
             }
         }
 
-        void btn_Click(object sender, RoutedEventArgs e)
+        void img_MouseDown(object sender, MouseButtonEventArgs e)
         {
             InfoControl.IsRacingGame = false;
             ProcessStartInfo gameInfo = new ProcessStartInfo();
-            gameInfo.FileName = gameList[Convert.ToInt32((sender as Button).Tag)].Name+".exe";
+            gameInfo.FileName = gameList[Convert.ToInt32((sender as Button).Tag)].Name + ".exe";
             gameInfo.WorkingDirectory = gameList[Convert.ToInt32((sender as Button).Tag)].Path;
             gameInfo.WindowStyle = ProcessWindowStyle.Normal;
             try
@@ -83,8 +93,8 @@ namespace Client_v2
             userId = rd.Next(100000).ToString();
             user = "LKQ" + userId;
             ProcessStartInfo gameInfo = new ProcessStartInfo();
-            gameInfo.FileName = "MyFirstWPF.exe";
-            gameInfo.WorkingDirectory = @"J:\VB\MyFirstWPF\MyFirstWPF\bin\Debug";
+            gameInfo.FileName = gameList[Convert.ToInt32((sender as Button).Tag)].Name + ".exe";
+            gameInfo.WorkingDirectory = gameList[Convert.ToInt32((sender as Button).Tag)].Path;
             gameInfo.WindowStyle = ProcessWindowStyle.Normal;
             gameInfo.Arguments = user + " " + userId;
             try
