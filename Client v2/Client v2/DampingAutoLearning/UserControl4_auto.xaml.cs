@@ -16,6 +16,7 @@ using BuzzWin;
 using AForge.Neuro;
 using AForge.Neuro.Learning;
 using System.Runtime.Serialization.Formatters.Binary;
+using Client_v2.Model;
 
 namespace Client_v2.DampingAutoLearning
 {
@@ -73,7 +74,7 @@ namespace Client_v2.DampingAutoLearning
             }
         }
         int preLoad = 0;
-        List<int> displayData = new List<int>();
+        List<LoadInfo> displayData = new List<LoadInfo>();
         void device_GetSportStatus(DeviceDataManager.SportStatus sportStatus)
         {
             if (LearningMode)
@@ -89,10 +90,14 @@ namespace Client_v2.DampingAutoLearning
                 preLoad = Shift;
                 inputList[DataCount] = input;
                 outputList[DataCount] = output;
+                
+                displayData.Insert(0, new LoadInfo(Shift,DataCount));
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    chartLoad.ItemsSource = displayData;
+                    chartLoad.Refresh();
+                }));
                 DataCount++;
-                displayData.Insert(0, Shift);
-                chartLoad.ItemsSource = displayData;
-                chartLoad.Refresh();
                 if (DataCount == TrainingCount)
                 {
                     LearningMode = false;
