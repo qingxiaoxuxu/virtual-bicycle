@@ -73,6 +73,7 @@ namespace Client_v2.DampingAutoLearning
             }
         }
         int preLoad = 0;
+        List<int> displayData = new List<int>();
         void device_GetSportStatus(DeviceDataManager.SportStatus sportStatus)
         {
             if (LearningMode)
@@ -89,6 +90,9 @@ namespace Client_v2.DampingAutoLearning
                 inputList[DataCount] = input;
                 outputList[DataCount] = output;
                 DataCount++;
+                displayData.Insert(0, Shift);
+                chartLoad.ItemsSource = displayData;
+                chartLoad.Refresh();
                 if (DataCount == TrainingCount)
                 {
                     LearningMode = false;

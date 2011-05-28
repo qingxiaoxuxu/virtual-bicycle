@@ -3,16 +3,60 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Client_v2"
+             xmlns:cfxData="clr-namespace:ChartFX.WPF.Data;assembly=ChartFX.WPF.Data"
+             xmlns:cfx="http://schemas.softwarefx.com/chartfx/wpf/80"
+             xmlns:cfxcontrols="http://schemas.softwarefx.com/chartfx/wpf/80/controls"
              mc:Ignorable="d" 
              d:DesignHeight="374" d:DesignWidth="600">
+    <UserControl.Resources>
+    <ResourceDictionary>
+        <ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary Source="../Vista.xaml"/>
+        </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <Canvas>
             <Border BorderBrush="Black" Width="600" Height="374" Canvas.Left="0" Canvas.Top="0" CornerRadius="5,5,5,5" BorderThickness="5">
                 <Canvas>
-                    <Button Content="Start" Height="57" Name="btn_Start" Width="77" Canvas.Left="79" Canvas.Top="170" Click="btn_Start_Click" />
-                    <Button Content="Save" Height="57" Name="btn_Save" Width="77" Canvas.Left="242" Canvas.Top="170" Click="btn_Save_Click" />
-                    <Button Content="Load" Height="57" Name="btn_Load" Width="77" Canvas.Left="411" Canvas.Top="170" Click="btn_Load_Click" />
+                    <Button Content="Start" Height="30" Name="btn_Start" Width="77" Canvas.Left="79" Canvas.Top="20" Click="btn_Start_Click" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White"/>
+                    <Button Content="Save" Height="30" Name="btn_Save" Width="77" Canvas.Left="242" Canvas.Top="20" Click="btn_Save_Click" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White" />
+                    <Button Content="Load" Height="30" Name="btn_Load" Width="77" Canvas.Left="411" Canvas.Top="20" Click="btn_Load_Click" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White" />
                 </Canvas>
+                
+            </Border>
+            <Border BorderBrush="Black" Width="600" Height="306" Canvas.Left="0" Canvas.Top="68" CornerRadius="5,5,5,5" BorderThickness="5">
+                <cfx:Chart Name="chartLoad" Height="306" Width="580" Gallery="Line">
+                    <cfx:Chart.AllSeries>
+                        <cfx:AllSeriesAttributes StrokeThickness="3">
+                            <cfx:AllSeriesAttributes.Marker>
+                                <cfx:MarkerAttributes Visibility="Hidden" />
+                            </cfx:AllSeriesAttributes.Marker>
+                        </cfx:AllSeriesAttributes>
+                    </cfx:Chart.AllSeries>
+                    <cfx:Chart.Series>
+                        <cfx:SeriesAttributes Content="当前阻尼" BindingPath="Load" />
+                    </cfx:Chart.Series>
+                    
+                    <cfx:Chart.LegendBox>
+                        <cfx:LegendBox Visibility="Hidden" />
+                    </cfx:Chart.LegendBox>
+                    <cfx:Chart.AxesY>
+                        <cfx:Axis Min="0" Max="255"  Step="20" MinorStep="1">
+                            <cfx:Axis.Labels>
+                                <cfx:AxisLabelAttributes Format="Number" />
+                            </cfx:Axis.Labels>
+                        </cfx:Axis>
+                    </cfx:Chart.AxesY>
+                    <cfx:Chart.AxesX>
+                        <cfx:Axis Min="1" Max="10000" Step="5000" MinorStep="5">
+                            <cfx:Axis.Labels>
+                                <cfx:AxisLabelAttributes BindingPath="CurrentTime"/>
+                            </cfx:Axis.Labels>
+                        </cfx:Axis>
+                    </cfx:Chart.AxesX>
+                </cfx:Chart>
             </Border>
         </Canvas>
     </Grid>
