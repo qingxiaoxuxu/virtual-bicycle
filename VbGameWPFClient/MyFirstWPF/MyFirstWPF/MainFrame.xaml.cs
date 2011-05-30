@@ -385,6 +385,8 @@ namespace MyFirstWPF
                     }
                     if (index >= 0)                                                 //索引合法
                     {
+                        if (currentIndex != INDEX_MAIN_PAGE)
+                            ((IReload)pages[currentIndex]).Leave();
                         if (index != INDEX_MAIN_PAGE)
                             ((IReload)pages[index]).Reload();
                         System.Threading.Thread.Sleep(50);                          //延迟0.05秒，进行界面变换
@@ -416,6 +418,8 @@ namespace MyFirstWPF
                 index = ((IKeyDown)this.Content).BtnFunction1();            //获得第一个功能键的界面索引
             if (index >= 0)                                                 //索引合法
             {
+                if (currentIndex != INDEX_MAIN_PAGE)
+                    ((IReload)pages[currentIndex]).Leave();
                 if (index != INDEX_MAIN_PAGE)
                     ((IReload)pages[index]).Reload();
                 System.Threading.Thread.Sleep(50);                          //延迟0.05秒，进行界面变换
