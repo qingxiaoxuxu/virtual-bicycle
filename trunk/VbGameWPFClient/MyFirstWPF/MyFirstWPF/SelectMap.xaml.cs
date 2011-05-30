@@ -65,6 +65,7 @@ namespace MyFirstWPF
                 client.CreateFailure += new EventHandler(client_CreateFailure);
                 string str = "Large" + msk[peopleState] + "Story";
                 (this.Resources[str] as Storyboard).Begin(this);
+                StartText.Text = "建立房间";
             }
             else
             {
@@ -74,6 +75,7 @@ namespace MyFirstWPF
                 peopleTwo.Visibility = Visibility.Hidden;
                 peopleThree.Visibility = Visibility.Hidden;
                 peopleFour.Visibility = Visibility.Hidden;
+                StartText.Text = "开始游戏！";
             }
         }
 
@@ -115,7 +117,14 @@ namespace MyFirstWPF
         public void Reload()
         {
             isCreated = 0;
-            //TODO;
+            flickerState = 0;
+            LeftArrow.Margin = new Thickness(
+                   LeftArrow.Margin.Left,
+                   FlickerTop,
+                   0, 0);
+            RightArrow.Margin = new Thickness(
+                0, FlickerTop,
+                RightArrow.Margin.Right, 0);
         }
 
         #endregion

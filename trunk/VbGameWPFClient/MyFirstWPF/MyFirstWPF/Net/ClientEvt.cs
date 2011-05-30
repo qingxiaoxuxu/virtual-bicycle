@@ -28,6 +28,8 @@ namespace VbClient.Net
         public event EventHandler BeginLoadGame;
         public event EventHandler BeginGame;
 
+        public event EventHandler EndGame;
+
         public event UpdateMapHandler GetOtherBike;
         public event UpdateMapHandler GetObject;
 
@@ -231,6 +233,11 @@ namespace VbClient.Net
                     {
                         if (RefreshRoomInfo != null)
                             RefreshRoomInfo();
+                        break;
+                    }
+                case "gameend":
+                    {
+                        EndGame(this, null);
                         break;
                     }
             }

@@ -15,6 +15,7 @@ namespace VbClient.Net
         public event Action Escape;
         public event HandlebarRotatedHandler HandlebarRotated;
         public event WheelSpeedChangedHandler WheelSpeedChanged;
+        public event WheelSpeedChangedHandler WheelSpeedChangedRaw;
         public event HeartPulseChangedHandler HeartPulse;
 
         public ClientIEvt(string serverIp)
@@ -65,6 +66,12 @@ namespace VbClient.Net
                     {
                         WheelSpeedChangedEventArgs arg = new WheelSpeedChangedEventArgs(Single.Parse(msgs[1]), Single.Parse(msgs[2]));
                         WheelSpeedChanged(arg);
+                        break;
+                    }
+                case "speedraw":
+                    {
+                        WheelSpeedChangedEventArgs arg = new WheelSpeedChangedEventArgs(Single.Parse(msgs[1]),0);
+                        WheelSpeedChangedRaw(arg);
                         break;
                     }
                 case "heart":

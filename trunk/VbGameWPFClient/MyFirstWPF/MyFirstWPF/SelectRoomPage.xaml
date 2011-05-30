@@ -39,5 +39,29 @@
         		<ImageBrush Stretch="Fill" ImageSource="Contents\Images\blue_down.png"/>
         	</Canvas.Background>
         </Canvas>
+        <Canvas HorizontalAlignment="Left" Margin="50,0,0,20" x:Name="ReturnCanvas"
+			VerticalAlignment="Bottom" Width="220" Height="60">
+            <Canvas.Background>
+                <ImageBrush Stretch="Fill" ImageSource="Contents\Images\bgButton.png"/>
+            </Canvas.Background>
+            <TextBlock Height="50" Width="200" Margin="10, 3, 0, 0" Name="EscapeText"
+                       FontFamily="微软雅黑" Text="←退出大厅" FontSize="28pt" TextAlignment="Center" Canvas.Left="-2" />
+        </Canvas>
+        <Canvas HorizontalAlignment="Left" Margin="50,110,0,0" x:Name="CreateCanvas"
+			VerticalAlignment="Top" Width="220" Height="60">
+            <Canvas.Background>
+                <ImageBrush Stretch="Fill" ImageSource="Contents\Images\bgButton.png"/>
+            </Canvas.Background>
+            <TextBlock Height="50" Width="200" Margin="10, 3, 0, 0" Name="CreateText"
+                       FontFamily="微软雅黑" Text="←创建房间" FontSize="28pt" TextAlignment="Center"/>
+        </Canvas>
+        <Canvas HorizontalAlignment="Right" Margin="0,0,50,20" x:Name="StartCanvas"
+			VerticalAlignment="Bottom" Width="220" Height="60">
+            <Canvas.Background>
+                <ImageBrush Stretch="Fill" ImageSource="Contents\Images\bgButton.png"/>
+            </Canvas.Background>
+            <TextBlock Height="50" Width="200" Margin="10, 3, 0, 0" Name="StartText"
+                       FontFamily="微软雅黑" Text="进入房间→" FontSize="28pt" TextAlignment="Center" Canvas.Left="0" />
+        </Canvas>
     </Grid>
 </UserControl>
