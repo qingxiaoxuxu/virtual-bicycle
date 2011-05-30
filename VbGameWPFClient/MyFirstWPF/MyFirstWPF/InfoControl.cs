@@ -118,5 +118,9 @@ namespace MyFirstWPF
             @"..\..\Contents\Images\scene3.png"
         };                                                              //地图路径
 
+        public static String FileName = "";                             //游戏名称
+
+        public static String WorkingDirectory = "";                     //路径
+
     }
 }
