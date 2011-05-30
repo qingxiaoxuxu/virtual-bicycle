@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Threading;
 using VbClient.Net;
+using System.Windows.Threading;
 
 namespace MyFirstWPF
 {
@@ -39,6 +40,7 @@ namespace MyFirstWPF
         EventWaitHandle addRoomEvent = new EventWaitHandle(true, EventResetMode.ManualReset);
         //控制进入房间的逻辑
         private ClientEvt client;
+        DispatcherTimer refreshTimer;
 
         delegate void Fun(List<string> team, List<string> map, List<int> counts);
         Fun showRoom;
@@ -54,6 +56,17 @@ namespace MyFirstWPF
             roomCount = 0;
             flickerCanvas.Visibility = Visibility.Hidden;
             showRoom = new Fun(this.getRoomInfo);
+            refreshTimer = new DispatcherTimer();
+            refreshTimer.Interval = TimeSpan.FromSeconds(5);
+            refreshTimer.Tick += new EventHandler(refreshTimer_Tick);
+        }
+
+        //每次刷新时向Server端发出查询房间列表请求
+        void refreshTimer_Tick(object sender, EventArgs e)
+        {
+            isEntered = 0;
+            flickerState = 0;
+            client.GetTeamList();
         }
 
         #region client系列事件响应
@@ -163,9 +176,15 @@ namespace MyFirstWPF
 
         public void Reload()
         {
+            refreshTimer.Start();
             isEntered = 0;
             flickerState = 0;
             client.GetTeamList();
+        }
+
+        public void Leave()
+        {
+            refreshTimer.Stop();
         }
 
         #endregion

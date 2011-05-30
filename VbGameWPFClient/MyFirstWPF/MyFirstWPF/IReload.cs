@@ -8,5 +8,7 @@ namespace MyFirstWPF
     interface IReload
     {
         void Reload();      //界面刷新
+
+        void Leave();       //退出界面
     }
 }

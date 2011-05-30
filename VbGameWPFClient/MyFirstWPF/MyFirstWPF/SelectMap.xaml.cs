@@ -127,6 +127,9 @@ namespace MyFirstWPF
                 RightArrow.Margin.Right, 0);
         }
 
+        public void Leave()
+        { }
+
         #endregion
 
         #region IKeyDown 成员
