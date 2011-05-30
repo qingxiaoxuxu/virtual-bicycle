@@ -82,7 +82,8 @@ namespace MyFirstWPF
             iClient.Enter += new Action(iClient_Function1);                     //对应FUN1
             iClient.Reset += new Action(iClient_Function2);                     //对应FUN2
             iClient.HandlebarRotated += new ClientIEvt.HandlebarRotatedHandler(iClient_HandlebarRotated);
-            iClient.WheelSpeedChanged += new ClientIEvt.WheelSpeedChangedHandler(iClient_WheelSpeedChanged);
+            iClient.WheelSpeedChangedRaw += new ClientIEvt.WheelSpeedChangedHandler(iClient_WheelSpeedChanged);
+            
             #endregion
             userId = usrId;
             user = usr;
@@ -105,8 +106,9 @@ namespace MyFirstWPF
         #region 健身车事件
         void iClient_HandlebarRotated(ClientIEvt.HandlebarRotatedEventArgs e)
         {  
-            if (e.Angle < -0.02)
+            if (e.Angle < -0.015)
             {
+                Console.WriteLine(e.Angle);
                 #region 健身车右转
                 Thread t = new Thread(new ThreadStart(() =>
                     {
@@ -122,8 +124,9 @@ namespace MyFirstWPF
                 t.Start();
                 #endregion
             }
-            else if (e.Angle > 0.02)
+            else if (e.Angle > 0.015)
             {
+                Console.WriteLine(e.Angle);
                 #region 健身车左转
                 Thread t = new Thread(new ThreadStart(() =>
                     {
@@ -148,6 +151,7 @@ namespace MyFirstWPF
             //a++;
             if (e.Speed > 64)
             {
+                Console.WriteLine(e.Speed);
                 #region 向前踩
                 Thread t = new Thread(new ThreadStart(() =>
                     {
@@ -165,7 +169,20 @@ namespace MyFirstWPF
             }
             else if (e.Speed < -64)
             {
+                Console.WriteLine(e.Speed);
                 #region 向后踩
+                Thread t = new Thread(new ThreadStart(() =>
+                {
+                    if (!isRiding)
+                    {
+                        isRiding = true;
+                        MainFrame_KeyDown_Bicycle(BTN_ROTATE_UP);
+                        Thread.Sleep(PRESS_DELAY);
+                        isRiding = false;
+                    }
+                }
+               ));
+                t.Start();
                 #endregion
             }
         }
@@ -347,8 +364,7 @@ namespace MyFirstWPF
                     }
                     if (index >= 0)                                                 //索引合法
                     {
-                        if (index == INDEX_MULTI_SELECT_ROOM_PAGE ||
-                            index == INDEX_WAITING_ROOM_PAGE)
+                        if (index != INDEX_MAIN_PAGE)
                             ((IReload)pages[index]).Reload();
                         System.Threading.Thread.Sleep(50);                          //延迟0.05秒，进行界面变换
                         this.Content = pages[index];                                //显示新界面
@@ -379,8 +395,7 @@ namespace MyFirstWPF
                 index = ((IKeyDown)this.Content).BtnFunction1();            //获得第一个功能键的界面索引
             if (index >= 0)                                                 //索引合法
             {
-                if (index == INDEX_MULTI_SELECT_ROOM_PAGE ||
-                    index == INDEX_WAITING_ROOM_PAGE)
+                if (index != INDEX_MAIN_PAGE)
                     ((IReload)pages[index]).Reload();
                 System.Threading.Thread.Sleep(50);                          //延迟0.05秒，进行界面变换
                 this.Content = pages[index];                                //显示新界面

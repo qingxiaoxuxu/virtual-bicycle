@@ -14,46 +14,46 @@
 			<ImageBrush Stretch="Fill" ImageSource="Contents\Images\WaitingRoom.jpg"/>
 		</Grid.Background>
 		<TextBlock x:Name="titleText" FontSize="32pt" Foreground="White" TextAlignment="Center"
-			FontFamily="微软雅黑" Text="准备游戏" Margin="512,70,514,0" VerticalAlignment="Top" Height="50" />
+			FontFamily="微软雅黑" Text="准备游戏" Margin="380,70,382,0" VerticalAlignment="Top" Height="50" />
 		<Canvas x:Name="MapCanvas" HorizontalAlignment="Left" Margin="50,150,0,0" 
 			Width="360" VerticalAlignment="Top" Height="260" Background="BurlyWood"/>
-		<Canvas x:Name="BicycleCanvas" HorizontalAlignment="Left" Margin="50,420,0,0"
-			Width="360" VerticalAlignment="Top" Height="260" Background="Cyan"/>
+		
         
-		<Canvas x:Name="PlayerCanvas1" Margin="0,150,50,0" VerticalAlignment="Top" 
-			Height="80" HorizontalAlignment="Right" Width="800">
-			<local:UserInfoBlock x:Name="User0" d:LayoutOverrides="Width, Height" d:IsHidden="True"/>
+		<Canvas x:Name="PlayerCanvas1" Margin="432,180,50,0" VerticalAlignment="Top" 
+			Height="80">
+			<local:UserInfoBlock x:Name="User0" d:LayoutOverrides="Width, Height" d:IsHidden="True" Height="80" Canvas.Top="0" />
 		</Canvas>
-        <Canvas x:Name="PlayerCanvas2" Margin="0,240,50,0" VerticalAlignment="Top" 
-			Height="80" HorizontalAlignment="Right" Width="800">
+        <Canvas x:Name="PlayerCanvas2" Margin="432,310,50,0" VerticalAlignment="Top" 
+			Height="80">
             <local:UserInfoBlock x:Name="User1" d:LayoutOverrides="Width, Height" d:IsHidden="True"/>
         </Canvas>
-        <Canvas x:Name="PlayerCanvas3" Margin="0,330,50,0" VerticalAlignment="Top" 
-			Height="80" HorizontalAlignment="Right" Width="800">
+        <Canvas x:Name="PlayerCanvas3" Margin="432,0,50,282" Height="80" VerticalAlignment="Bottom">
             <local:UserInfoBlock x:Name="User2" d:LayoutOverrides="Width, Height" d:IsHidden="True"/>
         </Canvas>
-        <Canvas x:Name="PlayerCanvas4" Margin="0,420,50,0" VerticalAlignment="Top" 
-			Height="80" HorizontalAlignment="Right" Width="800">
-            <local:UserInfoBlock x:Name="User3" d:LayoutOverrides="Width, Height" d:IsHidden="True"/>
+        <Canvas x:Name="PlayerCanvas4" Margin="432,0,50,152" VerticalAlignment="Bottom" 
+			Height="80">
+            <local:UserInfoBlock x:Name="User3" d:LayoutOverrides="Width, Height" d:IsHidden="True" Height="80" />
         </Canvas>
-        <Canvas x:Name="PlayerCanvas5" Margin="0,510,50,0" VerticalAlignment="Top" 
-			Height="80" HorizontalAlignment="Right" Width="800">
-            <local:UserInfoBlock x:Name="User4" d:LayoutOverrides="Width, Height" d:IsHidden="True"/>
-        </Canvas>
-        <Canvas x:Name="PlayerCanvas6" Margin="0,600,50,0" VerticalAlignment="Top" 
-			Height="80" HorizontalAlignment="Right" Width="800">
-            <local:UserInfoBlock x:Name="User5" d:LayoutOverrides="Width, Height" d:IsHidden="True"/>
-        </Canvas>
+        
+        
 
         <Canvas HorizontalAlignment="Left" Margin="50,0,0,20" x:Name="ReturnCanvas"
-			VerticalAlignment="Bottom" Width="200" Height="60"/>
+			VerticalAlignment="Bottom" Width="200" Height="60">
+            <Canvas.Background>
+                <ImageBrush Stretch="Fill" ImageSource="Contents\Images\bgButton.png"/>
+            </Canvas.Background>
+            <TextBlock Height="50" Width="180" Margin="10, 3, 0, 0" Name="EscapeText"
+                       FontFamily="微软雅黑" Text="退出房间" FontSize="28pt" TextAlignment="Center"/>
+        </Canvas>
 		<Canvas HorizontalAlignment="Right" Margin="0,0,50,20" x:Name="StartCanvas"
 			VerticalAlignment="Bottom" Width="200" Height="60">
             <Canvas.Background>
                 <ImageBrush Stretch="Fill" ImageSource="Contents\Images\bgButton.png"/>
             </Canvas.Background>
-            <TextBlock Height="50" Width="180" Margin="10, 3, 0, 0" Name="StartText"
-                       FontFamily="微软雅黑" Text="开始游戏" FontSize="28pt" TextAlignment="Center"/>
+            <TextBlock Height="50" Width="180" Margin="6, 3, 0, 0" Name="StartText"
+                       FontFamily="微软雅黑" Text="开始游戏！" FontSize="28pt" TextAlignment="Center"/>
         </Canvas>
+        <TextBlock Height="57" Margin="294,0,296,24" Name="infoBlock" VerticalAlignment="Bottom"
+                   FontFamily="微软雅黑" FontSize="32pt" Foreground="Yellow" TextAlignment="Center"/>
 	</Grid>
 </UserControl>

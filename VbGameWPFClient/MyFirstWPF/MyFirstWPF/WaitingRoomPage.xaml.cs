@@ -23,13 +23,14 @@ namespace MyFirstWPF
         public const int MODE_HOST = 0;
         public const int MODE_JOIN = 1;
         public const int TOTAL_USERS = 4;
-        UserInfoBlock[] users = new UserInfoBlock[6];
+        UserInfoBlock[] users = new UserInfoBlock[4];
         string teamName;
         private int index;                  //用户排在第几个位置
         private int currentMode;            //当前用户是否为房主，0为是，1为否
         private bool allReady;              //所有玩家是否都准备好（仅限于房主状态）
         private bool playerReady;           //该玩家是否准备好（仅限于加入游戏状态）
 
+        private bool isGameStarted;
         private ClientEvt client;
 
         private ProcessStartInfo gameInfo;  //游戏的进程信息
@@ -42,13 +43,12 @@ namespace MyFirstWPF
             client.RoomDetail += new ClientEvt.RoomInfo(client_RoomDetail);
             client.RefreshRoomInfo += new Action(client_RefreshRoomInfo);
             client.BeginGame += new EventHandler(client_BeginGame);
+            client.EndGame += new EventHandler(client_EndGame);
             #region 分配位置
             users[0] = User0;
             users[1] = User1;
             users[2] = User2;
             users[3] = User3;
-            users[4] = User4;
-            users[5] = User5;
             #endregion
         }
 
@@ -59,11 +59,12 @@ namespace MyFirstWPF
             //gameInfo.FileName = "mspaint.exe";      //RacingGame.exe
             //gameInfo.WorkingDirectory = @"C:\WINDOWS\system32";     //Where?
             gameInfo.FileName = "RacingGame.exe";
-            gameInfo.WorkingDirectory = @"J:\VB\VbGame\RacingGame\bin\x86\Debug\";
+            gameInfo.WorkingDirectory = "D:\\VbProgram\\VbGame\\";
             gameInfo.WindowStyle = ProcessWindowStyle.Normal;
             gameInfo.Arguments = InfoControl.UserId;
             try
             {
+                isGameStarted = true;
                 gameProc = Process.Start(gameInfo);
                 System.Threading.Thread.Sleep(500);
             }
@@ -141,7 +142,7 @@ namespace MyFirstWPF
                     }
                     #endregion
                     #region 改变开始游戏按钮状态
-                    if (totalReady == isReady.Count - 1)
+                    if (totalReady == isReady.Count - 1 /*&& totalReady != 0*/)
                         allReady = true;
                     else
                         allReady = false;
@@ -166,8 +167,23 @@ namespace MyFirstWPF
         //服务器发来开始游戏的命令
         void client_BeginGame(object sender, EventArgs e)
         {
+            this.Dispatcher.Invoke(new Action(() =>
+                {
+                    infoBlock.Text = "游戏即将开始！";
+                }));
             startGame();
             //MessageBox.Show("Game started! " + InfoControl.UserName);
+        }
+
+        //服务器发来结束游戏的命令
+        void client_EndGame(object sender, EventArgs e)
+        {
+            this.Dispatcher.Invoke(new Action(() =>
+            {
+                infoBlock.Text = "";
+            }));
+            isGameStarted = false;
+            client_RefreshRoomInfo();
         }
         #endregion
 
@@ -176,7 +192,8 @@ namespace MyFirstWPF
         public void Reload()
         {
             teamName = "";
-            playerReady = allReady = false;
+            infoBlock.Text = "";
+            playerReady = allReady = isGameStarted = false;
             client.GetRoomInfo();       //获取房间具体信息，消息返回方法是client_RoomDetail
         }
 
@@ -191,6 +208,7 @@ namespace MyFirstWPF
 
         public int Choose()
         {
+            if (isGameStarted) return -1;
             if (currentMode == MODE_JOIN)
                 client.Ready();
             else
@@ -205,12 +223,14 @@ namespace MyFirstWPF
 
         public int MoveBack()
         {
+            if (isGameStarted) return -1;
             client.LeaveTeam(teamName);
             return MainFrame.INDEX_MULTI_SELECT_ROOM_PAGE;
         }
 
         public int BtnFunction1()
         {
+            if (isGameStarted) return -1;
             return -1;
         }
 
