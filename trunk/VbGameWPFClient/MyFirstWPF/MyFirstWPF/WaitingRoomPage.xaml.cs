@@ -58,8 +58,8 @@ namespace MyFirstWPF
             gameInfo = new ProcessStartInfo();
             //gameInfo.FileName = "mspaint.exe";      //RacingGame.exe
             //gameInfo.WorkingDirectory = @"C:\WINDOWS\system32";     //Where?
-            gameInfo.FileName = "RacingGame.exe";
-            gameInfo.WorkingDirectory = "D:\\VbProgram\\VbGame\\";
+            gameInfo.FileName = InfoControl.FileName;
+            gameInfo.WorkingDirectory = InfoControl.WorkingDirectory;
             gameInfo.WindowStyle = ProcessWindowStyle.Normal;
             gameInfo.Arguments = InfoControl.UserId;
             try

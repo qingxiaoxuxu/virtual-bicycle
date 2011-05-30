@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Threading;
 using VbClient.Net;
+using System.IO;
 
 namespace MyFirstWPF
 {
@@ -85,6 +86,28 @@ namespace MyFirstWPF
             #endregion
             userId = usrId;
             user = usr;
+            getGamePath();
+        }
+
+        private void getGamePath()
+        {
+            const string CONF_NAME = "GamePath.ini";
+            const string TEMPLATE = 
+@"RacingGame.exe";
+            if (!File.Exists(CONF_NAME))
+            {
+                using (StreamWriter sw = new StreamWriter(CONF_NAME))
+                {
+                    sw.Write(TEMPLATE);
+                    sw.WriteLine();
+                    sw.WriteLine();
+                }
+            }
+            using (StreamReader sr = new StreamReader(CONF_NAME))
+            {
+                InfoControl.FileName = sr.ReadLine();
+                InfoControl.WorkingDirectory = sr.ReadLine();
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
