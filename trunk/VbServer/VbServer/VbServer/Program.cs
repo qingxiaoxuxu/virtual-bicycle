@@ -50,6 +50,7 @@ namespace VbServer
 
         static void Server_ReceivedMsg(Client client, string msg)
         {
+            if (!msg.Contains("vb"))
             Console.WriteLine("Receiving("+client.ClientIp+"):"+msg);
         }
     }
