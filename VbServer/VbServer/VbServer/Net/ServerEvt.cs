@@ -21,7 +21,7 @@ namespace VbServer.Net
             t.mapName = "Beginner";
             teamList.Add(t);
             t.userList.Add(new User("lkq","1",null));
-            t.userList.Add(new User("pl","2",null));
+            //t.userList.Add(new User("pl","2",null));
             //t.userList.Add(new User("xt","3",null));
             t.userList[0].isAdmin = true;       //
             //t.mapName = "Advanced";           //
@@ -31,6 +31,7 @@ namespace VbServer.Net
 
         void Server_WrittenMsg(Client client, string msg)
         {
+            if(!msg.Contains("vb"))
             Console.WriteLine("Sending:" + msg);
         }
 
@@ -41,7 +42,18 @@ namespace VbServer.Net
 
         void ServerEvt_DisConnect(object sender, EventArgs e)
         {
-        
+            Team t = FindTeamByUser(teamList, FindUserByClient(User.allLoginUser, sender as Client));
+            User current = FindUserByClient(User.allLoginUser, sender as Client);
+            if (t != null)
+            {
+                foreach (User us in t.userList)
+                {
+                    if (us.userId == current.userId)
+                    {
+                        us.client.SendTxt("gameend");
+                    }
+                }
+            }
             for (int i = teamList.Count - 1; i >= 0; i--)
             {
                 teamList[i].DelUser(sender as Client);
