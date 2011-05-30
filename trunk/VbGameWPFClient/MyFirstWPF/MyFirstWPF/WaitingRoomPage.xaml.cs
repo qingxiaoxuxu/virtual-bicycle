@@ -197,6 +197,9 @@ namespace MyFirstWPF
             client.GetRoomInfo();       //获取房间具体信息，消息返回方法是client_RoomDetail
         }
 
+        public void Leave()
+        { }
+
         #endregion
 
         #region IKeyDown 成员
