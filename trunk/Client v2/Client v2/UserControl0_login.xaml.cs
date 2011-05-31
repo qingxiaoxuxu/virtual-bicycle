@@ -27,23 +27,25 @@ namespace Client_v2
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            string userName = textUser.Text;
+            string userid = textUser.Text;
             string pw = textPw.Password;
-            string res = DataManage.findUser(userName, pw);
-            if (res == null)
-            {
-                MessageBox.Show("用户名或密码错误，请重试！", "Login Error");
-                textUser.Text = "";
-                textPw.Password = "";
-            }
-            else
-            {
-                MessageBox.Show("Succ");
-                InfoControl.User = userName;
-                InfoControl.UserId = res;
+            //string res = DataManage.findUser(userid, pw);
+            //if (res == null)
+            //{
+            //    MessageBox.Show("用户名或密码错误，请重试！", "Login Error");
+            //    textUser.Text = "";
+            //    textPw.Password = "";
+            //}
+            //else
+            //{
+            string res = (userid == "11113" ? "lkq" : "test");
+                MessageBox.Show("欢迎您，" + res + "!", "Login Success");
+                InfoControl.User = res;
+                InfoControl.UserId = userid;
                 InfoControl.LoginTime = DateTime.Now;
                 InfoControl.Mw.LoginAction();
-            }
+                InfoControl.Mw.addEvent();
+            //}
         }
     }
 }

@@ -90,8 +90,11 @@ namespace Client_v2
             InfoControl.IsRacingGame = true;
             string userId, user;
             Random rd = new Random(DateTime.Now.Millisecond);
-            userId = rd.Next(100000).ToString();
-            user = "LKQ" + userId;
+            userId = InfoControl.UserId;
+            user = InfoControl.User;
+            //userId = rd.Next(100000).ToString();
+            //user = "LKQ" + userId;
+
             ProcessStartInfo gameInfo = new ProcessStartInfo();
             gameInfo.FileName = gameList[Convert.ToInt32((sender as Button).Tag)].Name + ".exe";
             gameInfo.WorkingDirectory = gameList[Convert.ToInt32((sender as Button).Tag)].Path;

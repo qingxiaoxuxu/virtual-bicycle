@@ -42,7 +42,7 @@ namespace Client_v2
             set { loginTime = value; }
         }
 
-        private static bool isRacingGame=false;
+        private static bool isRacingGame=true;
 
         public static bool IsRacingGame
         {
