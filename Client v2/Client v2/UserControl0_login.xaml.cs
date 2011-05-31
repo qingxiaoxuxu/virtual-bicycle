@@ -44,7 +44,6 @@ namespace Client_v2
                 InfoControl.UserId = userid;
                 InfoControl.LoginTime = DateTime.Now;
                 InfoControl.Mw.LoginAction();
-                InfoControl.Mw.addEvent();
             //}
         }
     }
