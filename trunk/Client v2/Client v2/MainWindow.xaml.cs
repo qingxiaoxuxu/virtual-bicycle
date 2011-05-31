@@ -56,6 +56,7 @@ namespace Client_v2
         public MainWindow()
         {
             InitializeComponent();
+            this.DragMove();
             InfoControl.device.OpenDevice(ref InfoControl.device.m_oBuzzDevice,0x8888,0x0006);
             //InfoControl.device.GetSportStatus += new DeviceDataManager.F2(device_GetSportStatus);
             //InfoControl.device.GetGameControl += new DeviceDataManager.F8(device_GetGameControl);
