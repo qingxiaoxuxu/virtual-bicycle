@@ -28,7 +28,6 @@ namespace Client_v2
             InitializeComponent();
         }
 
-
         public void UpdateChartInfo(List<ChartInfo> data)
         {
             displayData = new List<ChartInfo>(data);

@@ -38,6 +38,8 @@ namespace Client_v2.DampingAutoLearning
         public UserControl4_auto()
         {
             InitializeComponent();
+            chartLoad.ItemsSource = displayData;
+            chartLoad.Refresh();
         }
         public void Init()
         {
@@ -91,7 +93,7 @@ namespace Client_v2.DampingAutoLearning
                 inputList[DataCount] = input;
                 outputList[DataCount] = output;
                 
-                displayData.Insert(0, new LoadInfo(Shift,DataCount));
+                displayData.Add(new LoadInfo(Shift,DataCount));
                 Dispatcher.Invoke(new Action(() =>
                 {
                     chartLoad.ItemsSource = displayData;
