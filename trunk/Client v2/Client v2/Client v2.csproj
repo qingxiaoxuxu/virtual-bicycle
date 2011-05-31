@@ -90,6 +90,7 @@
     </Compile>
     <Compile Include="InfoControl.cs" />
     <Compile Include="Model\ChartInfo.cs" />
+    <Compile Include="Model\LoadInfo.cs" />
     <Compile Include="Net\Client.cs" />
     <Compile Include="Net\DataPort.cs" />
     <Compile Include="Net\OESServer.cs" />
@@ -145,10 +146,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Vista.xaml">
+    <Resource Include="Vista.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

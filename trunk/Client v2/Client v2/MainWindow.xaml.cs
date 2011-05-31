@@ -57,8 +57,8 @@ namespace Client_v2
         {
             InitializeComponent();
             InfoControl.device.OpenDevice(ref InfoControl.device.m_oBuzzDevice,0x8888,0x0006);
-            InfoControl.device.GetSportStatus += new DeviceDataManager.F2(device_GetSportStatus);
-            InfoControl.device.GetGameControl += new DeviceDataManager.F8(device_GetGameControl);
+            //InfoControl.device.GetSportStatus += new DeviceDataManager.F2(device_GetSportStatus);
+            //InfoControl.device.GetGameControl += new DeviceDataManager.F8(device_GetGameControl);
             #region 界面
             usrLogin = new UserControl0_login();
             usrChart = new UserControl1_chart();
@@ -105,7 +105,7 @@ namespace Client_v2
             tm.Tick += new EventHandler(tm_Tick);
             tm.Start();
 
-            isLogin = true;
+            InfoControl.User = "gtuygiu";
         }
 
         static int preDamp = 0;
@@ -172,57 +172,57 @@ namespace Client_v2
             }
             else
             {
-                #region 键盘控制
-                if (gameControl.Btn1)
-                {
-                    Demo.Keyboard.Press(Key.Space);
-                    Demo.Keyboard.Release(Key.Space);
-                }
-                if (gameControl.Btn2)
-                {
-                    Demo.Keyboard.Press(Key.LeftCtrl);
-                    Demo.Keyboard.Release(Key.LeftCtrl);
-                }
-                if (gameControl.Btn3)
-                {
-                    Demo.Keyboard.Press(Key.LeftShift);
-                    Demo.Keyboard.Release(Key.LeftShift);
-                }
-                if (gameControl.Btn4)
-                {
-                    Demo.Keyboard.Press(Key.C);
-                    Demo.Keyboard.Release(Key.C);
-                }
+                //#region 键盘控制
+                //if (gameControl.Btn1)
+                //{
+                //    Demo.Keyboard.Press(Key.Space);
+                //    Demo.Keyboard.Release(Key.Space);
+                //}
+                //if (gameControl.Btn2)
+                //{
+                //    Demo.Keyboard.Press(Key.LeftCtrl);
+                //    Demo.Keyboard.Release(Key.LeftCtrl);
+                //}
+                //if (gameControl.Btn3)
+                //{
+                //    Demo.Keyboard.Press(Key.LeftShift);
+                //    Demo.Keyboard.Release(Key.LeftShift);
+                //}
+                //if (gameControl.Btn4)
+                //{
+                //    Demo.Keyboard.Press(Key.C);
+                //    Demo.Keyboard.Release(Key.C);
+                //}
 
-                gameControl.Y = gameControl.Y - 128;
+                //gameControl.Y = gameControl.Y - 128;
 
-                gameControl.X = gameControl.X - 128;
-                if (gameControl.X > 60)
-                {
-                    Console.WriteLine("Left");
-                    Demo.Keyboard.Press(Key.Left);
-                    Demo.Keyboard.Release(Key.Left);
+                //gameControl.X = gameControl.X - 128;
+                //if (gameControl.X > 60)
+                //{
+                //    Console.WriteLine("Left");
+                //    Demo.Keyboard.Press(Key.Left);
+                //    Demo.Keyboard.Release(Key.Left);
                     
-                }
-                if (gameControl.X < -60)
-                {
-                    Console.WriteLine("Right");
-                    Demo.Keyboard.Press(Key.Right);
-                    Demo.Keyboard.Release(Key.Right);
-                }
-                if (gameControl.Y > 60)
-                {
-                    Console.WriteLine("Up");
-                    Demo.Keyboard.Press(Key.Up);
-                    Demo.Keyboard.Release(Key.Up);
-                }
-                if (gameControl.Y < -60)
-                {
-                    Console.WriteLine("Down");
-                    Demo.Keyboard.Press(Key.Down);
-                    Demo.Keyboard.Release(Key.Down);
-                }
-                #endregion
+                //}
+                //if (gameControl.X < -60)
+                //{
+                //    Console.WriteLine("Right");
+                //    Demo.Keyboard.Press(Key.Right);
+                //    Demo.Keyboard.Release(Key.Right);
+                //}
+                //if (gameControl.Y > 60)
+                //{
+                //    Console.WriteLine("Up");
+                //    Demo.Keyboard.Press(Key.Up);
+                //    Demo.Keyboard.Release(Key.Up);
+                //}
+                //if (gameControl.Y < -60)
+                //{
+                //    Console.WriteLine("Down");
+                //    Demo.Keyboard.Press(Key.Down);
+                //    Demo.Keyboard.Release(Key.Down);
+                //}
+                //#endregion
             }
         }
 
