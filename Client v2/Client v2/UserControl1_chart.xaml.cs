@@ -32,7 +32,7 @@ namespace Client_v2
         {
             displayData = new List<ChartInfo>(data);
             while (displayData.Count < MainWindow.MAX_POINT)
-                displayData.Insert(0, new ChartInfo(-1, 0, 0, 0, 0, 0));
+                displayData.Insert(0, new ChartInfo(-1, 0, 0, 80, 0, 0));
             chartSpeed.ItemsSource = displayData;
             chartSpeed.Refresh();
         }
