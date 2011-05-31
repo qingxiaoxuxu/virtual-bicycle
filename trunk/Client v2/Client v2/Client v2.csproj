@@ -40,17 +40,29 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AForge, Version=0.0.1.25637, Culture=neutral">
+    <Reference Include="AForge, Version=2.1.5.0, Culture=neutral, PublicKeyToken=c1db6ff4eaa06aeb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\AForge.dll</HintPath>
     </Reference>
-    <Reference Include="AForge.Controls, Version=1.0.2513.25637, Culture=neutral">
+    <Reference Include="AForge.Controls, Version=2.1.5.0, Culture=neutral, PublicKeyToken=a8ac264d1dc6b9d9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\AForge.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="AForge.Neuro, Version=0.0.1.25637, Culture=neutral">
+    <Reference Include="AForge.Genetic, Version=2.1.5.0, Culture=neutral, PublicKeyToken=4336634eeb41b69b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\AForge.Genetic.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Math, Version=2.1.5.0, Culture=neutral, PublicKeyToken=abba2e25397ee8c9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\AForge.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Neuro, Version=2.1.1.0, Culture=neutral, PublicKeyToken=2094f4ea39731d4f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\AForge.Neuro.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Video, Version=2.1.5.0, Culture=neutral, PublicKeyToken=cbfb6e07d173c401, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\AForge.Video.dll</HintPath>
     </Reference>
     <Reference Include="ChartFX.WPF, Version=8.0.3581.26941, Culture=neutral, PublicKeyToken=a1878e2052c08dce" />
     <Reference Include="ChartFX.WPF.Data, Version=8.0.3581.26941, Culture=neutral, PublicKeyToken=a1878e2052c08dce, processorArchitecture=MSIL" />
