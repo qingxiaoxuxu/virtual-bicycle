@@ -29,12 +29,12 @@ namespace Client_v2.DAO
             con.ExecuteUpdate(command);
         }
 
-        public static string findUser(string userName, string pw)
+        public static string findUser(string userId, string pw)
         {
             string res = null;
             //Encoding utf8 = Encoding.UTF8;
             //Encoding gb2312 = Encoding.GetEncoding("gb2312");
-            String command = "SELECT userid FROM vb_usermessage_user WHERE username = '" + userName + "' AND password = MD5('" + pw + "')";
+            String command = "SELECT username FROM vb_usermessage_user WHERE userid = '" + userId + "' AND password = MD5('" + pw + "')";
             //byte[] tmp = utf8.GetBytes(command);
             //byte[] tmp1 = Encoding.Convert(utf8, gb2312, tmp);
             //command = gb2312.GetString(tmp1);
