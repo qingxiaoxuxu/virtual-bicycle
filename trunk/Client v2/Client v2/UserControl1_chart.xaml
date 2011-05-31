@@ -19,16 +19,14 @@
                         </cfx:AllSeriesAttributes>
                     </cfx:Chart.AllSeries>
                     <cfx:Chart.Series>
-                        <cfx:SeriesAttributes Content="当前速度" BindingPath="Speed" />
+                        <cfx:SeriesAttributes Content="当前速度" BindingPath="Speed"/>
+                        <cfx:SeriesAttributes Content="当前心率" BindingPath="HeartBeat"/>
                     </cfx:Chart.Series>
-                    <cfx:Chart.Titles>
-                        <cfx:Title Content="The Speed " />
-                    </cfx:Chart.Titles>
                     <cfx:Chart.LegendBox>
-                        <cfx:LegendBox Visibility="Hidden" />
+                        <cfx:LegendBox Visibility="Visible" />
                     </cfx:Chart.LegendBox>
                     <cfx:Chart.AxesY>
-                        <cfx:Axis Min="0" Max="30"  Step="5" MinorStep="1">
+                        <cfx:Axis Min="0" Max="150"  Step="10" MinorStep="1">
                             <cfx:Axis.Labels>
                                 <cfx:AxisLabelAttributes Format="Number" />
                             </cfx:Axis.Labels>
