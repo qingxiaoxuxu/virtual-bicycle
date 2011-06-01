@@ -141,13 +141,19 @@ namespace VbServer.Net
                 
                 case "create":
                     {
-                        Team t = new Team(msgs[1]);
-                        teamList.Add(t);
-                        t.AddUser(client);
-                        t.userList[0].isAdmin = true;
-                        t.mapName = msgs[2];                //添加地图信息
-                        t.maxCount = Convert.ToInt32(msgs[3]);
-                        client.SendTxt("create$ok");
+                        Team ot = FindTeamByUser(teamList, FindUserByClient(User.allLoginUser, client));
+                        if (ot != null)
+                            client.SendTxt("create$error");
+                        else
+                        {
+                            Team t = new Team(msgs[1]);
+                            teamList.Add(t);
+                            t.AddUser(client);
+                            t.userList[0].isAdmin = true;
+                            t.mapName = msgs[2];                //添加地图信息
+                            t.maxCount = Convert.ToInt32(msgs[3]);
+                            client.SendTxt("create$ok");
+                        }
                         break;
                     }
                 case "setmap":
@@ -209,10 +215,11 @@ namespace VbServer.Net
                         //#endregion
                         foreach (Team t in teamList)
                         {
-                            genmsg += "$" + t.teamName 
-                                    + "$" + t.mapName 
-                                    + "$" + t.userList.Count.ToString()
-                                    + "$" + t.maxCount.ToString();
+                            if (t.maxCount != 1)
+                                genmsg += "$" + t.teamName 
+                                        + "$" + t.mapName 
+                                        + "$" + t.userList.Count.ToString()
+                                        + "$" + t.maxCount.ToString();
                         }
                         client.SendTxt(genmsg);
                         break;
