@@ -29,22 +29,23 @@ namespace Client_v2
         {
             string userid = textUser.Text;
             string pw = textPw.Password;
-            //string res = DataManage.findUser(userid, pw);
-            //if (res == null)
-            //{
-            //    MessageBox.Show("用户名或密码错误，请重试！", "Login Error");
-            //    textUser.Text = "";
-            //    textPw.Password = "";
-            //}
-            //else
-            //{
-            string res = (userid == "11113" ? "lkq" : "test");
+            string res;
+            res = DataManage.findUser(userid, pw);
+            if (res == null)
+            {
+                MessageBox.Show("用户名或密码错误，请重试！", "Login Error");
+                textUser.Text = "";
+                textPw.Password = "";
+            }
+            else
+            {
+                //res = (userid == "11113" ? "lkq" : "test");
                 MessageBox.Show("欢迎您，" + res + "!", "Login Success");
                 InfoControl.User = res;
                 InfoControl.UserId = userid;
                 InfoControl.LoginTime = DateTime.Now;
                 InfoControl.Mw.LoginAction();
-            //}
+            }
         }
     }
 }
