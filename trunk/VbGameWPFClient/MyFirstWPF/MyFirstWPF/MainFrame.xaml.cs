@@ -126,7 +126,8 @@ namespace MyFirstWPF
 
         #region 健身车事件
         void iClient_HandlebarRotated(ClientIEvt.HandlebarRotatedEventArgs e)
-        {  
+        {
+            Console.WriteLine(e.Angle);
             if (e.Angle < -0.015)
             {
                 Console.WriteLine(e.Angle);
