@@ -71,8 +71,8 @@ namespace Client_v2
         {
             InfoControl.IsRacingGame = false;
             ProcessStartInfo gameInfo = new ProcessStartInfo();
-            gameInfo.FileName = gameList[Convert.ToInt32((sender as Button).Tag)].Name + ".exe";
-            gameInfo.WorkingDirectory = gameList[Convert.ToInt32((sender as Button).Tag)].Path;
+            gameInfo.FileName = gameList[Convert.ToInt32((sender as Image).Tag)].Name + ".exe";
+            gameInfo.WorkingDirectory = gameList[Convert.ToInt32((sender as Image).Tag)].Path;
             gameInfo.WindowStyle = ProcessWindowStyle.Normal;
             try
             {
@@ -96,8 +96,8 @@ namespace Client_v2
             //user = "LKQ" + userId;
 
             ProcessStartInfo gameInfo = new ProcessStartInfo();
-            gameInfo.FileName = gameList[Convert.ToInt32((sender as Button).Tag)].Name + ".exe";
-            gameInfo.WorkingDirectory = gameList[Convert.ToInt32((sender as Button).Tag)].Path;
+            gameInfo.FileName = gameList[Convert.ToInt32((sender as Image).Tag)].Name + ".exe";
+            gameInfo.WorkingDirectory = gameList[Convert.ToInt32((sender as Image).Tag)].Path;
             gameInfo.WindowStyle = ProcessWindowStyle.Normal;
             gameInfo.Arguments = user + " " + userId;
             try
