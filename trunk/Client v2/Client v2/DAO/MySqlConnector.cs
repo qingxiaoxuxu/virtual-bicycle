@@ -16,7 +16,7 @@ namespace Client_v2.DAO
         public MySqlConnector()
         {
             conn = new MySQLConnection(
-                new MySQLConnectionString("localhost", "vb_databases", "root", "123456").AsString
+                new MySQLConnectionString("192.168.137.124", "vb_databases", "root", "123456").AsString
                 );
         }
 
