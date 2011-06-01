@@ -36,6 +36,7 @@ namespace Client_v2.DampingAutoLearning
         static bool LearningMode = true;
         static int TrainingCount = 20;
         static int MAX_COUNT = 50;
+        static bool IsStart = false;
         List<LoadInfo> loadData = new List<LoadInfo>();
         List<LoadInfo> displayData = new List<LoadInfo>();
         public UserControl4_auto()
@@ -171,6 +172,7 @@ namespace Client_v2.DampingAutoLearning
 
         private void btn_Start_Click(object sender, RoutedEventArgs e)
         {
+            IsStart = true;
             Init();
         }
 
@@ -217,6 +219,13 @@ namespace Client_v2.DampingAutoLearning
                 }
             }
             fStream.Close();
+        }
+
+        private void btn_Stop_Click(object sender, RoutedEventArgs e)
+        {
+            IsStart = false;
+            InfoControl.device.GetSportStatus -= device_GetSportStatus;
+            InfoControl.device.GetGameControl -= device_GetGameControl;
         }
     }
 }

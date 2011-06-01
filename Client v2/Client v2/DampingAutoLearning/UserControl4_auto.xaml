@@ -20,8 +20,9 @@
             <Border BorderBrush="Black" Width="600" Height="425" Canvas.Left="0" Canvas.Top="0" CornerRadius="5,5,5,5" BorderThickness="5">
                 <Canvas>
                     <Button Content="Start" Height="30" Name="btn_Start" Width="77" Canvas.Left="79" Canvas.Top="20" Click="btn_Start_Click" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White"/>
-                    <Button Content="Save" Height="30" Name="btn_Save" Width="77" Canvas.Left="242" Canvas.Top="20" Click="btn_Save_Click" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White" />
-                    <Button Content="Load" Height="30" Name="btn_Load" Width="77" Canvas.Left="411" Canvas.Top="20" Click="btn_Load_Click" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White" />
+                    <Button Content="Save" Height="30" Name="btn_Save" Width="77" Canvas.Left="186" Canvas.Top="20" Click="btn_Save_Click" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White" />
+                    <Button Content="Load" Height="30" Name="btn_Load" Width="77" Canvas.Left="306" Canvas.Top="20" Click="btn_Load_Click" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White" />
+                    <Button Canvas.Left="423" Canvas.Top="20" Content="Stop" Foreground="White" Height="30" Name="btn_Stop" Template="{DynamicResource ButtonControlTemplate1}" Width="77" Click="btn_Stop_Click" />
                 </Canvas>
                 
             </Border>
