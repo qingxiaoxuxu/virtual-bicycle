@@ -1,7 +1,5 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
- 
 using System.Text;
 
 namespace VbServer.Net
@@ -25,6 +23,7 @@ namespace VbServer.Net
             //t.userList.Add(new User("xt","3",null));
             t.userList[0].isAdmin = true;       //
             //t.mapName = "Advanced";           //
+            t.maxCount = 1;
             User.allLoginUser.AddRange(t.userList);
 #endif
         }
@@ -48,7 +47,7 @@ namespace VbServer.Net
             {
                 foreach (User us in t.userList)
                 {
-                    if (us.userId == current.userId)
+                    if (us.userId == current.userId && us.client != null)
                     {
                         us.client.SendTxt("gameend");
                     }
@@ -147,6 +146,7 @@ namespace VbServer.Net
                         t.AddUser(client);
                         t.userList[0].isAdmin = true;
                         t.mapName = msgs[2];                //添加地图信息
+                        t.maxCount = Convert.ToInt32(msgs[3]);
                         client.SendTxt("create$ok");
                         break;
                     }
@@ -209,7 +209,10 @@ namespace VbServer.Net
                         //#endregion
                         foreach (Team t in teamList)
                         {
-                            genmsg += "$" + t.teamName + "$" + t.mapName+ "$" + t.userList.Count.ToString();
+                            genmsg += "$" + t.teamName 
+                                    + "$" + t.mapName 
+                                    + "$" + t.userList.Count.ToString()
+                                    + "$" + t.maxCount.ToString();
                         }
                         client.SendTxt(genmsg);
                         break;
@@ -217,7 +220,7 @@ namespace VbServer.Net
                 case "add":
                     {
                         Team t=FindTeamByName(teamList, msgs[1]);
-                        if (t != null && t.userList.Count < MAX_USER)
+                        if (t != null && t.userList.Count < t.maxCount)
                         {
                             t.AddUser(client);
                             client.SendTxt("add$ok$" + t.mapName);

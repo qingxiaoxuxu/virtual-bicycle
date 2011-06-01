@@ -18,6 +18,9 @@ namespace VbServer
         //就绪人数
         public int readyCount = 0;
 
+        //房间最多可进入的人数
+        public int maxCount = 4;
+
         //进入游戏后的玩家用户
         public List<User> playerList = new List<User>();
 
@@ -27,7 +30,7 @@ namespace VbServer
         //添加一个用户
         public void AddUser(Client c)
         {
-            User user=null;
+            User user = null;
             foreach (User u in User.allLoginUser)
             {
                 if (u.client == c)
