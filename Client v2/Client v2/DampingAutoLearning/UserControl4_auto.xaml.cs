@@ -35,6 +35,7 @@ namespace Client_v2.DampingAutoLearning
         static int DataCount = 0;
         static bool LearningMode = true;
         static int TrainingCount = 20;
+        static int MAX_COUNT = 50;
         List<LoadInfo> loadData = new List<LoadInfo>();
         List<LoadInfo> displayData = new List<LoadInfo>();
         public UserControl4_auto()
@@ -57,7 +58,7 @@ namespace Client_v2.DampingAutoLearning
         void updateChartInfo(List<LoadInfo> data)
         {
             displayData = new List<LoadInfo>(data);
-            for (int i = data.Count; i < TrainingCount; i++)
+            for (int i = data.Count; i < MAX_COUNT; i++)
                 displayData.Insert(0, new LoadInfo(0, 0));
             chartLoad.ItemsSource = displayData;
             chartLoad.Refresh();
@@ -144,6 +145,13 @@ namespace Client_v2.DampingAutoLearning
                 //        }));
                 BuzzWin.DeviceDataManager.Damp d = new DeviceDataManager.Damp();
                 d.value=(int)(output*255);
+                loadData.Add(new LoadInfo(d.value, DataCount));
+                while (loadData.Count > MAX_COUNT)
+                    loadData.RemoveAt(0);
+                this.Dispatcher.Invoke(new Action(() =>
+                    {
+                        updateChartInfo(loadData);
+                    }));
                 InfoControl.device.SetDamp(d);
                 DataCount++;
             }

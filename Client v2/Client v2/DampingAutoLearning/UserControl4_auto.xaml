@@ -42,7 +42,7 @@
                         <cfx:LegendBox Visibility="Hidden" />
                     </cfx:Chart.LegendBox>
                     <cfx:Chart.AxesY>
-                        <cfx:Axis Min="0" Max="100"  Step="20" MinorStep="5">
+                        <cfx:Axis Min="0" Max="260"  Step="20" MinorStep="5">
                             <cfx:Axis.Labels>
                                 <cfx:AxisLabelAttributes Format="Number" />
                             </cfx:Axis.Labels>
