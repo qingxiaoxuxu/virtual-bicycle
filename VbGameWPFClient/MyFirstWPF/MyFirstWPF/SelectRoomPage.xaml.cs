@@ -42,7 +42,7 @@ namespace MyFirstWPF
         private ClientEvt client;
         DispatcherTimer refreshTimer;
 
-        delegate void Fun(List<string> team, List<string> map, List<int> counts);
+        delegate void Fun(List<string> team, List<string> map, List<int> counts, List<int> maxCount);
         Fun showRoom;
 
         public SelectRoomPage()
@@ -72,12 +72,13 @@ namespace MyFirstWPF
         #region client系列事件响应
         //生成房间信息
         void client_GotTeamMapList(object sender, List<string> team, 
-            List<string> map, List<int> counts)
+            List<string> map, List<int> counts, List<int> maxCount)
         {
-            object[] para = new object[3];
+            object[] para = new object[4];
             para[0] = team;
             para[1] = map;
             para[2] = counts;
+            para[3] = maxCount;
             this.Dispatcher.Invoke(showRoom, para);         //调用getRoomInfo方法
         }
 
@@ -99,7 +100,7 @@ namespace MyFirstWPF
         #region 房间生成及摆放
         
         //从Server获取房间信息
-        public void getRoomInfo(List<string> team, List<string> map, List<int> counts)   
+        public void getRoomInfo(List<string> team, List<string> map, List<int> counts, List<int> maxCount)   
         {
             if (rooms != null)              //控件注销
                 for (int i = 0; i < rooms.Length; i++)
@@ -112,7 +113,7 @@ namespace MyFirstWPF
             rooms = new RoomInfoBlock[roomCount];
             for (int i = 0; i < roomCount; i++)
             {
-                rooms[i] = new RoomInfoBlock(team[i], map[i], counts[i]);
+                rooms[i] = new RoomInfoBlock(team[i], map[i], counts[i], maxCount[i]);
                 rooms[i].Name = "room" + i.ToString();
                 RegisterName(rooms[i].Name, rooms[i]);
             }

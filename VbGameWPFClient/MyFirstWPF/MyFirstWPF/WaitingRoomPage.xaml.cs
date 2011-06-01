@@ -56,17 +56,15 @@ namespace MyFirstWPF
         private void startGame()
         {
             gameInfo = new ProcessStartInfo();
-            //gameInfo.FileName = "mspaint.exe";      //RacingGame.exe
-            //gameInfo.WorkingDirectory = @"C:\WINDOWS\system32";     //Where?
             gameInfo.FileName = InfoControl.FileName;
             gameInfo.WorkingDirectory = InfoControl.WorkingDirectory;
             gameInfo.WindowStyle = ProcessWindowStyle.Normal;
             gameInfo.Arguments = InfoControl.UserId;
             try
             {
-                isGameStarted = true;
                 gameProc = Process.Start(gameInfo);
                 System.Threading.Thread.Sleep(500);
+                isGameStarted = true;
             }
             catch (System.ComponentModel.Win32Exception)
             {
@@ -142,7 +140,7 @@ namespace MyFirstWPF
                     }
                     #endregion
                     #region 改变开始游戏按钮状态
-                    if (totalReady == isReady.Count - 1 /*&& totalReady != 0*/)
+                    if (totalReady == isReady.Count - 1 && totalReady != 0)
                         allReady = true;
                     else
                         allReady = false;

@@ -113,9 +113,9 @@ namespace MyFirstWPF
             "Expert"
         };                                                              //地图名称
         public static String[] MapPaths = new String[MapCount]{
-            @"..\..\Contents\Images\scene1.png",
-            @"..\..\Contents\Images\scene2.png",
-            @"..\..\Contents\Images\scene3.png"
+            @"Contents\Images\scene1.png",
+            @"Contents\Images\scene2.png",
+            @"Contents\Images\scene3.png"
         };                                                              //地图路径
 
         public static String FileName = "";                             //游戏名称

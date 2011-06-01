@@ -19,7 +19,7 @@ namespace VbClient.Net
         public event UpdateMapHandler SettingMap;
 
         public delegate void TeamMapList(object sender, 
-            List<string> team, List<string> map, List<int> counts);
+            List<string> team, List<string> map, List<int> counts, List<int> maxCount);
         public event TeamMapList GotTeamMapList;
 
         public event UpdateMapHandler AddSuccess;
@@ -56,9 +56,9 @@ namespace VbClient.Net
             Client.SendTxt("login$" + name + "$" + id);
         }
 
-        public void CreateTeam(string teamName, string mapName)
+        public void CreateTeam(string teamName, string mapName, string total)
         {
-            Client.SendTxt("create$" + teamName + "$" + mapName);
+            Client.SendTxt("create$" + teamName + "$" + mapName + "$" + total);
         }
 
         public void SetMap(string mapName)
@@ -156,14 +156,16 @@ namespace VbClient.Net
                         List<string> team = new List<string>();
                         List<string> map = new List<string>();
                         List<int> counts = new List<int>();
+                        List<int> maxCount = new List<int>();
                         for (int i = 1; i < msgs.Length; )
                         {
                             team.Add(msgs[i++]);
                             map.Add(msgs[i++]);
                             counts.Add(Int32.Parse(msgs[i++]));
+                            maxCount.Add(Int32.Parse(msgs[i++]));
                         }
                         if (GotTeamMapList != null)
-                            GotTeamMapList(this, team, map, counts);
+                            GotTeamMapList(this, team, map, counts, maxCount);
                         break;
                     }
                 case "add":

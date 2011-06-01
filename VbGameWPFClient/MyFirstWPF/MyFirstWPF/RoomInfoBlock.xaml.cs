@@ -28,12 +28,12 @@ namespace MyFirstWPF
             return RoomName.Content.ToString();
         }
 
-		public RoomInfoBlock(string teamName, string mapName, int people)
+		public RoomInfoBlock(string teamName, string mapName, int people, int max)
 		{
             this.InitializeComponent();
             RoomName.Content = teamName;
             RoomMap.Content = mapName;
-            string str = people.ToString() + "/" + SelectRoomPage.MaxPeople.ToString();
+            string str = people.ToString() + "/" + max.ToString();
             PeopleLabel.Content = str;
 		}
 	}
