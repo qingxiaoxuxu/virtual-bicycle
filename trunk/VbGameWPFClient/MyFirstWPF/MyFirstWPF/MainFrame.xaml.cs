@@ -103,7 +103,7 @@ namespace MyFirstWPF
                     sw.WriteLine();
                 }
             }
-            using (StreamReader sr = new StreamReader(CONF_NAME))
+            using (StreamReader sr = new StreamReader(CONF_NAME, Encoding.Default))
             {
                 InfoControl.FileName = sr.ReadLine();
                 InfoControl.WorkingDirectory = sr.ReadLine();

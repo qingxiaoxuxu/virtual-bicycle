@@ -16,7 +16,7 @@
 		<TextBlock x:Name="titleText" FontSize="32pt" Foreground="White" TextAlignment="Center"
 			FontFamily="微软雅黑" Text="准备游戏" Margin="380,70,382,0" VerticalAlignment="Top" Height="50" />
 		<Canvas x:Name="MapCanvas" HorizontalAlignment="Left" Margin="50,150,0,0" 
-			Width="360" VerticalAlignment="Top" Height="260" Background="BurlyWood"/>
+			Width="320" VerticalAlignment="Top" Height="260" Background="BurlyWood"/>
 		
         
 		<Canvas x:Name="PlayerCanvas1" Margin="432,180,50,0" VerticalAlignment="Top" 

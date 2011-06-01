@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VbClient.Net;
 using System.Threading;
+using System.Diagnostics;
 
 namespace MyFirstWPF
 {
@@ -29,6 +30,7 @@ namespace MyFirstWPF
         int state;										//哪个地图被选中
         int peopleState;                                //选择人数的状态
         int flickerState;                               //箭头的位置
+        #region 位移常量
         const double Left = 512;                        //初始Margin.Left
         const double Top = 260;                         //初始Margin.Top
         const double Right = 514;                       //初始Margin.Right
@@ -37,6 +39,7 @@ namespace MyFirstWPF
         const int ShrinkUnit = 80;                      //图标缩小尺寸
         const int FlickerTop = 330;                     //箭头初始Margin.Top
         const int FlickerMoveUnit = 240;                //箭头上下移动尺寸
+        #endregion
         Storyboard moveStory;
         Canvas[] iconCanvas = new Canvas[InfoControl.MapCount];
         string[] msk = new string[] { "Two", "Three", "Four" }; //Storyboard对应名称
@@ -44,6 +47,10 @@ namespace MyFirstWPF
         //控制创建房间的逻辑
         int isCreated;
         private ClientEvt client;
+
+        private bool isGameStarted;         //单人游戏是否开始
+        private ProcessStartInfo gameInfo;  //游戏的进程信息
+        private Process gameProc;           //游戏进程
 
         public SelectMapPage(int md)
         {
@@ -60,9 +67,6 @@ namespace MyFirstWPF
             mapText.Text = InfoControl.MapTexts[0];
             if (md == MODE_MULTI)
             {
-                client = InfoControl.Client;
-                client.CreateSuccess += new EventHandler(client_CreateSuccess);
-                client.CreateFailure += new EventHandler(client_CreateFailure);
                 string str = "Large" + msk[peopleState] + "Story";
                 (this.Resources[str] as Storyboard).Begin(this);
                 StartText.Text = "建立房间";
@@ -76,6 +80,31 @@ namespace MyFirstWPF
                 peopleThree.Visibility = Visibility.Hidden;
                 peopleFour.Visibility = Visibility.Hidden;
                 StartText.Text = "开始游戏！";
+            }
+            client = InfoControl.Client;
+            client.CreateSuccess += new EventHandler(client_CreateSuccess);
+            client.CreateFailure += new EventHandler(client_CreateFailure);
+            client.BeginGame += new EventHandler(client_BeginGame);
+            client.EndGame += new EventHandler(client_EndGame);
+        }
+
+        //启动游戏的方法
+        private void startGame()
+        {
+            gameInfo = new ProcessStartInfo();
+            gameInfo.FileName = InfoControl.FileName;
+            gameInfo.WorkingDirectory = InfoControl.WorkingDirectory;
+            gameInfo.WindowStyle = ProcessWindowStyle.Normal;
+            gameInfo.Arguments = "1";
+            try
+            {
+                gameProc = Process.Start(gameInfo);
+                System.Threading.Thread.Sleep(500);
+                isGameStarted = true;
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                MessageBox.Show("cannot find exe!");
             }
         }
 
@@ -92,6 +121,16 @@ namespace MyFirstWPF
         {
             isCreated = -1;
             createRoomEvent.Set();
+        }
+        
+        //服务器发来开始游戏的命令
+        void client_BeginGame(object sender, EventArgs e)
+        {
+        }
+        
+        //服务器发来结束游戏的命令
+        void client_EndGame(object sender, EventArgs e)
+        {
         }
         #endregion
 
@@ -151,12 +190,14 @@ namespace MyFirstWPF
             if (mode == 0)                      //单机游戏
             {
                 //TODO:Game start
+                client.SetMap(mapText.Text);
                 MessageBox.Show("Game start!");
+                startGame();
                 return -1;
             }
             else                                //联网游戏
             {
-                client.CreateTeam(InfoControl.UserName + "的房间", InfoControl.MapTexts[state]);
+                client.CreateTeam(InfoControl.UserName + "的房间", InfoControl.MapTexts[state], (peopleState + 2).ToString());
                 createRoomEvent.Reset();
                 if (createRoomEvent.WaitOne())
                 {
