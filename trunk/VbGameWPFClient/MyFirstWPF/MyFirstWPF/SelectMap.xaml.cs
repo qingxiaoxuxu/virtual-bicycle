@@ -95,7 +95,7 @@ namespace MyFirstWPF
             gameInfo.FileName = InfoControl.FileName;
             gameInfo.WorkingDirectory = InfoControl.WorkingDirectory;
             gameInfo.WindowStyle = ProcessWindowStyle.Normal;
-            gameInfo.Arguments = "1";
+            gameInfo.Arguments = InfoControl.UserId;
             try
             {
                 gameProc = Process.Start(gameInfo);
@@ -112,15 +112,26 @@ namespace MyFirstWPF
         //创建房间成功的响应
         void client_CreateSuccess(object sender, EventArgs e)
         {
-            isCreated = 1;
-            createRoomEvent.Set();
+            if (mode == MODE_MULTI)
+            {
+                isCreated = 1;
+                createRoomEvent.Set();
+            }
+            else
+            {
+                MessageBox.Show("Game start!");
+                startGame();
+            }
         }
 
         //创建房间失败的响应
         void client_CreateFailure(object sender, EventArgs e)
         {
-            isCreated = -1;
-            createRoomEvent.Set();
+            if (mode == MODE_MULTI)
+            {
+                isCreated = -1;
+                createRoomEvent.Set();
+            }
         }
         
         //服务器发来开始游戏的命令
@@ -190,9 +201,9 @@ namespace MyFirstWPF
             if (mode == 0)                      //单机游戏
             {
                 //TODO:Game start
-                client.SetMap(mapText.Text);
-                MessageBox.Show("Game start!");
-                startGame();
+                client.CreateTeam(InfoControl.UserName + "的房间", InfoControl.MapTexts[state], "1");
+                //MessageBox.Show("Game start!");
+                //startGame();
                 return -1;
             }
             else                                //联网游戏
