@@ -4,11 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-            d:DesignHeight="374" d:DesignWidth="600">
+            d:DesignHeight="425" d:DesignWidth="600">
     <Grid>
         <Canvas>
-            <Border BorderBrush="Black" Width="600" Height="374" Canvas.Left="0" Canvas.Top="0" CornerRadius="5,5,5,5" BorderThickness="5"></Border>
-            <WrapPanel FlowDirection="LeftToRight" Orientation="Horizontal" Width="600" Height="374" Name="wrapPanel" >
+            <Border BorderBrush="Black" Width="600" Height="425" Canvas.Left="0" Canvas.Top="0" CornerRadius="5,5,5,5" BorderThickness="5"></Border>
+            <WrapPanel FlowDirection="LeftToRight" Orientation="Horizontal" Width="600" Height="425" Name="wrapPanel" >
             
             </WrapPanel>
         </Canvas>

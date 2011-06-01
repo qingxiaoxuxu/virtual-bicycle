@@ -6,11 +6,11 @@
              xmlns:cfxData="clr-namespace:ChartFX.WPF.Data;assembly=ChartFX.WPF.Data"
              xmlns:cfx="http://schemas.softwarefx.com/chartfx/wpf/80"
              xmlns:cfxcontrols="http://schemas.softwarefx.com/chartfx/wpf/80/controls"
-             mc:Ignorable="d" d:DesignHeight="374" d:DesignWidth="600">
+             mc:Ignorable="d" d:DesignHeight="425" d:DesignWidth="600">
     <Grid>
         <Canvas>
-            <Border BorderBrush="Black" Width="600" Height="374" Canvas.Left="0" Canvas.Top="0" CornerRadius="5,5,5,5" BorderThickness="5">
-                <cfx:Chart Name="chartSpeed" Height="357" Width="580" Gallery="Line">
+            <Border BorderBrush="Black" Width="600" Height="425" Canvas.Left="0" Canvas.Top="0" CornerRadius="5,5,5,5" BorderThickness="5">
+                <cfx:Chart Name="chartSpeed" Gallery="Line">
                     <cfx:Chart.AllSeries>
                         <cfx:AllSeriesAttributes StrokeThickness="3">
                             <cfx:AllSeriesAttributes.Marker>
@@ -19,26 +19,16 @@
                         </cfx:AllSeriesAttributes>
                     </cfx:Chart.AllSeries>
                     <cfx:Chart.Series>
-                        <cfx:SeriesAttributes Content="当前速度" BindingPath="Speed"/>
+                        <cfx:SeriesAttributes Content="当前速度" BindingPath="Speed" />
                         <cfx:SeriesAttributes Content="当前心率" BindingPath="HeartBeat"/>
                     </cfx:Chart.Series>
                     <cfx:Chart.LegendBox>
-                        <cfx:LegendBox Visibility="Visible" />
+                        <cfx:LegendBox Visibility="Hidden" />
                     </cfx:Chart.LegendBox>
-                    <cfx:Chart.AxesY>
-                        <cfx:Axis Min="0" Max="150"  Step="10" MinorStep="1">
-                            <cfx:Axis.Labels>
-                                <cfx:AxisLabelAttributes Format="Number" />
-                            </cfx:Axis.Labels>
-                        </cfx:Axis>
-                    </cfx:Chart.AxesY>
                     <cfx:Chart.AxesX>
                         <cfx:Axis Min="1" Max="10000" Step="5000" MinorStep="5">
-                            <cfx:Axis.Title>
-                                <cfx:Title Content="上图显示的是玩家玩游戏的速度." />
-                            </cfx:Axis.Title>
                             <cfx:Axis.Labels>
-                                <cfx:AxisLabelAttributes BindingPath="CurrentTime"/>
+                                <cfx:AxisLabelAttributes BindingPath="CurrentTime" />
                             </cfx:Axis.Labels>
                         </cfx:Axis>
                     </cfx:Chart.AxesX>

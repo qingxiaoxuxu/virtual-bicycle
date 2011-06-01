@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:Client_v2"
         xmlns:cfxData="clr-namespace:ChartFX.WPF.Data;assembly=ChartFX.WPF.Data"
-        Title="MainWindow" Height="523" Width="674" WindowStyle="None" xmlns:cfx="http://schemas.softwarefx.com/chartfx/wpf/80" xmlns:cfxcontrols="http://schemas.softwarefx.com/chartfx/wpf/80/controls">
+        xmlns:cfx="http://schemas.softwarefx.com/chartfx/wpf/80" 
+        xmlns:cfxcontrols="http://schemas.softwarefx.com/chartfx/wpf/80/controls"
+        Title="MainWindow" Height="566" Width="674" WindowStyle="None" WindowStartupLocation="CenterScreen">
        <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -23,8 +25,12 @@
             </XmlDataProvider-->
         </ResourceDictionary>
     </Window.Resources>
-    <Grid>
-        <Canvas Margin="14,32,13,14" Name="canvas1">
+    <Grid Height="528">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="108*" />
+            <ColumnDefinition Width="544*" />
+        </Grid.ColumnDefinitions>
+        <Canvas Margin="14,32,13,0" Name="canvas1" Grid.ColumnSpan="2">
             <Canvas Canvas.Left="0" Canvas.Top="0" Height="55" Name="canvas2" Width="615">
                 <Button Focusable="False" Canvas.Left="135" Canvas.Top="2" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White" Content="查看健身数据" 
                         FontSize="15" FontFamily="Arial" Height="50" Width="120" x:Name="btnChart" Click="btnChart_Click" />
@@ -37,10 +43,10 @@
                 <Button Focusable="False" Canvas.Left="495" Canvas.Top="2" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White" Content="智能调节阻尼" 
                         FontSize="15" FontFamily="Arial" Height="50" Width="120" Name="btnAuto" Click="btnAuto_Click"/>
             </Canvas>
-            <Canvas Canvas.Left="13" Canvas.Top="57" Height="374" Name="canvas3" Width="602"></Canvas>
+            <Canvas Canvas.Left="13" Canvas.Top="57" Height="425" Name="canvas3" Width="602"></Canvas>
         </Canvas>
-        <Label Content="Client  Terminal" Height="28" Margin="181,0,208,0" Name="label1" VerticalAlignment="Top" FontFamily="Times New Roman" FontWeight="Bold" FontSize="18" FontStretch="Normal" HorizontalContentAlignment="Center" />
-        <Button Content="X" Height="23" HorizontalAlignment="Left" Margin="605,5,0,0" Name="btnLogout" VerticalAlignment="Top" Width="24" Click="btnLogout_Click" />
+        <Label Content="Client  Terminal" Height="28" Margin="73,0,208,0" Name="label1" VerticalAlignment="Top" FontFamily="Times New Roman" FontWeight="Bold" FontSize="18" FontStretch="Normal" HorizontalContentAlignment="Center" Grid.Column="1" />
+        <Button Content="X" Height="23" HorizontalAlignment="Left" Margin="497,5,0,0" Name="btnLogout" VerticalAlignment="Top" Width="24" Click="btnLogout_Click" Grid.Column="1" />
         <!--This is Main Chart Container-->
       
     </Grid> 

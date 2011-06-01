@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="374" d:DesignWidth="600">
+             d:DesignHeight="425" d:DesignWidth="600">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -14,18 +14,18 @@
     </UserControl.Resources>
     <Grid>
         <Canvas>
-            <Border BorderBrush="Black" Width="600" Height="374" Canvas.Left="0" Canvas.Top="0" CornerRadius="5,5,5,5" BorderThickness="5"></Border>
+            <Border BorderBrush="Black" Width="600" Height="425" Canvas.Left="0" Canvas.Top="0" CornerRadius="5,5,5,5" BorderThickness="5"></Border>
           
-            <TextBlock Text="转向灵敏度：" Height="14" Canvas.Top="78" Canvas.Left="57" Width="72"></TextBlock>
-            <TextBlock Text="速度灵敏度：" Height="14" Canvas.Top="118" Canvas.Left="57" Width="72"></TextBlock>
-            <TextBlock Text="阻力大小值：" Height="14" Canvas.Top="158" Canvas.Left="57" Width="72"></TextBlock>
-            <Slider Width="250" Canvas.Top="75"  Canvas.Left="127" Height="22" Maximum="255" Name="slider1" ValueChanged="slider1_ValueChanged"></Slider>
-            <Slider Width="250" Canvas.Top="115" Canvas.Left="127" Height="22" Maximum="255" Name="slider2" ValueChanged="slider2_ValueChanged"></Slider>
-            <Slider Width="250" Canvas.Top="155" Canvas.Left="127" Height="22" Maximum="255" Name="slider3" ValueChanged="slider3_ValueChanged"></Slider>
-            <Button Height="22" Canvas.Left="395" Canvas.Top="74" Width="44" Click="Button_Click" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White">默认值</Button>
-            <Button Canvas.Left="395" Canvas.Top="114" Height="22" Width="44" Click="Button_Click_1" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White">默认值</Button>
-            <Button Canvas.Left="395" Canvas.Top="154" Height="22" Width="44" Click="Button_Click_2" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White">默认值</Button>
-            <Button Height="100" Width="150" Canvas.Left="302" Canvas.Top="241" Name="btnSetting" Click="btnSetting_Click" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White">
+            <TextBlock Text="转向灵敏度：" Height="14" Canvas.Top="99" Canvas.Left="57" Width="72"></TextBlock>
+            <TextBlock Text="速度灵敏度：" Height="14" Canvas.Top="139" Canvas.Left="57" Width="72"></TextBlock>
+            <TextBlock Text="阻力大小值：" Height="14" Canvas.Top="179" Canvas.Left="57" Width="72"></TextBlock>
+            <Slider Width="250" Canvas.Top="96"  Canvas.Left="127" Height="22" Maximum="255" Name="slider1" ValueChanged="slider1_ValueChanged"></Slider>
+            <Slider Width="250" Canvas.Top="136" Canvas.Left="127" Height="22" Maximum="255" Name="slider2" ValueChanged="slider2_ValueChanged"></Slider>
+            <Slider Width="250" Canvas.Top="176" Canvas.Left="127" Height="22" Maximum="255" Name="slider3" ValueChanged="slider3_ValueChanged"></Slider>
+            <Button Height="22" Canvas.Left="395" Canvas.Top="95" Width="44" Click="Button_Click" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White">默认值</Button>
+            <Button Canvas.Left="395" Canvas.Top="135" Height="22" Width="44" Click="Button_Click_1" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White">默认值</Button>
+            <Button Canvas.Left="395" Canvas.Top="175" Height="22" Width="44" Click="Button_Click_2" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White">默认值</Button>
+            <Button Height="100" Width="150" Canvas.Left="302" Canvas.Top="270" Name="btnSetting" Click="btnSetting_Click" Template="{DynamicResource ButtonControlTemplate1}" Foreground="White">
                 <Button.Content>
                     <StackPanel>
                         <TextBlock FontSize="16" Name="bt_setting"/>
