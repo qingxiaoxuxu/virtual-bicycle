@@ -13,7 +13,6 @@ namespace VbServer.Net
             Server.ReceivedTxt += new ClientEventHandel(Server_ReceivedTxt);
             Server.WrittenMsg += new ClientEventHandel(Server_WrittenMsg);
             Server.AcceptedClient += new EventHandler(Server_AcceptedClient);
-
         }
         public delegate void ForceBackHandler(float f);
         public event ForceBackHandler ForceBack;
