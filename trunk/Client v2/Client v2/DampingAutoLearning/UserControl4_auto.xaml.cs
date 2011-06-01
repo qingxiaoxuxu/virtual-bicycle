@@ -35,11 +35,12 @@ namespace Client_v2.DampingAutoLearning
         static int DataCount = 0;
         static bool LearningMode = true;
         static int TrainingCount = 20;
+        List<LoadInfo> loadData = new List<LoadInfo>();
+        List<LoadInfo> displayData = new List<LoadInfo>();
         public UserControl4_auto()
         {
             InitializeComponent();
-            chartLoad.ItemsSource = displayData;
-            chartLoad.Refresh();
+            updateChartInfo(loadData);
         }
         public void Init()
         {
@@ -51,7 +52,17 @@ namespace Client_v2.DampingAutoLearning
             data.value=0;
             InfoControl.device.SetDamp(data);
         }
-         static int Shift = 0;
+        static int Shift = 0;
+
+        void updateChartInfo(List<LoadInfo> data)
+        {
+            displayData = new List<LoadInfo>(data);
+            for (int i = data.Count; i < TrainingCount; i++)
+                displayData.Insert(0, new LoadInfo(0, 0));
+            chartLoad.ItemsSource = displayData;
+            chartLoad.Refresh();
+        }
+
         void device_GetGameControl(DeviceDataManager.GameControl gameControl)
         {
             BuzzWin.DeviceDataManager.Damp d = new DeviceDataManager.Damp();
@@ -76,7 +87,7 @@ namespace Client_v2.DampingAutoLearning
             }
         }
         int preLoad = 0;
-        List<LoadInfo> displayData = new List<LoadInfo>();
+        
         void device_GetSportStatus(DeviceDataManager.SportStatus sportStatus)
         {
             if (LearningMode)
@@ -93,12 +104,19 @@ namespace Client_v2.DampingAutoLearning
                 inputList[DataCount] = input;
                 outputList[DataCount] = output;
                 
-                displayData.Add(new LoadInfo(Shift,DataCount));
-                Dispatcher.Invoke(new Action(() =>
-                {
-                    chartLoad.ItemsSource = displayData;
-                    chartLoad.Refresh();
-                }));
+                //loadData.Add(new LoadInfo(Shift,DataCount));
+                loadData.Add(new LoadInfo(DataCount * 10 + 10, DataCount * 5 + 5));
+                //this.Dispatcher.Invoke(new Action(() =>
+                //{
+                //    loadData.Add(new LoadInfo(2, 5));
+                    
+                //    chartLoad.ItemsSource = loadData;
+                //    chartLoad.Refresh();
+                //}));
+                this.Dispatcher.Invoke(new Action(() =>
+                    {
+                        updateChartInfo(loadData);
+                    }));
                 DataCount++;
                 if (DataCount == TrainingCount)
                 {

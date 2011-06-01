@@ -21,6 +21,7 @@
                     <cfx:Chart.Series>
                         <cfx:SeriesAttributes Content="当前速度" BindingPath="Speed" />
                         <cfx:SeriesAttributes Content="当前心率" BindingPath="HeartBeat"/>
+                        <cfx:SeriesAttributes Content="当前路程" BindingPath="Distance"/>
                     </cfx:Chart.Series>
                     <cfx:Chart.LegendBox>
                         <cfx:LegendBox Visibility="Hidden" />
