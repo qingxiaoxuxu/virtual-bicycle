@@ -48,13 +48,13 @@
                             </cfx:Axis.Labels>
                         </cfx:Axis>
                     </cfx:Chart.AxesY>
-                    <cfx:Chart.AxesX>
+                    <!--cfx:Chart.AxesX>
                         <cfx:Axis Min="0" Max="100" Step="5" MinorStep="1">
                             <cfx:Axis.Labels>
                                 <cfx:AxisLabelAttributes BindingPath="CurrentTime"/>
                             </cfx:Axis.Labels>
                         </cfx:Axis>
-                    </cfx:Chart.AxesX>
+                    </cfx:Chart.AxesX-->
                 </cfx:Chart>
             </Border>
         </Canvas>

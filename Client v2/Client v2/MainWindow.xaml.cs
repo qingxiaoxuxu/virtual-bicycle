@@ -58,7 +58,7 @@ namespace Client_v2
             InitializeComponent();
             this.DragMove();
             InfoControl.device.OpenDevice(ref InfoControl.device.m_oBuzzDevice,0x8888,0x0006);
-            //InfoControl.device.GetSportStatus += new DeviceDataManager.F2(device_GetSportStatus);
+            InfoControl.device.GetSportStatus += new DeviceDataManager.F2(device_GetSportStatus);
             //InfoControl.device.GetGameControl += new DeviceDataManager.F8(device_GetGameControl);
             #region 界面
             usrLogin = new UserControl0_login();
@@ -82,7 +82,7 @@ namespace Client_v2
             InfoControl.Mw = this;
             InfoControl.User = "";
             InfoControl.UserId = "";
-            //InfoControl.LoginTime = DateTime.Now;
+            InfoControl.LoginTime = DateTime.Now;
             #endregion
             #region 测试数据
             //for (totalInfo = 0; totalInfo < 10; totalInfo++)
@@ -234,7 +234,7 @@ namespace Client_v2
 
         void device_GetSportStatus(DeviceDataManager.SportStatus sportStatus)
         {
-            Console.WriteLine(sportStatus.Speed);
+            Console.WriteLine(sportStatus.HeartRate + " " + sportStatus.load + " " + sportStatus.distance);
             totalInfo++;
             TimeSpan time = DateTime.Now - InfoControl.LoginTime;
             data.Add(new ChartInfo(
@@ -245,6 +245,7 @@ namespace Client_v2
                 sportStatus.distance,
                 sportStatus.distance * sportStatus.load
                 ));
+            //data.Add(new ChartInfo(-1, 0, 0, 0, 0, 0));
             if (data.Count > MAX_POINT)         //将以前的数据移出
             {
                 bufData.Add(data[0]);

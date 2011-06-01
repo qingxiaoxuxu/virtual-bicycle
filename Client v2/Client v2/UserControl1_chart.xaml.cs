@@ -40,6 +40,7 @@ namespace Client_v2
 
             Axis axisYSpeed = new Axis();
             Axis axisYHeart = new Axis();
+            Axis axisYDist = new Axis();
 
             axisYSpeed.Max = new DataUnit(30);
             axisYSpeed.Min = new DataUnit(0);
@@ -49,31 +50,41 @@ namespace Client_v2
             axisYHeart.Min = new DataUnit(60);
             axisYHeart.Step = new DataUnit(40);
 
+            axisYDist.Max = new DataUnit(40000000);
+            axisYDist.Min = new DataUnit(0);
+            axisYDist.Step = new DataUnit(10000000);
+
             chartSpeed.AxesY.Add(axisYSpeed);
             chartSpeed.AxesY.Add(axisYHeart);
+            chartSpeed.AxesY.Add(axisYDist);
 
             axisYSpeed.Title.Content = "当前速度";
             axisYHeart.Title.Content = "当前心率";
+            axisYDist.Title.Content = "当前路程";
 
             chartSpeed.Series[0].AxisY = axisYSpeed;
             chartSpeed.Series[1].AxisY = axisYHeart;
+            chartSpeed.Series[2].AxisY = axisYDist;
 
             Pane paneSpeed = new Pane();
             Pane paneHeart = new Pane();
+            Pane paneDist = new Pane();
             paneSpeed.Series.Add(chartSpeed.Series[0]);
             paneHeart.Series.Add(chartSpeed.Series[1]);
+            paneDist.Series.Add(chartSpeed.Series[2]);
 
             chartSpeed.Panes.Clear();
 
             chartSpeed.Panes.Add(paneSpeed);
             chartSpeed.Panes.Add(paneHeart);
+            chartSpeed.Panes.Add(paneDist);
         }
 
         public void UpdateChartInfo(List<ChartInfo> data)
         {
             displayData = new List<ChartInfo>(data);
             while (displayData.Count < MainWindow.MAX_POINT)
-                displayData.Insert(0, new ChartInfo(-1, 0, 5, 80, 0, 0));
+                displayData.Insert(0, new ChartInfo(-1, 0, 0, 80, 0, 0));
             chartSpeed.ItemsSource = displayData;
             chartSpeed.Refresh();
         }
