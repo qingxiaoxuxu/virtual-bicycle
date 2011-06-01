@@ -104,8 +104,8 @@ namespace Client_v2.DampingAutoLearning
                 inputList[DataCount] = input;
                 outputList[DataCount] = output;
                 
-                //loadData.Add(new LoadInfo(Shift,DataCount));
-                loadData.Add(new LoadInfo(DataCount * 10 + 10, DataCount * 5 + 5));
+                loadData.Add(new LoadInfo(Shift,DataCount));
+                //loadData.Add(new LoadInfo(DataCount * 10 + 10, DataCount * 5 + 5));
                 //this.Dispatcher.Invoke(new Action(() =>
                 //{
                 //    loadData.Add(new LoadInfo(2, 5));
