@@ -39,11 +39,6 @@ namespace MyFirstWPF
 		public WaitingRoomPage()
 		{
 			this.InitializeComponent();
-            client = InfoControl.Client;
-            client.RoomDetail += new ClientEvt.RoomInfo(client_RoomDetail);
-            client.RefreshRoomInfo += new Action(client_RefreshRoomInfo);
-            client.BeginGame += new EventHandler(client_BeginGame);
-            client.EndGame += new EventHandler(client_EndGame);
             #region 分配位置
             users[0] = User0;
             users[1] = User1;
@@ -189,6 +184,13 @@ namespace MyFirstWPF
 
         public void Reload()
         {
+            #region 关联client
+            client = InfoControl.Client;
+            client.RoomDetail += client_RoomDetail;
+            client.RefreshRoomInfo += client_RefreshRoomInfo;
+            client.BeginGame += client_BeginGame;
+            client.EndGame += client_EndGame;
+            #endregion
             teamName = "";
             infoBlock.Text = "";
             playerReady = allReady = isGameStarted = false;
@@ -196,7 +198,15 @@ namespace MyFirstWPF
         }
 
         public void Leave()
-        { }
+        {
+            #region 注销client
+            client.RoomDetail -= client_RoomDetail;
+            client.RefreshRoomInfo -= client_RefreshRoomInfo;
+            client.BeginGame -= client_BeginGame;
+            client.EndGame -= client_EndGame;
+            client = null;
+            #endregion
+        }
 
         #endregion
 
