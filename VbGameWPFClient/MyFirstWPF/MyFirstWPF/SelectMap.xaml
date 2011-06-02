@@ -174,5 +174,7 @@
             <TextBlock Height="50" Width="180" Margin="10, 3, 0, 0" Name="StartText"
                        FontFamily="微软雅黑" Text="" FontSize="28pt" TextAlignment="Center"/>
         </Canvas>
+        <TextBlock Height="57" Margin="294,0,296,24" Name="infoBlock" VerticalAlignment="Bottom"
+                   FontFamily="微软雅黑" FontSize="32pt" Foreground="Yellow" TextAlignment="Center"/>
     </Grid>
 </UserControl>

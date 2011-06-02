@@ -49,10 +49,6 @@ namespace MyFirstWPF
         {
             InitializeComponent();
             this.KeyDown += new KeyEventHandler(KeyboardDown);
-            client = InfoControl.Client;
-            client.GotTeamMapList += new ClientEvt.TeamMapList(client_GotTeamMapList);
-            client.AddSuccess += new ClientEvt.UpdateMapHandler(client_AddSuccess);
-            client.AddFailure += new EventHandler(client_AddFailure);
             roomCount = 0;
             flickerCanvas.Visibility = Visibility.Hidden;
             showRoom = new Fun(this.getRoomInfo);
@@ -177,6 +173,12 @@ namespace MyFirstWPF
 
         public void Reload()
         {
+            #region 关联client
+            client = InfoControl.Client;
+            client.GotTeamMapList += client_GotTeamMapList;
+            client.AddSuccess += client_AddSuccess;
+            client.AddFailure += client_AddFailure;
+            #endregion
             refreshTimer.Start();
             isEntered = 0;
             flickerState = 0;
@@ -186,6 +188,12 @@ namespace MyFirstWPF
         public void Leave()
         {
             refreshTimer.Stop();
+            #region 注销client
+            client.GotTeamMapList -= client_GotTeamMapList;
+            client.AddSuccess -= client_AddSuccess;
+            client.AddFailure -= client_AddFailure;
+            client = null;
+            #endregion
         }
 
         #endregion

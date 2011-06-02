@@ -41,6 +41,7 @@ namespace MyFirstWPF
         const int FlickerMoveUnit = 240;                //箭头上下移动尺寸
         #endregion
         Storyboard moveStory;
+        string singleTeam;
         Canvas[] iconCanvas = new Canvas[InfoControl.MapCount];
         string[] msk = new string[] { "Two", "Three", "Four" }; //Storyboard对应名称
         EventWaitHandle createRoomEvent = new EventWaitHandle(true, EventResetMode.ManualReset);
@@ -81,11 +82,6 @@ namespace MyFirstWPF
                 peopleFour.Visibility = Visibility.Hidden;
                 StartText.Text = "开始游戏！";
             }
-            client = InfoControl.Client;
-            client.CreateSuccess += new EventHandler(client_CreateSuccess);
-            client.CreateFailure += new EventHandler(client_CreateFailure);
-            client.BeginGame += new EventHandler(client_BeginGame);
-            client.EndGame += new EventHandler(client_EndGame);
         }
 
         //启动游戏的方法
@@ -119,7 +115,11 @@ namespace MyFirstWPF
             }
             else
             {
-                MessageBox.Show("Game start!");
+                //MessageBox.Show("Game start!");
+                this.Dispatcher.Invoke(new Action(() =>
+                {
+                    infoBlock.Text = "游戏即将开始！";
+                }));
                 startGame();
             }
         }
@@ -132,6 +132,10 @@ namespace MyFirstWPF
                 isCreated = -1;
                 createRoomEvent.Set();
             }
+            else
+            {
+                MessageBox.Show("创建游戏失败!");
+            }
         }
         
         //服务器发来开始游戏的命令
@@ -142,6 +146,12 @@ namespace MyFirstWPF
         //服务器发来结束游戏的命令
         void client_EndGame(object sender, EventArgs e)
         {
+            this.Dispatcher.Invoke(new Action(() =>
+            {
+                infoBlock.Text = "";
+            }));
+            isGameStarted = false;
+            client.LeaveTeam(singleTeam);
         }
         #endregion
 
@@ -166,8 +176,19 @@ namespace MyFirstWPF
 
         public void Reload()
         {
+            #region 关联client
+            client = InfoControl.Client;
+            client.CreateSuccess += client_CreateSuccess;
+            client.CreateFailure += client_CreateFailure;
+            if (mode == MODE_SINGLE)
+            {
+                client.BeginGame += client_BeginGame;
+                client.EndGame += client_EndGame;
+            }
+            #endregion
             isCreated = 0;
             flickerState = 0;
+            singleTeam = InfoControl.UserName + "'s Room";
             LeftArrow.Margin = new Thickness(
                    LeftArrow.Margin.Left,
                    FlickerTop,
@@ -178,7 +199,18 @@ namespace MyFirstWPF
         }
 
         public void Leave()
-        { }
+        {
+            #region 注销client
+            if (mode == MODE_SINGLE)
+            {
+                client.BeginGame -= client_BeginGame;
+                client.EndGame -= client_EndGame;
+            }
+            client.CreateSuccess -= client_CreateSuccess;
+            client.CreateFailure -= client_CreateFailure;
+            client = null;
+            #endregion
+        }
 
         #endregion
 
@@ -198,10 +230,11 @@ namespace MyFirstWPF
 
         public int Choose()
         {
-            if (mode == 0)                      //单机游戏
+            if (isGameStarted) return -1;
+            if (mode == MODE_SINGLE)            //单机游戏
             {
                 //TODO:Game start
-                client.CreateTeam(InfoControl.UserName + "的房间", InfoControl.MapTexts[state], "1");
+                client.CreateTeam(singleTeam, InfoControl.MapTexts[state], "1");
                 //MessageBox.Show("Game start!");
                 //startGame();
                 return -1;
@@ -226,6 +259,7 @@ namespace MyFirstWPF
 
         public int MoveBack()
         {
+            if (isGameStarted) return -1;
             if (mode == 0)
                 return MainFrame.INDEX_MAIN_PAGE;
             else
